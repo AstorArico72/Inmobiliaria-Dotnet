@@ -1,0 +1,28 @@
+@model List<Usuario>;
+@{
+    ViewData["Title"] = "Central de Usuarios";
+}
+
+<div class="text-center">
+    <h1 class="display-4">@ViewData["Title"]</h1>
+    <p>
+        Los usuarios registrados en ésta webapp <br>
+        <a asp-action="Nuevo">Nueva entrada</a>
+    </p>
+    <table class="table primary">
+        <thead>
+            <th>#</th>
+            <th>Nombre</th>
+            <th>Rol</th>
+        </thead>
+        @foreach (var item in Model) {
+            <tr>
+                <td>@item.ID</td>
+                <td>@item.NombreUsuario</td>
+                <td>@item.Rol</td>
+                <td><a asp-action="Editar" asp-route-id= "@item.ID">Editar</a></td>
+                <td><a asp-action="Borrar" asp-route-id= "@item.ID">Borrar</a></td>
+            </tr>
+        }
+    </table>
+</div>

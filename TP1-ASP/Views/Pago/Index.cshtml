@@ -1,0 +1,28 @@
+@model List<Pago>;
+@{
+    ViewData["Title"] = "Central de Pagos";
+}
+
+<div class="text-center">
+    <h1 class="display-4">@ViewData["Title"]</h1>
+    <p>
+        No se me ocurre qué poner aquí por ahora. <br>
+        <a asp-action="Nuevo">Nueva entrada</a>
+    </p>
+    <table class="table primary">
+        <th>#</th>
+        <th>Contrato</th>
+        <th>Pago #</th>
+        <th>Monto</th>
+        @foreach (var item in Model) {
+            <tr>
+                <td>@item.ID</td>
+                <td>@item.IdContrato</td>
+                <td>@item.NumeroPago</td>
+                <td>@item.Monto</td>
+                <td><a asp-action="Editar" asp-route-id= "@item.ID">Editar</a></td>
+                <td><a asp-action="Borrar" asp-route-id= "@item.ID">Borrar</a></td>
+            </tr>
+        }
+    </table>
+</div>

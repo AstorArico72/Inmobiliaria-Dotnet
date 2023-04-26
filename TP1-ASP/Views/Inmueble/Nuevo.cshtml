@@ -1,0 +1,28 @@
+@model List<Inmueble>;
+    <!-- Pendiente: Implementar ViewData -->
+@{
+    ViewData["Title"] = "Nuevo Inmueble";
+    List <Propietario> ListaPropietarios = ViewBag.Propietarios;
+}
+
+<div class="text-center">
+    <h1 class="display-4">@ViewData["Title"]</h1>
+
+    <form asp-action="Nuevo" method="post">
+        <label for="CampoNombre">Dirección:</label>
+        <input type="text" name="Dirección" id="CampoDirección"/> <br>
+        <label for="CampoNombre">Superficie en m&#178;:</label>
+        <input type="tel" name="Superficie" id="CampoSuperficie" max="65535" min="1" size="5"/> <br>
+        <label for="CampoNombre">Precio en dólares:</label>
+        <input type="tel" name="Precio" id="CampoPrecio" max="2147483647" min="0" size="6"/> <br>
+        <label for="CampoPropietario">Dueño:</label>
+        <select id="CampoPropietario" name="IDPropietario">
+            <option value="null">Sin dueño</option>
+            @foreach (var item in ListaPropietarios) {
+                <option value="@item.ID">@item.Nombre &#40;#@item.ID&#41;</option>
+            }
+        </select>
+        <br>
+        <button type="submit">Guardar</button>
+    </form>
+</div>

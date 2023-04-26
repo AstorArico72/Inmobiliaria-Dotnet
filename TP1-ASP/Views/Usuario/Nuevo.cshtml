@@ -1,0 +1,18 @@
+@{
+    ViewData["Title"] = "Nuevo Usuario";
+}
+<div class="text-center">
+    <h1 class="display-4">@ViewData["Title"]</h1>
+
+    <form asp-action="Nuevo" method="post">
+        <label for="CampoNombre">Nombre: </label>
+        <input type="text" name="NombreUsuario" id="CampoNombre"/> <br>
+        <label for="CampoClave">Contraseña: </label>
+        <input type="password" name="Clave" id="CampoClave"/> <br>
+        <input type="hidden" name="Rol" value="Usuario"/>
+        <p>
+            El rol será "Usuario"
+        </p>
+        <button type="submit">Guardar</button>
+    </form>
+</div>

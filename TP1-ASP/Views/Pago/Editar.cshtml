@@ -1,0 +1,17 @@
+@model Pago;
+@{
+    ViewData["Title"] = "Editar Pago";
+}
+
+<div class="text-center">
+    <h1 class="display-4">@ViewData["Title"] #@Model.ID</h1>
+
+    <form asp-action="Editar" method="post">
+        <input type="hidden" value="@Model.IdContrato" name="IdContrato"/>
+        <label for="CampoNumPago">Pago #</label>
+        <input type="tel" name="NumeroPago" id="CampoNumPago" size="2" value="@Model.NumeroPago"/> <br>
+        <label for="CampoMonto">Monto:</label>
+        <input type="text" name="Monto" id="CampoMonto"/> <br>
+        <button type="submit">Guardar cambios</button>
+    </form>
+</div>

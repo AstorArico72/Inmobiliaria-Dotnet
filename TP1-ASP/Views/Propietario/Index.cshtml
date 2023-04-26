@@ -1,0 +1,17 @@
+@model List<Propietario>;
+@{
+    ViewData["Title"] = "Central de Propietarios";
+}
+
+<div class="text-center">
+    <h1 class="display-4">@ViewData["Title"]</h1>
+    <p>
+        Los propietarios registrados en la inmobiliaria. <br>
+        <a asp-action="Nuevo">Nueva entrada</a>
+    </p>
+    <ul>
+        @foreach (var item in Model) {
+            <li>@item.Nombre <a asp-action="Editar" asp-route-id= "@item.ID">Editar</a> <a asp-action="Borrar" asp-route-id= "@item.ID">Borrar</a></li>
+        }
+    </ul>
+</div>

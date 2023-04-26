@@ -1,0 +1,26 @@
+@model List<Pago>;
+@{
+    ViewData["Title"] = "Nuevo Pago";
+    List <Inmueble> ListaInmuebles = ViewBag.Inmuebles;
+    List <Contrato> ListaContratos = ViewBag.Contratos;
+}
+
+<div class="text-center">
+    <h1 class="display-4">@ViewData["Title"]</h1>
+
+    <form asp-action="Nuevo" method="post">
+        <label for="CampoNumPago">Pago #</label>
+        <input type="tel" name="NumeroPago" id="CampoNumPago" size="2"/> <br>
+        <label for="CampoContrato">Contrato a pagar:</label>
+        <select id="CampoContrato" name="IdContrato">
+            @foreach (var item in ListaContratos) {
+                Contrato ContratoSeleccionado = ListaContratos.Where (i => i.ID == item.ID).First ();
+                Inmueble InmuebleSeleccionado = ListaInmuebles.Where (i => i.ID == ContratoSeleccionado.Propiedad).First ();
+                <option value="@ContratoSeleccionado.ID">#@ContratoSeleccionado.ID &#40;@InmuebleSeleccionado.Dirección&#41;</option>
+            }
+        </select> <br>
+        <label for="CampoMonto">Importe a pagar:</label>
+        <input type="tel" name="Monto" id="CampoMonto" size="6"/> <br>
+        <button type="submit">Guardar</button>
+    </form>
+</div>

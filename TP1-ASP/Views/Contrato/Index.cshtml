@@ -1,0 +1,40 @@
+@model List<Contrato>;
+@{
+    ViewData["Title"] = "Contratos de alquiler";
+    List <Inquilino> ListaInquilinos = ViewBag.Inquilinos;
+    List <Inmueble> ListaInmuebles = ViewBag.Inmuebles;
+    List <Propietario> ListaPropietarios = ViewBag.Propietarios;
+}
+
+<div class="text-center">
+    <h1 class="display-4">@ViewData["Title"]</h1>
+    <p>
+        No se me ocurre qué poner aquí por ahora. <br>
+        <a asp-action="Nuevo">Nuevo contrato</a>
+    </p>
+    <table class="table primary">
+        <thead>
+            <th>#</th>
+            <th>Propiedad</th>
+            <th>Locatario</th>
+            <th>Locador</th>
+            <th>Desde</th>
+            <th>Hasta</th>
+        </thead>
+        @foreach (var item in Model) {
+            Propietario PropietarioSeleccionado = ListaPropietarios.Where(i => i.ID == item.Locador).First ();
+            Inquilino InquilinoSeleccionado = ListaInquilinos.Where(i => i.ID == item.Locatario).First ();
+            Inmueble InmuebleSeleccionado = ListaInmuebles.Where(i => i.ID == item.Propiedad).First ();
+            <tr>
+                <td>@item.ID</td>
+                <td>@InmuebleSeleccionado.Dirección</td>
+                <td>@InquilinoSeleccionado.Nombre</td>
+                <td>@PropietarioSeleccionado.Nombre</td>
+                <td>@item.FechaContrato.Day/@item.FechaContrato.Month/@item.FechaContrato.Year</td>
+                <td>@item.FechaLímite.Day/@item.FechaLímite.Month/@item.FechaLímite.Year</td>
+                <td><a asp-action="Editar" asp-route-id= "@item.ID">Editar</a></td>
+                <td><a asp-action="Borrar" asp-route-id= "@item.ID">Borrar</a></td>
+            </tr>
+        }
+    </table>
+</div>

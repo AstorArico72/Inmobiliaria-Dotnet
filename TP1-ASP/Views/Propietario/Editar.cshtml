@@ -1,0 +1,13 @@
+@{
+    ViewData["Title"] = "Editar Propietario";
+}
+
+<div class="text-center">
+    <h1 class="display-4">Editando Propietario</h1>
+
+    <form asp-action="Editar" method="post">
+        <label for="CampoNombre">Nombre:</label>
+        <input type="text" name="Nombre" id="CampoNombre"/> <br>
+        <button type="submit">Guardar cambios</button>
+    </form>
+</div>
