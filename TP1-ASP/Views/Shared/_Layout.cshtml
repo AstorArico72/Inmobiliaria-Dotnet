@@ -26,11 +26,18 @@
                                 </button>
                             </li>
                         } else {
+                            var ClaimUsuario = User.Claims.FirstOrDefault (claim => claim.Type == "IdUsuario");
+                            int IdUsuario = int.Parse (ClaimUsuario.Value);
                             @if (User.IsInRole ("Admin")) {
                                 <li class="nav-item text-danger">Conectado como @User.Identity.Name
                                 <button class="btn btn-danger">
                                     <a class="nav-link text-dark" asp-area="" asp-controller="Usuario" asp-action="Logout">Salir</a>
                                 </button>
+                                </li>
+                                <li>
+                                    <button class="btn btn-warning">
+                                    <a class="nav-link text-dark" asp-area="" asp-controller="Usuario" asp-action="Editar" asp-route-id="@IdUsuario">Editar Perfil</a>
+                                    </button>
                                 </li>
 
                             } else {
@@ -38,6 +45,11 @@
                                 <button class="btn btn-danger">
                                     <a class="nav-link text-dark" asp-area="" asp-controller="Usuario" asp-action="Logout">Salir</a>
                                 </button>
+                                </li>
+                                <li>
+                                    <button class="btn btn-warning">
+                                    <a class="nav-link text-dark" asp-area="" asp-controller="Usuario" asp-action="Editar" asp-route-id="@IdUsuario">Editar Perfil</a>
+                                    </button>
                                 </li>
                             }
                         }

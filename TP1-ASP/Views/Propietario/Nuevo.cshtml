@@ -6,8 +6,7 @@
     <h1 class="display-4">@ViewData["Title"]</h1>
 
     <form asp-action="Nuevo" method="post">
-        <label for="CampoNombre">Nombre:</label>
-        <input type="text" name="Nombre" id="CampoNombre"/> <br>
+        <input type="text" name="Nombre" id="CampoNombre" class="form-select" placeholder="Nombre"/> <br>
         <button type="submit">Guardar</button>
     </form>
 </div>

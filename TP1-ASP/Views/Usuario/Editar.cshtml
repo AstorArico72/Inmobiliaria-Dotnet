@@ -1,0 +1,15 @@
+@model Usuario;
+@{
+    ViewData["Title"] = "Editar Usuario";
+}
+
+<div class="text-center">
+    <h1 class="display-4">Editando a @Model.NombreUsuario</h1>
+
+    <form asp-action="Editar" method="post">
+        <input type="text" class="form-control" name="NombreUsuario" id="CampoNombre" placeholder="Nombre de usuario"/> <br>
+        <input type="password" class="form-control" name="Clave" id="CampoClave" placeholder="Contraseña"/> <br>
+        <input type="hidden" name="Rol" value="@Model.Rol"/>
+        <button type="submit" class="btn btn-primary">Guardar cambios</button>
+    </form>
+</div>

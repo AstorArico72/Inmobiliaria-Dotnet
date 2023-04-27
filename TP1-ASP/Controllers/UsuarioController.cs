@@ -30,6 +30,15 @@ public class UsuarioController : Controller
         return View (lista);
     }
 
+    public IActionResult Borrar (int id, Usuario usuario) {
+        if (repo.Borrar (id, usuario) != -1) {
+            return RedirectToAction ("Index");
+        }
+        else {
+            return RedirectToAction ("Index");
+        }
+    }
+
     public IActionResult Detalles (int id) {
         return View (repo.BuscarPorID (id));
     }
@@ -61,7 +70,8 @@ public class UsuarioController : Controller
         } else {
             var ClaimList = new List<Claim> {
                 new Claim (ClaimTypes.Name, UsuarioSeleccionado.NombreUsuario),
-                new Claim (ClaimTypes.Role, UsuarioSeleccionado.Rol)
+                new Claim (ClaimTypes.Role, UsuarioSeleccionado.Rol),
+                new Claim ("IdUsuario", UsuarioSeleccionado.ID.ToString ())
             };
             var IdentityClaim = new ClaimsIdentity (ClaimList, CookieAuthenticationDefaults.AuthenticationScheme);
             await HttpContext.SignInAsync(CookieAuthenticationDefaults.AuthenticationScheme, new ClaimsPrincipal(IdentityClaim));
@@ -86,6 +96,36 @@ public class UsuarioController : Controller
         }
         else {
             return View ();
+        }
+    }
+
+    [HttpGet]
+    [AllowAnonymous]
+    public IActionResult Editar (int id) {
+        int? IdUsuario;
+        var ClaimUsuario = User.Claims.FirstOrDefault (claim => claim.Type == "IdUsuario");
+        if (ClaimUsuario != null) {
+            IdUsuario = int.Parse (ClaimUsuario.Value);
+            if (IdUsuario == id && IdUsuario != null) {
+                return View (repo.BuscarPorID (id));
+            } else {
+                return RedirectToAction ("Login");
+            }
+        } else {
+            return RedirectToAction ("Login");
+        }
+    }
+
+    [HttpPost]
+    [AllowAnonymous]
+    public IActionResult Editar (int id, Usuario usuario) {
+        var ClaimUsuario = User.Claims.FirstOrDefault (claim => claim.Type == "IdUsuario");
+        int? IdUsuario = int.Parse (ClaimUsuario.Value);
+        if (repo.Editar (id, usuario) != -1 && IdUsuario == id && IdUsuario != null) {
+            return RedirectToAction ("Index", "Home");
+        }
+        else {
+            return RedirectToAction ("Login");
         }
     }
 

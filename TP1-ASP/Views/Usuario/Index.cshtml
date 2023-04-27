@@ -7,17 +7,24 @@
     <h1 class="display-4">@ViewData["Title"]</h1>
     <p>
         Los usuarios registrados en ésta webapp <br>
-        <a asp-action="Nuevo">Nueva entrada</a>
+        <a asp-action="Nuevo">Nuevo usuario</a>
     </p>
     <table class="table primary">
         <thead>
             <th>#</th>
             <th>Nombre</th>
+            <th>Rol</th>
         </thead>
         @foreach (var item in Model) {
             <tr>
                 <td>@item.ID</td>
-                <td><a asp-action="Detalles" asp-route-id= "@item.ID">@item.NombreUsuario</a></td>
+                <td>@item.NombreUsuario</td>
+                <td>@item.Rol</td>
+            @if (item.Rol != "Admin") {
+                <td><a class="text-danger" asp-action="Borrar" asp-route-id="@item.ID">Borrar</a> </td>
+            } else {
+                <td>No puede borrarse </td>
+            }
             </tr>
         }
     </table>

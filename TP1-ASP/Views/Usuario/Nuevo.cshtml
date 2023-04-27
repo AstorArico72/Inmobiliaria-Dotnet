@@ -5,14 +5,13 @@
     <h1 class="display-4">@ViewData["Title"]</h1>
 
     <form asp-action="Nuevo" method="post">
-        <label for="CampoNombre">Nombre: </label>
-        <input type="text" name="NombreUsuario" id="CampoNombre"/> <br>
-        <label for="CampoClave">Contraseña: </label>
-        <input type="password" name="Clave" id="CampoClave"/> <br>
-        <input type="hidden" name="Rol" value="Usuario"/>
-        <p>
-            El rol será "Usuario"
-        </p>
-        <button type="submit">Guardar</button>
+        <input type="text" name="NombreUsuario" id="CampoNombre" class="form-control" placeholder="Nombre de usuario"/> <br>
+        <input type="password" name="Clave" id="CampoClave" class="form-control" placeholder="Contraseña"/> <br>
+        <label for="CampoRol">Rol: </label>
+        <select name="Rol" class="form-select" id="CampoRol">
+            <option value="Admin">Administrador</option>
+            <option value="Empleado">Empleado</option>
+        </select>
+        <button type="submit" class="btn btn-primary">Guardar</button>
     </form>
 </div>

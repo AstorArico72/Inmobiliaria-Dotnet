@@ -14,10 +14,14 @@
     <form asp-action="Editar" method="post">
         <p>Inmueble: @InmuebleSeleccionado.Dirección &#40;#@InmuebleSeleccionado.ID&#41;</p>
         <input type="hidden" name="Propiedad" value="@InmuebleSeleccionado.ID"/>
-        <p>Locador: @DueñoSeleccionado.Nombre &#40;#@DueñoSeleccionado.ID&#41;</p>
-        <input type="hidden" name="Locador" value="@DueñoSeleccionado.ID"/>
+        <label for="CampoDueño">Locador:</label>
+        <select id="CampoDueño" name="Locador" class="form-select">
+            @foreach (var item in ListaPropietarios) {
+                <option value="@item.ID">@item.Nombre &#40;#@item.ID&#41;</option>
+            }
+        </select>
         <label for="CampoInmueble">Locatario:</label>
-        <select id="CampoInmueble" name="Locatario">
+        <select id="CampoInmueble" name="Locatario" class="form-select">
             @foreach (var item in ListaInquilinos) {
                 <option value="@item.ID">@item.Nombre &#40;#@item.ID&#41;</option>
             }
@@ -25,7 +29,7 @@
         <br>
         <br>
         <label for="CampoFecha">Fecha límite del contrato:</label>
-        <input type="date" name="FechaLímite" id="CampoFecha"/>
+        <input type="date" name="FechaLímite" id="CampoFecha" class="form-control"/>
         <br>
         <button type="submit">Guardar</button>
     </form>

@@ -70,6 +70,13 @@ public class RepositorioUsuario : IRepo <Usuario> {
             using (var con = new MySqlConnection (ConnectionString)) {
                 string SQLQuery = @"UPDATE Usuarios SET Nombre = @Nombre, Clave = @Clave, Rol = @Rol WHERE ID = " + id;
                 using (var comm = new MySqlCommand (SQLQuery, con)) {
+                    u.Clave = Convert.ToBase64String(KeyDerivation.Pbkdf2(
+			            password: u.Clave,
+			            salt: System.Text.Encoding.ASCII.GetBytes("Salty-as-the-ocean"),
+			            prf: KeyDerivationPrf.HMACSHA256,
+			            iterationCount: 1000,
+			            numBytesRequested: 256 / 8
+                    ));
                     comm.Parameters.AddWithValue ("@Nombre", u.NombreUsuario);
                     comm.Parameters.AddWithValue ("@Clave", u.Clave);
                     comm.Parameters.AddWithValue ("@Rol", u.Rol);
@@ -88,7 +95,7 @@ public class RepositorioUsuario : IRepo <Usuario> {
         int resultado = -1;
         try {
             using (var con = new MySqlConnection (ConnectionString)) {
-                string SQLQuery = @"DELETE FROM Usuarios WHERE ID = " + id + " AND Rol = 'Usuario'";
+                string SQLQuery = @"DELETE FROM Usuarios WHERE ID = " + id + " AND Rol = 'Empleado'";
                 using (var comm = new MySqlCommand (SQLQuery, con)) {
                     con.Open ();
                     resultado = Convert.ToInt32 (comm.ExecuteNonQuery ());
