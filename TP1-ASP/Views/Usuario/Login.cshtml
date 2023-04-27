@@ -5,10 +5,8 @@
     <h1 class="display-4">@ViewData["Title"]</h1>
 
     <form asp-action="Ingresar" method="post">
-        <label for="CampoNombre">Nombre: </label>
-        <input type="text" name="NombreUsuario" id="CampoNombre"/> <br>
-        <label for="CampoClave">Contraseña: </label>
-        <input type="password" name="Clave" id="CampoClave"/> <br>
-        <button type="submit">Iniciar Sesión</button>
+        <input class="form-control" type="text" name="NombreUsuario" id="CampoNombre" placeholder="Nombre de usuario"/> <br>
+        <input class="form-control" type="password" name="Clave" id="CampoClave" placeholder="Contraseña"/> <br>
+        <button class="btn btn-primary" type="submit">Iniciar Sesión</button>
     </form>
 </div>

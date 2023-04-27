@@ -1,0 +1,32 @@
+@model Inmueble;
+@{
+    string DatoAMostrar;
+    List<Propietario> ListaPropietarios = ViewBag.Propietarios;
+    IEnumerable <Propietario> Dueños = ListaPropietarios.Where (item => item.ID == Model.IDPropietario);
+    if (Dueños.Count () != 0) {
+        DatoAMostrar = Dueños.First ().Nombre;
+    } else {
+        DatoAMostrar = "Propiedad de la inmobiliaria";
+    }
+    
+    ViewData["Title"] = "Inmueble #" + @Model.ID;
+}
+
+<div class="text-center">
+    <h1 class="display-4">@ViewData["Title"]</h1>
+    <p>
+        Inmueble registrado en la inmobiliaria. <br>
+        <p>
+            Dirección: @Html.DisplayFor(Model => Model.Dirección) <br>
+            Superficie: @Html.DisplayFor(Model => Model.Superficie) m&#178; <br>
+            @if (Model.IDPropietario != null) {
+                <span>Dueño: <a asp-action="Detalles" asp-controller="Propietario" asp-route-id="@Model.IDPropietario"> @DatoAMostrar </a> <br></span>
+            } else {
+                <span>@DatoAMostrar<br></span>
+            }
+            En alquiler por $@Model.Precio <br>
+        </p>
+    </p>
+    <a asp-action="Editar" asp-route-id= "@Model.ID"> <button class="btn btn-warning">Editar éste inmueble</button> </a><br>
+    <a asp-action="Borrar" asp-route-id= "@Model.ID"><button class="btn btn-danger">Borrar éste inmueble</button></a>
+</div>

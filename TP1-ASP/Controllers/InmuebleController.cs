@@ -34,6 +34,11 @@ public class InmuebleController : Controller
         return View (repo.BuscarPorID (id));
     }
 
+    public IActionResult Detalles (int id) {
+        ViewBag.Propietarios = repoPropietarios.ObtenerTodos ();
+        return View (repo.BuscarPorID (id));
+    }
+
     [HttpPost]
     public IActionResult Editar (int id, Inmueble inmueble) {
         if (repo.Editar (id, inmueble) != -1) {

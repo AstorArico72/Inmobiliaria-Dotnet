@@ -10,8 +10,8 @@
     <h1 class="display-4">@ViewData["Title"]</h1>
 
     <form asp-action="Nuevo" method="post">
-        <label for="CampoInmueble">Inmueble:</label>
-        <select id="CampoInmueble" name="Propiedad">
+        <label class="display-6" for="CampoInmueble">Inmueble:</label>
+        <select class="form-select" id="CampoInmueble" name="Propiedad">
             @foreach (var item in ListaInmuebles) {
                 if (item.Dueño != null) {
                     <option value="@item.ID">@item.Dirección &#40;#@item.ID&#41;, propiedad de @item.Dueño.Nombre </option>
@@ -19,22 +19,22 @@
             }
         </select>
         <br>
-        <label for="CampoInmueble">Locatario:</label>
-        <select id="CampoInmueble" name="Locatario">
+        <label class="display-6" for="CampoLocatario">Locatario:</label>
+        <select class="form-select" id="CampoLocatario" name="Locatario">
             @foreach (var item in ListaInquilinos) {
                 <option value="@item.ID">@item.Nombre &#40;#@item.ID&#41;</option>
             }
         </select>
         <br>
-        <label for="CampoPropietario">Locador:</label>
-        <select id="CampoPropietario" name="Locador">
+        <label class="display-6" for="CampoPropietario">Locador:</label>
+        <select class="form-select" id="CampoPropietario" name="Locador">
             @foreach (var item in ListaPropietarios) {
                 <option value="@item.ID">@item.Nombre &#40;#@item.ID&#41;</option>
             }
         </select>
         <br>
         <label for="CampoFecha">Fecha límite del contrato:</label>
-        <input type="date" name="FechaLímite" id="CampoFecha"/>
+        <input class="date" type="date" name="FechaLímite" id="CampoFecha"/>
         <br>
         <button type="submit">Guardar</button>
     </form>

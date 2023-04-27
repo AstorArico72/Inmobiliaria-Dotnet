@@ -43,6 +43,13 @@ public class ContratoController : Controller {
         return View (repo.BuscarPorID (id));
     }
 
+    public IActionResult Detalles (int id) {
+        ViewBag.Propietarios = repoPropietarios.ObtenerTodos ();
+        ViewBag.Inmuebles = repoInmuebles.ObtenerTodos ();
+        ViewBag.Inquilinos = repoInquilinos.ObtenerTodos ();
+        return View (repo.BuscarPorID (id));
+    }
+
     [HttpPost]
     public IActionResult Editar (int id, Contrato contrato) {
         if (repo.Editar (id, contrato) != -1) {

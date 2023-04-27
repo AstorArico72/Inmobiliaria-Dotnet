@@ -36,6 +36,10 @@ public class PagoController : Controller
         return View (repo.BuscarPorID (id));
     }
 
+    public IActionResult Detalles (int id) {
+        return View (repo.BuscarPorID (id));
+    }
+
     [HttpPost]
     public IActionResult Editar (int id, Pago pago) {
         if (repo.Editar (id, pago) != -1) {

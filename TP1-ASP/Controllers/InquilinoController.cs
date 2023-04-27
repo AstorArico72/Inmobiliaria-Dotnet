@@ -30,6 +30,14 @@ public class InquilinoController : Controller
         return View (repo.BuscarPorID (id));
     }
 
+    public IActionResult Detalles (int id) {
+        var RepoContratos = new RepositorioContrato ();
+        ViewBag.Contratos = RepoContratos.ObtenerTodos ();
+        var RepoInmuebles = new RepositorioInmueble ();
+        ViewBag.Inmuebles = RepoInmuebles.ObtenerTodos ();
+        return View (repo.BuscarPorID (id));
+    }
+
     [HttpPost]
     public IActionResult Editar (int id, Inquilino inquilino) {
         if (repo.Editar (id, inquilino) != -1) {

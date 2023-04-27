@@ -7,8 +7,10 @@ public class Inmueble {
         public int ID {get; set;}
         public string? Dirección {get; set;}
         public short Superficie {get; set;}
+        [DisplayFormat(ConvertEmptyStringToNull = true, NullDisplayText = "No está en alquiler", ApplyFormatInEditMode=true)]
         public Nullable<Int32> Precio {get; set;}
         public Nullable<Int32> IDPropietario {get; set;}
+        [DisplayFormat(ConvertEmptyStringToNull = true, NullDisplayText = "Propiedad de la inmobiliaria", ApplyFormatInEditMode=true)]
         public Propietario? Dueño {get; set;}
         /* Inplementar otro día
         public Contrato ContratoAlquiler {get; set;}

@@ -10,28 +10,9 @@
         <a asp-action="Nuevo">Nueva entrada</a>
     </p>
     <ul>
-        @foreach (var item in Model) {
-            if (item.Precio is null || item.IDPropietario is null) {
-                //Lo de abajo es cómo se muestra en pantalla.
-                //Con dueño, sin precio
-                if (item.Precio is null && item.IDPropietario is not null) {
-                <li>#@item.ID, ubicado en @item.Dirección, @item.Superficie m&#178;, propiedad de @item.Dueño.Nombre [No está en alquiler] <a asp-action="Editar" asp-route-id= "@item.ID">[Editar] </a> <a asp-action="Borrar" asp-route-id= "@item.ID">[Borrar]</a>
-                </li>
-                }
-                //Con precio, sin dueño
-                if (item.IDPropietario is null && item.Precio is not null) {
-                <li>#@item.ID, ubicado en @item.Dirección, @item.Superficie m&#178;, propiedad de la inmobiliaria [En alquiler por $@item.Precio] <a asp-action="Editar" asp-route-id= "@item.ID">[Editar] </a> <a asp-action="Borrar" asp-route-id= "@item.ID">[Borrar]</a>
-                </li>
-                }
-                //Los dos nulos
-                if (item.IDPropietario is null && item.Precio is null) {
-                <li>#@item.ID, ubicado en @item.Dirección, @item.Superficie m&#178;, propiedad de la inmobiliaria [No está en alquiler] <a asp-action="Editar" asp-route-id= "@item.ID">[Editar] </a> <a asp-action="Borrar" asp-route-id= "@item.ID">[Borrar]</a>
-                </li>
-                }
-            } else { //Ninguno nulo
-                <li>#@item.ID, ubicado en @item.Dirección, @item.Superficie m&#178;, propiedad de @item.Dueño.Nombre [En alquiler por $@item.Precio] <a asp-action="Editar" asp-route-id= "@item.ID">[Editar] </a> <a asp-action="Borrar" asp-route-id= "@item.ID">[Borrar]</a>
-                </li>
-            }
-        }
+
     </ul>
+    @foreach (var item in Model) {
+            <li>#@item.ID, ubicado en <a asp-action="Detalles" asp-route-id= "@item.ID">@item.Dirección</a></li>
+    }
 </div>

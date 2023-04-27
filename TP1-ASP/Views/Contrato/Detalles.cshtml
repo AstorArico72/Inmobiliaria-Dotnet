@@ -1,0 +1,33 @@
+@model Contrato;
+
+@{
+    ViewData ["Title"] = "Contrato #" + Model.ID;
+    string DueñoAMostrar;
+    List <Inquilino> ListaInquilinos = ViewBag.Inquilinos;
+    List <Inmueble> ListaInmuebles = ViewBag.Inmuebles;
+    List <Propietario> ListaPropietarios = ViewBag.Propietarios;
+    Inquilino InquilinoSeleccionado = ListaInquilinos.Where (item => item.ID == Model.Locatario).First ();
+    Propietario DueñoSeleccionado = ListaPropietarios.Where (item => item.ID == Model.Locador).First ();
+    Inmueble InmuebleSeleccionado = ListaInmuebles.Where (item => item.ID == Model.Propiedad).First ();
+    Propietario DueñoInmueble = ListaPropietarios.Where(item => item.ID == InmuebleSeleccionado.IDPropietario).First ();
+    if (DueñoInmueble == null) {
+        DueñoAMostrar = "La inmobiliaria";
+    } else {
+        DueñoAMostrar = DueñoInmueble.Nombre;
+    }
+}
+
+<div class="text-center">
+    <h1 class="display-4">@ViewData["Title"]</h1>
+    <p>Locador: <a asp-action="Detalles" asp-controller="Propietario" asp-route-id="@DueñoSeleccionado.ID">@DueñoSeleccionado.Nombre</a></p>
+    <p>Locatario: <a asp-action="Detalles" asp-controller="Inquilino" asp-route-id="@InquilinoSeleccionado.ID">@InquilinoSeleccionado.Nombre</a></p>
+    <p>Inmueble: <a asp-action="Detalles" asp-controller="Inmueble" asp-route-id="@InmuebleSeleccionado.ID">@InmuebleSeleccionado.Dirección</a></p>
+    <p>Dueño del inmueble: @DueñoAMostrar</p>
+    <p>
+        Fecha de inicio del contrato: @Model.FechaContrato.Year - @Model.FechaContrato.Month - @Model.FechaContrato.Day <br>
+        Fecha límite del contrato: @Model.FechaLímite.Year - @Model.FechaLímite.Month - @Model.FechaLímite.Day <br>
+    </p>
+    <a asp-action="Editar" asp-route-id="@Model.ID"><button class="btn btn-warning">Editar éste contrato</button></a>
+    <a asp-action="Borrar" asp-route-id="@Model.ID"><button class="btn btn-danger">Borrar éste contrato</button></a> <br><br>
+    <a asp-action="Nuevo"><button class="btn btn-success">Añadir uno nuevo</button></a>
+</div>

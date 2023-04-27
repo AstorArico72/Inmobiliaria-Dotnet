@@ -30,6 +30,10 @@ public class UsuarioController : Controller
         return View (lista);
     }
 
+    public IActionResult Detalles (int id) {
+        return View (repo.BuscarPorID (id));
+    }
+
     [HttpGet]
     [AllowAnonymous]
     public IActionResult Login (string ReturnUrl) {

@@ -88,7 +88,7 @@ public class RepositorioUsuario : IRepo <Usuario> {
         int resultado = -1;
         try {
             using (var con = new MySqlConnection (ConnectionString)) {
-                string SQLQuery = @"DELETE FROM Usuarios WHERE ID = " + id;
+                string SQLQuery = @"DELETE FROM Usuarios WHERE ID = " + id + " AND Rol = 'Usuario'";
                 using (var comm = new MySqlCommand (SQLQuery, con)) {
                     con.Open ();
                     resultado = Convert.ToInt32 (comm.ExecuteNonQuery ());

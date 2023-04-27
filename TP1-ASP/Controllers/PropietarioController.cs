@@ -26,6 +26,14 @@ public class PropietarioController : Controller
         return View ();
     }
 
+    public IActionResult Detalles (int id) {
+        var RepoInmuebles = new RepositorioInmueble ();
+        var RepoContratos = new RepositorioContrato ();
+        ViewBag.ListaContratos = RepoContratos.ObtenerTodos ();
+        ViewBag.ListaInmuebles = RepoInmuebles.ObtenerTodos ();
+        return View (repo.BuscarPorID (id));
+    }
+
     [HttpPost]
     public IActionResult Editar (int id, Propietario propietario) {
         if (repo.Editar (id, propietario) != -1) {

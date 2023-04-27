@@ -13,15 +13,11 @@
         <thead>
             <th>#</th>
             <th>Nombre</th>
-            <th>Rol</th>
         </thead>
         @foreach (var item in Model) {
             <tr>
                 <td>@item.ID</td>
-                <td>@item.NombreUsuario</td>
-                <td>@item.Rol</td>
-                <td><a asp-action="Editar" asp-route-id= "@item.ID">Editar</a></td>
-                <td><a asp-action="Borrar" asp-route-id= "@item.ID">Borrar</a></td>
+                <td><a asp-action="Detalles" asp-route-id= "@item.ID">@item.NombreUsuario</a></td>
             </tr>
         }
     </table>
