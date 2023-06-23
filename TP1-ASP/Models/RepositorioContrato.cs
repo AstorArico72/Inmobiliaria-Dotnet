@@ -18,14 +18,12 @@ public class RepositorioContrato : IRepo <Contrato> {
                 con.Open ();
                 var lector = com.ExecuteReader ();
                 while (lector.Read ()) {
-                    var NuevoItem = new Contrato (
-                        lector.GetInt32 ("ID"),
-                        lector.GetInt32 ("Locador"),
-                        lector.GetInt32 ("Locatario"),
-                        lector.GetInt32 ("Propiedad"),
-                        lector.GetDateTime ("FechaLímite"),
-                        lector.GetDateTime ("FechaContrato")
-                    );
+                    var NuevoItem = new Contrato ();
+                    NuevoItem.ID = lector.GetInt32 (0);
+                    NuevoItem.Locatario = lector.GetInt32 (1);
+                    NuevoItem.Propiedad = lector.GetInt32 (2);
+                    NuevoItem.FechaLímite = lector.GetDateTime (3);
+                    NuevoItem.FechaContrato = lector.GetDateTime (4);
                     resultado.Add (NuevoItem);
                 }
                 con.Close ();
@@ -38,12 +36,12 @@ public class RepositorioContrato : IRepo <Contrato> {
         int resultado = -1;
         try {
             using (var con = new MySqlConnection (ConnectionString)) {
-                string SQLQuery = @"INSERT INTO Contratos (Locador, Locatario, Propiedad, FechaLímite) VALUES (@Locador, @Locatario, @Propiedad, @FechaLímite); SELECT LAST_INSERT_ID ()";
+                string SQLQuery = @"INSERT INTO Contratos (Locatario, Propiedad, FechaLímite) VALUES (@Locatario, @Propiedad, @FechaLímite, @FechaContrato); SELECT LAST_INSERT_ID ()";
                 using (var comm = new MySqlCommand (SQLQuery, con)) {
-                    comm.Parameters.AddWithValue ("@Locador", co.Locador);
                     comm.Parameters.AddWithValue ("@Locatario", co.Locatario);
                     comm.Parameters.AddWithValue ("@Propiedad", co.Propiedad);
                     comm.Parameters.AddWithValue ("@FechaLímite", co.FechaLímite);
+                    comm.Parameters.AddWithValue ("@FechaContrato", co.FechaContrato);
                     con.Open ();
                     resultado = Convert.ToInt32 (comm.ExecuteScalar ());
                     con.Close ();
@@ -59,9 +57,8 @@ public class RepositorioContrato : IRepo <Contrato> {
         int resultado = -1;
         try {
             using (var con = new MySqlConnection (ConnectionString)) {
-                string SQLQuery = @"UPDATE Contratos SET Locador = @Locador, Locatario = @Locatario, Propiedad = @Propiedad, FechaLímite = @FechaLímite WHERE ID = " + id;
+                string SQLQuery = @"UPDATE Contratos SET Locatario = @Locatario, Propiedad = @Propiedad, FechaLímite = @FechaLímite WHERE ID = " + id;
                 using (var comm = new MySqlCommand (SQLQuery, con)) {
-                    comm.Parameters.AddWithValue ("@Locador", co.Locador);
                     comm.Parameters.AddWithValue ("@Locatario", co.Locatario);
                     comm.Parameters.AddWithValue ("@Propiedad", co.Propiedad);
                     comm.Parameters.AddWithValue ("@FechaLímite", co.FechaLímite);
@@ -101,11 +98,11 @@ public class RepositorioContrato : IRepo <Contrato> {
                 con.Open ();
                 var lector = com.ExecuteReader ();
                 while (lector.Read ()) {
-                        resultado.ID = lector.GetInt32 ("ID");
-                        resultado.Locador = lector.GetInt32 ("Locador");
-                        resultado.Locatario = lector.GetInt32 ("Locatario");
-                        resultado.Propiedad = lector.GetInt32 ("Propiedad");
-                        resultado.FechaLímite = lector.GetDateTime ("FechaLímite");
+                        resultado.ID = lector.GetInt32 (0);
+                        resultado.Locatario = lector.GetInt32 (1);
+                        resultado.Propiedad = lector.GetInt32 (2);
+                        resultado.FechaLímite = lector.GetDateTime (3);
+                        resultado.FechaContrato = lector.GetDateTime (4);
                     }
                 }
             con.Close ();

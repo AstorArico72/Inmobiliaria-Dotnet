@@ -1,11 +1,9 @@
 @model Contrato;
 @{
     ViewData["Title"] = "Editando Contrato";
-    List <Propietario> ListaPropietarios = ViewBag.Propietarios;
     List <Inmueble> ListaInmuebles = ViewBag.Inmuebles;
     List <Inquilino> ListaInquilinos = ViewBag.Inquilinos;
     Inmueble InmuebleSeleccionado = ListaInmuebles.Where (item => item.ID == Model.Propiedad).First ();
-    Propietario DueñoSeleccionado = ListaPropietarios.Where (item => item.ID == Model.Locador).First ();
 }
 
 <div class="text-center">
@@ -14,12 +12,6 @@
     <form asp-action="Editar" method="post">
         <p>Inmueble: @InmuebleSeleccionado.Dirección &#40;#@InmuebleSeleccionado.ID&#41;</p>
         <input type="hidden" name="Propiedad" value="@InmuebleSeleccionado.ID"/>
-        <label for="CampoDueño">Locador:</label>
-        <select id="CampoDueño" name="Locador" class="form-select">
-            @foreach (var item in ListaPropietarios) {
-                <option value="@item.ID">@item.Nombre &#40;#@item.ID&#41;</option>
-            }
-        </select>
         <label for="CampoInmueble">Locatario:</label>
         <select id="CampoInmueble" name="Locatario" class="form-select">
             @foreach (var item in ListaInquilinos) {

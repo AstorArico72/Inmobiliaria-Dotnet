@@ -7,7 +7,6 @@
     List <Inmueble> ListaInmuebles = ViewBag.Inmuebles;
     List <Propietario> ListaPropietarios = ViewBag.Propietarios;
     Inquilino InquilinoSeleccionado = ListaInquilinos.Where (item => item.ID == Model.Locatario).First ();
-    Propietario DueñoSeleccionado = ListaPropietarios.Where (item => item.ID == Model.Locador).First ();
     Inmueble InmuebleSeleccionado = ListaInmuebles.Where (item => item.ID == Model.Propiedad).First ();
     Propietario DueñoInmueble = ListaPropietarios.Where(item => item.ID == InmuebleSeleccionado.IDPropietario).First ();
     if (DueñoInmueble == null) {
@@ -19,7 +18,6 @@
 
 <div class="text-center">
     <h1 class="display-4">@ViewData["Title"]</h1>
-    <p>Locador: <a asp-action="Detalles" asp-controller="Propietario" asp-route-id="@DueñoSeleccionado.ID">@DueñoSeleccionado.Nombre</a></p>
     <p>Locatario: <a asp-action="Detalles" asp-controller="Inquilino" asp-route-id="@InquilinoSeleccionado.ID">@InquilinoSeleccionado.Nombre</a></p>
     <p>Inmueble: <a asp-action="Detalles" asp-controller="Inmueble" asp-route-id="@InmuebleSeleccionado.ID">@InmuebleSeleccionado.Dirección</a></p>
     <p>Dueño del inmueble: @DueñoAMostrar</p>

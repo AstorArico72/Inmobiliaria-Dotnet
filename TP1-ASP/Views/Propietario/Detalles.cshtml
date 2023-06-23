@@ -1,30 +1,15 @@
 @model Propietario;
 @{
     ViewData["Title"] = Model.Nombre;
-    List <Contrato> ListaContratos = ViewBag.ListaContratos;
     List <Inmueble> ListaInmuebles = ViewBag.ListaInmuebles;
-    List <Contrato> ContratosSeleccionados = ListaContratos.Where (item => item.Locador == Model.ID).ToList ();
     List <Inmueble> InmueblesSeleccionados = ListaInmuebles.Where (item => item.IDPropietario == Model.ID).ToList ();
 }
 
 <div class="text-center">
     <h1 class="display-4">@ViewData["Title"]</h1>
     <p>
-        Propietario registrado en la inmobiliaria. <br>
-        Locador de éstos contratos:
+        Propietario registrado en la inmobiliaria.
     </p>
-    <ul>
-        @if (ContratosSeleccionados.Count () == 0) {
-            <li>
-                Ningún contrato
-            </li>
-        } else {
-            foreach (var item in ContratosSeleccionados) {
-                Inmueble InmuebleSeleccionado = ListaInmuebles.Where (casa => casa.ID == item.Propiedad).First ();
-                <li><a asp-action="Detalles" asp-controller="Contrato" asp-route-id="@item.ID"> #@item.ID</a>, en <a asp-action="Detalles" asp-controller="Inmueble" asp-route-id="@item.Propiedad">@InmuebleSeleccionado.Dirección</a></li>
-            }
-        }
-    </ul>
     <p>
         Propietario de éstos inmuebles:
     </p>
@@ -36,12 +21,12 @@
         } else {
             foreach (var item in InmueblesSeleccionados) {
                 <li>
-                    @item.Dirección &#40;#@item.ID&#41;
+                    <a asp-action="Detalles" asp-controller="Inmueble" asp-route-id="@item.ID"> @item.Dirección </a> &#40;#@item.ID&#41;
                 </li>
             }
         }
     </ul>
-    <a asp-action="Editar" asp-route-id="@Model.ID"><button class="btn btn-warning">Editar éste inquilino</button></a>
-    <a asp-action="Borrar" asp-route-id="@Model.ID"><button class="btn btn-danger">Borrar éste inquilino</button></a> <br><br>
+    <a asp-action="Editar" asp-route-id="@Model.ID"><button class="btn btn-warning">Editar éste propietario</button></a>
+    <a asp-action="Borrar" asp-route-id="@Model.ID"><button class="btn btn-danger">Borrar éste propietario</button></a> <br><br>
     <a asp-action="Nuevo"><button class="btn btn-success">Añadir uno nuevo</button></a>
 </div>
