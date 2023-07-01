@@ -1,0 +1,34 @@
+@model Inmueble; //El inmueble resultado de RepoInmuebles.BuscarPorID ();
+@{
+    ViewData["Title"] = "Editando un Inmueble";
+    List <Propietario> ListaPropietarios = ViewBag.Propietarios; //Igual al resultado de RepositorioPropietarios.ObtenerTodos ();
+    int IDSeleccionado = Model.ID; //ID del inmueble que recibe por la URL (ver arriba)
+    
+    //Conseguir el ID del propietario que corresponde al inmueble, si es aplicable.
+    IEnumerable <Propietario> ItemsSeleccionados = ListaPropietarios.Where(item => item.ID == Model.IDPropietario);
+}
+
+<div class="text-center">
+    <h1 class="display-4">Editando Inmueble #@Model.ID</h1>
+
+    <form asp-action="Editar" method="post">
+        <label for="CampoNombre">Dirección:</label>
+        <input type="text" name="Dirección" id="CampoDirección" placeholder="@Model.Dirección" value="@Model.Dirección"/> <br>
+        <label for="CampoNombre">Superficie en m&#178;:</label>
+        <input type="tel" name="Superficie" id="CampoSuperficie" max="65535" min="1" size="5" placeholder="@Model.Superficie" value="@Model.Superficie"/> <br>
+        <label for="CampoNombre">Precio del alquiler:</label>
+        <input type="tel" name="Precio" id="CampoPrecio" max="2147483647" min="0" size="10" placeholder="@Model.Precio" value="@Model.Precio"/> <br>
+        <label for="CampoPropietario">Dueño:</label>
+        <select id="CampoPropietario" name="IDPropietario">
+            <option value="null">Sin dueño</option>
+            @if (ItemsSeleccionados.Count() != 0) {
+                <option selected value="@Model.IDPropietario">Dueño original: @ItemsSeleccionados.First().Nombre</option>
+            }
+            @foreach (var item in ListaPropietarios) {
+                <option value="@item.ID">@item.Nombre &#40;#@item.ID&#41;</option>
+            }
+        </select>
+        <br>
+        <button type="submit" class="btn btn-primary">Guardar</button>
+    </form>
+</div>

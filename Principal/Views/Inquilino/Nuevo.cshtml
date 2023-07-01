@@ -1,0 +1,13 @@
+@{
+    ViewData["Title"] = "Nuevo Inquilino";
+}
+
+<div class="text-center">
+    <h1 class="display-4">@ViewData["Title"]</h1>
+
+    <form asp-action="Nuevo" method="post">
+        <label for="CampoNombre">Nombre:</label>
+        <input type="text" name="Nombre" id="CampoNombre"/> <br>
+        <button type="submit" class="btn btn-primary">Guardar</button>
+    </form>
+</div>

@@ -1,0 +1,33 @@
+@model List<Contrato>;
+@{
+    ViewData["Title"] = "Nuevo Contrato";
+    List <Inmueble> ListaInmuebles = ViewBag.Inmuebles;
+    List <Inquilino> ListaInquilinos = ViewBag.Inquilinos;
+}
+
+<div class="text-center">
+    <h1 class="display-4">@ViewData["Title"]</h1>
+
+    <form asp-action="Nuevo" method="post">
+        <label class="display-6" for="CampoInmueble">Inmueble:</label>
+        <select class="form-select" id="CampoInmueble" name="Propiedad" class="form-select">
+            @foreach (var item in ListaInmuebles) {
+                if (item.Dueño != null) {
+                    <option value="@item.ID">@item.Dirección &#40;#@item.ID&#41;, propiedad de @item.Dueño.Nombre </option>
+                }
+            }
+        </select>
+        <br>
+        <label class="display-6" for="CampoLocatario">Locatario:</label>
+        <select class="form-select" id="CampoLocatario" name="Locatario" class="form-select">
+            @foreach (var item in ListaInquilinos) {
+                <option value="@item.ID">@item.Nombre &#40;#@item.ID&#41;</option>
+            }
+        </select>
+        <br>
+        <label for="CampoFecha">Fecha límite del contrato:</label>
+        <input class="date" type="date" name="FechaLímite" id="CampoFecha" class="form-control"/>
+        <br>
+        <button type="submit" class="btn btn-primary">Guardar</button>
+    </form>
+</div>
