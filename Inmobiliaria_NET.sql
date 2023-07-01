@@ -3,7 +3,7 @@
 -- https://www.phpmyadmin.net/
 --
 -- Servidor: localhost
--- Tiempo de generación: 23-06-2023 a las 22:26:53
+-- Tiempo de generación: 01-07-2023 a las 19:16:26
 -- Versión del servidor: 10.4.21-MariaDB
 -- Versión de PHP: 8.0.10
 
@@ -148,17 +148,16 @@ CREATE TABLE `Usuarios` (
   `ID` int(11) NOT NULL,
   `Nombre` varchar(255) COLLATE utf8_bin NOT NULL,
   `Clave` varchar(255) COLLATE utf8_bin NOT NULL,
-  `Rol` varchar(32) COLLATE utf8_bin NOT NULL
+  `Rol` varchar(32) COLLATE utf8_bin NOT NULL,
+  `UrlImagen` varchar(255) COLLATE utf8_bin DEFAULT '/medios/Nulo.png'
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8 COLLATE=utf8_bin;
 
 --
 -- Volcado de datos para la tabla `Usuarios`
 --
 
-INSERT INTO `Usuarios` (`ID`, `Nombre`, `Clave`, `Rol`) VALUES
-(1, 'Astor', 'HDXqdRoXalZpA9tpqsRwQjQh/q0e7y8c32u2hR5tH+c=', 'Admin'),
-(4, 'Mariano', 'Lhia6bjvVbSpZiZprz2k6oy35tJXlbp/eGKe0C1hUX0=', 'Admin'),
-(7, 'No-soy-Admin', 'fIzE1rU2YZw0awWx4smmxMH8E6W5crW3eo5GAivooy8=', 'Empleado');
+INSERT INTO `Usuarios` (`ID`, `Nombre`, `Clave`, `Rol`, `UrlImagen`) VALUES
+(12, 'Admin-3', 'ZQynNowY+yTLOAJU4mgZfa/WXDc/yEUtkwQN7lRluzY=', 'Admin', '/medios/Nulo.png');
 
 --
 -- Índices para tablas volcadas
@@ -242,7 +241,7 @@ ALTER TABLE `Propietarios`
 -- AUTO_INCREMENT de la tabla `Usuarios`
 --
 ALTER TABLE `Usuarios`
-  MODIFY `ID` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=8;
+  MODIFY `ID` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=13;
 
 --
 -- Restricciones para tablas volcadas
