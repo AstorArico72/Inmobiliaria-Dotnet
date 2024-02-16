@@ -83,7 +83,7 @@ public class RepositorioPropietario : IRepo <Propietario> {
         return resultado;
     }
 
-    public Propietario BuscarPorID (int id) {
+    public Propietario? BuscarPorID (int id) {
         var resultado = new Propietario ();
         string SQLQuery = @"SELECT * FROM Propietarios WHERE ID = " + id;
         using (var con = new MySqlConnection (ConnectionString)) {
@@ -93,6 +93,10 @@ public class RepositorioPropietario : IRepo <Propietario> {
                 while (lector.Read ()) {
                     resultado.Nombre = lector.GetString ("Nombre");
                     resultado.ID = lector.GetInt32 ("ID");
+                }
+                if (!lector.HasRows) {
+                    con.Close ();
+                    return null;
                 }
             }
             con.Close ();

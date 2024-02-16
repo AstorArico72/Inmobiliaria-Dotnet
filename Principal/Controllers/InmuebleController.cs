@@ -36,35 +36,52 @@ public class InmuebleController : Controller
 
     public IActionResult Detalles (int id) {
         ViewBag.Propietarios = repoPropietarios.ObtenerTodos ();
-        return View (repo.BuscarPorID (id));
+        Inmueble? resultado = repo.BuscarPorID (id);
+        if (resultado == null) {
+            return Error ();
+        } else {
+            return View (resultado);
+        }
     }
 
     [HttpPost]
     public IActionResult Editar (int id, Inmueble inmueble) {
         if (repo.Editar (id, inmueble) != -1) {
+            TempData ["Mensaje"] = "Inmueble editado con éxito";
+            TempData ["ColorMensaje"] = "#00FF00";
             return RedirectToAction ("Index");
         }
         else {
-            return Error ();
+            TempData ["Mensaje"] = "Un error ha ocurrido. Algún campo es inválido.";
+            TempData ["ColorMensaje"] = "#FF0000";
+            return RedirectToAction ("Editar");
         }
     }
 
     public IActionResult Borrar (int id, Inmueble inmueble) {
         if (repo.Borrar (id, inmueble) != -1) {
+            TempData ["Mensaje"] = "Inmueble borrado.";
+            TempData ["ColorMensaje"] = "#FF0000";
             return RedirectToAction ("Index");
         }
         else {
-            return Error ();
+            TempData ["Mensaje"] = "Un error ha ocurrido.";
+            TempData ["ColorMensaje"] = "#FF0000";
+            return RedirectToAction ("Index");
         }
     }
 
     [HttpPost]
     public IActionResult Nuevo (Inmueble inmueble) {
         if (repo.Nuevo (inmueble) != -1) {
+            TempData ["Mensaje"] = "Inmueble añadido con éxito.";
+            TempData ["ColorMensaje"] = "#00FF00";
             return RedirectToAction ("Index");
         }
         else {
-            return View ();
+            TempData ["Mensaje"] = "Un error ha ocurrido. Algún campo es inválido.";
+            TempData ["ColorMensaje"] = "#FF0000";
+            return RedirectToAction ("Nuevo");
         }
     }
 

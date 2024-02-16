@@ -108,7 +108,7 @@ public class RepositorioUsuario : IRepo <Usuario> {
         return resultado;
     }
 
-    public Usuario BuscarPorID (int id) {
+    public Usuario? BuscarPorID (int id) {
         var NuevoItem = new Usuario ();
         string SQLQuery = @"SELECT ID, Clave, Nombre, Rol FROM Usuarios WHERE ID = " + id;
         try {
@@ -121,6 +121,10 @@ public class RepositorioUsuario : IRepo <Usuario> {
                         NuevoItem.Clave = lector.GetString ("Clave");
                         NuevoItem.NombreUsuario = lector.GetString ("Nombre");
                         NuevoItem.Rol = lector.GetString ("Rol");
+                    }
+                    if (!lector.HasRows) {
+                        con.Close ();
+                        return null;
                     }
                 con.Close ();
                 }

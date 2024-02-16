@@ -36,15 +36,21 @@ public class RepositorioContrato : IRepo <Contrato> {
         int resultado = -1;
         try {
             using (var con = new MySqlConnection (ConnectionString)) {
-                string SQLQuery = @"INSERT INTO Contratos (Locatario, Propiedad, FechaLímite) VALUES (@Locatario, @Propiedad, @FechaLímite, @FechaContrato); SELECT LAST_INSERT_ID ()";
+                string SQLQuery = @"INSERT INTO Contratos (Locatario, Propiedad, FechaLímite, FechaContrato) VALUES (@Locatario, @Propiedad, @FechaLímite, @FechaContrato); SELECT LAST_INSERT_ID ()";
                 using (var comm = new MySqlCommand (SQLQuery, con)) {
                     comm.Parameters.AddWithValue ("@Locatario", co.Locatario);
                     comm.Parameters.AddWithValue ("@Propiedad", co.Propiedad);
                     comm.Parameters.AddWithValue ("@FechaLímite", co.FechaLímite);
                     comm.Parameters.AddWithValue ("@FechaContrato", co.FechaContrato);
-                    con.Open ();
-                    resultado = Convert.ToInt32 (comm.ExecuteScalar ());
-                    con.Close ();
+                    bool EstaOcupado = PropiedadOcupada (co.Propiedad, co.FechaContrato, co.FechaLímite);
+                    if (EstaOcupado) {
+                        resultado = -2;
+                        return resultado;
+                    } else {
+                        con.Open ();
+                        resultado = Convert.ToInt32 (comm.ExecuteScalar ());
+                        con.Close ();
+                    }
                 }
             }
         } catch (MySqlException ex) {
@@ -62,9 +68,14 @@ public class RepositorioContrato : IRepo <Contrato> {
                     comm.Parameters.AddWithValue ("@Locatario", co.Locatario);
                     comm.Parameters.AddWithValue ("@Propiedad", co.Propiedad);
                     comm.Parameters.AddWithValue ("@FechaLímite", co.FechaLímite);
-                    con.Open ();
-                    resultado = Convert.ToInt32 (comm.ExecuteNonQuery ());
-                    con.Close ();
+                    bool ocupado = PropiedadOcupada (co.Propiedad, co.FechaLímite);
+                    if (ocupado) {
+                        resultado = -2;
+                    } else {
+                        con.Open ();
+                        resultado = Convert.ToInt32 (comm.ExecuteNonQuery ());
+                        con.Close ();
+                    }
                 }
             }
         } catch (MySqlException ex) {
@@ -90,7 +101,7 @@ public class RepositorioContrato : IRepo <Contrato> {
         return resultado;
     }
 
-    public Contrato BuscarPorID (int id) {
+    public Contrato? BuscarPorID (int id) {
         var resultado = new Contrato ();
         string SQLQuery = @"SELECT * FROM Contratos WHERE ID = " + id;
         using (var con = new MySqlConnection (ConnectionString)) {
@@ -103,10 +114,76 @@ public class RepositorioContrato : IRepo <Contrato> {
                         resultado.Propiedad = lector.GetInt32 (2);
                         resultado.FechaLímite = lector.GetDateTime (3);
                         resultado.FechaContrato = lector.GetDateTime (4);
-                    }
                 }
+                if (!lector.HasRows) {
+                    con.Close ();
+                    return null;
+                }
+            }
             con.Close ();
             return resultado;
+        }
+    }
+
+    private bool PropiedadOcupada (int propiedad, DateTime fechaComienzo, DateTime fechaLimite) {
+        string limite = fechaLimite.ToString ("yyyy-MM-dd");
+        string comienzo = fechaComienzo.ToString ("yyyy-MM-dd");
+        string SQLQuery = @"SELECT * FROM Contratos WHERE Propiedad = @Propiedad AND '" + limite + "' >= FechaContrato AND '" + comienzo + "' <= FechaLímite";
+        int? resultado = null;
+        try {
+            using (var con = new MySqlConnection (ConnectionString)) {
+                using (var comm = new MySqlCommand (SQLQuery, con)) {
+                    con.Open ();
+                    comm.Parameters.AddWithValue ("@Propiedad", propiedad);
+                    //comm.Parameters.AddWithValue ("@FechaLimite", fechaLimite.ToString ("yyyy-MM-dd"));
+                    //comm.Parameters.AddWithValue ("@FechaComienzo", fechaComienzo.ToString ("yyyy-MM-dd"));
+                    var lector = comm.ExecuteReader ();
+                    while (lector.Read ()) {
+                        resultado = lector.GetInt32 ("ID");
+                    }
+                    con.Close ();
+                }
+            }
+            if (resultado != null) {
+                return true;
+            } else {
+                return false;
+            }
+        } catch (MySqlException ex) {
+            Console.WriteLine (ex);
+            return true;
+        }
+    }
+
+
+    //Sobrecarga del anterior para cuando se edita un contrato.
+
+    private bool PropiedadOcupada (int propiedad, DateTime fechaLimite) {
+        bool ocupada;
+        string SQLQuery = @"SELECT id FROM Contratos WHERE Propiedad = @propiedad AND @fechaLimite BETWEEN FechaLímite AND FechaContrato";
+        int? resultado = null;
+        try {
+            using (var con = new MySqlConnection (ConnectionString)) {
+                using (var comm = new MySqlCommand (SQLQuery, con)) {
+                    con.Open ();
+                    comm.Parameters.AddWithValue ("@propiedad", propiedad);
+                    comm.Parameters.AddWithValue ("@fechaLimite", fechaLimite);
+                    var lector = comm.ExecuteReader ();
+                    while (lector.Read ()) {
+                        resultado = lector.GetInt32 (0);
+                    }
+                    con.Close ();
+                }
+            }
+            if (resultado != null) {
+                ocupada = true;
+            } else {
+                ocupada = false;
+            }
+            return ocupada;
+        } catch (MySqlException ex) {
+            Console.WriteLine (ex);
+            return true;
         }
     }
 }

@@ -34,9 +34,13 @@ public class UsuarioController : Controller
 
     public IActionResult Borrar (int id, Usuario usuario) {
         if (repo.Borrar (id, usuario) != -1) {
+            TempData ["Mensaje"] = "Cuenta borrada.";
+            TempData ["ColorMensaje"] = "#FF0000";
             return RedirectToAction ("Index");
         }
         else {
+            TempData ["Mensaje"] = "Un error ha ocurrido.";
+            TempData ["ColorMensaje"] = "#FF0000";
             return RedirectToAction ("Index");
         }
     }
@@ -67,7 +71,8 @@ public class UsuarioController : Controller
         Usuario UsuarioSeleccionado = repo.BuscarPorNombre (data.NombreUsuario);
 
         if (UsuarioSeleccionado == null || UsuarioSeleccionado.Clave != ContraseñaConHash) {
-            ViewBag.MensajeError = ("Usuario o clave incorrectas");
+            TempData ["Mensaje"] = "Usuario o clave incorrectas";
+            TempData ["ColorMensaje"] = "#FF0000";
             return RedirectToAction ("Login");
         } else {
             string URLFoto;
@@ -102,10 +107,14 @@ public class UsuarioController : Controller
     public IActionResult Nuevo (Usuario usuario) {
         if (repo.Nuevo (usuario) != -1) {
             SubirFoto (usuario, ENV, repo);
+            TempData ["Mensaje"] = "Cuenta creada con éxito. Ahora puedes iniciar sesión con ésa cuenta.";
+            TempData ["ColorMensaje"] = "#00FF00";
             return RedirectToAction ("Index");
         }
         else {
-            return View ();
+            TempData ["Mensaje"] = "Un error ha ocurrido. Algún campo es inválido.";
+            TempData ["ColorMensaje"] = "#FF0000";
+            return RedirectToAction ("Nuevo");
         }
     }
 
@@ -119,6 +128,8 @@ public class UsuarioController : Controller
             if (IdUsuario == id && IdUsuario != null) {
                 return View (repo.BuscarPorID (id));
             } else {
+                TempData ["Mensaje"] = "No está permitido editar perfiles de otros usuarios.";
+                TempData ["ColorMensaje"] = "#FFFF00";
                 return RedirectToAction ("Login");
             }
         } else {
@@ -133,9 +144,13 @@ public class UsuarioController : Controller
         int? IdUsuario = int.Parse (ClaimUsuario.Value);
         if (repo.Editar (id, usuario) != -1 && IdUsuario == id && IdUsuario != null) {
             SubirFoto (usuario, ENV, repo);
+            TempData ["Mensaje"] = "Cuenta editada con éxito.";
+            TempData ["ColorMensaje"] = "#00FF00";
             return RedirectToAction ("Index", "Home");
         }
         else {
+            TempData ["Mensaje"] = "Un error ha ocurrido. Algún campo es inválido.";
+            TempData ["ColorMensaje"] = "#FF0000";
             return RedirectToAction ("Login");
         }
     }

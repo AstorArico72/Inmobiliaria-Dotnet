@@ -64,6 +64,11 @@
             </div>
         </nav>
     </header>
+    @if (TempData ["Mensaje"] != null) {
+        <div id="CartaMensaje" class="card sticky sticky-top" style='background-color: @TempData["ColorMensaje"];'>
+            <h3><button class="btn btn-primary" id="Cerrar">X</button>  @TempData["Mensaje"]</h3>
+        </div>
+    }
     <div class="container">
         <main role="main" class="pb-3">
             @RenderBody()
@@ -78,6 +83,13 @@
     <script src="~/lib/jquery/dist/jquery.min.js"></script>
     <script src="~/lib/bootstrap/dist/js/bootstrap.bundle.min.js"></script>
     <script src="~/js/site.js" asp-append-version="true"></script>
+    <script>
+        $(function () {
+            $("#Cerrar").click (()=> {
+                $("#CartaMensaje").hide ();
+            });
+        });
+    </script>
     @await RenderSectionAsync("Scripts", required: false)
 </body>
 </html>

@@ -7,7 +7,7 @@
             "type": "process",
             "args": [
                 "build",
-                "${workspaceFolder}/TP1-ASP/TP1-ASP.csproj",
+                "${workspaceFolder}/Principal/Principal.csproj",
                 "/property:GenerateFullPaths=true",
                 "/consoleloggerparameters:NoSummary"
             ],
@@ -19,7 +19,7 @@
             "type": "process",
             "args": [
                 "publish",
-                "${workspaceFolder}/TP1-ASP/TP1-ASP.csproj",
+                "${workspaceFolder}/Principal/Principal.csproj",
                 "/property:GenerateFullPaths=true",
                 "/consoleloggerparameters:NoSummary"
             ],
@@ -33,7 +33,7 @@
                 "watch",
                 "run",
                 "--project",
-                "${workspaceFolder}/TP1-ASP/TP1-ASP.csproj"
+                "${workspaceFolder}/Principal/Principal.csproj"
             ],
             "problemMatcher": "$msCompile"
         }

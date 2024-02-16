@@ -43,29 +43,41 @@ public class PagoController : Controller
     [HttpPost]
     public IActionResult Editar (int id, Pago pago) {
         if (repo.Editar (id, pago) != -1) {
+            TempData ["Mensaje"] = "Pago añadido con éxito.";
+            TempData ["ColorMensaje"] = "#00FF00";
             return RedirectToAction ("Index");
         }
         else {
-            return Error ();
+            TempData ["Mensaje"] = "Un error ha ocurrido. Algún campo es inválido.";
+            TempData ["ColorMensaje"] = "#FF0000";
+            return RedirectToAction ("Editar");
         }
     }
 
     public IActionResult Borrar (int id, Pago pago) {
         if (repo.Borrar (id, pago) != -1) {
+            TempData ["Mensaje"] = "Pago borrado.";
+            TempData ["ColorMensaje"] = "#FF0000";
             return RedirectToAction ("Index");
         }
         else {
-            return Error ();
+            TempData ["Mensaje"] = "Un error ha ocurrido.";
+            TempData ["ColorMensaje"] = "#FF0000";
+            return RedirectToAction ("Index");
         }
     }
 
     [HttpPost]
     public IActionResult Nuevo (Pago pago) {
         if (repo.Nuevo (pago) != -1) {
+            TempData ["Mensaje"] = "Pago añadido con éxito";
+            TempData ["ColorMensaje"] = "#00FF00";
             return RedirectToAction ("Index");
         }
         else {
-            return View ();
+            TempData ["Mensaje"] = "Un error ha ocurrido. Algún campo es inválido.";
+            TempData ["ColorMensaje"] = "#FF0000";
+            return RedirectToAction ("Nuevo");
         }
     }
 

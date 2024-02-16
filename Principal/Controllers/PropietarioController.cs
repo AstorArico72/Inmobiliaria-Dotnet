@@ -37,30 +37,41 @@ public class PropietarioController : Controller
     [HttpPost]
     public IActionResult Editar (int id, Propietario propietario) {
         if (repo.Editar (id, propietario) != -1) {
+            TempData ["Mensaje"] = "Propietario añadido con éxito.";
+            TempData ["ColorMensaje"] = "#00FF00";
             return RedirectToAction ("Index");
         }
         else {
-            return Error ();
+            TempData ["Mensaje"] = "Un error ha ocurrido. Algún campo es inválido.";
+            TempData ["ColorMensaje"] = "#FF0000";
+            return RedirectToAction ("Editar");
         }
     }
 
-//Por ahora, queda así.
     public IActionResult Borrar (int id, Propietario propietario) {
         if (repo.Borrar (id, propietario) != -1) {
+            TempData ["Mensaje"] = "Propietario borrado.";
+            TempData ["ColorMensaje"] = "#FF0000";
             return RedirectToAction ("Index");
         }
         else {
-            return Error ();
+            TempData ["Mensaje"] = "Un error ha ocurrido. Algún campo es inválido.";
+            TempData ["ColorMensaje"] = "#FF0000";
+            return RedirectToAction ("Index");
         }
     }
 
     [HttpPost]
     public IActionResult Nuevo (Propietario propietario) {
         if (repo.Nuevo (propietario) != -1) {
+            TempData ["Mensaje"] = "Propietario añadido con éxito.";
+            TempData ["ColorMensaje"] = "#00FF00";
             return RedirectToAction ("Index");
         }
         else {
-            return View ();
+            TempData ["Mensaje"] = "Un error ha ocurrido. Algún campo es inválido.";
+            TempData ["ColorMensaje"] = "#FF0000";
+            return RedirectToAction ("Nuevo");
         }
     }
 

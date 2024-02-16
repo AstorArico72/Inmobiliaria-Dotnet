@@ -41,10 +41,14 @@ public class InquilinoController : Controller
     [HttpPost]
     public IActionResult Editar (int id, Inquilino inquilino) {
         if (repo.Editar (id, inquilino) != -1) {
+            TempData ["Mensaje"] = "Inquilino añadido con éxito.";
+            TempData ["ColorMensaje"] = "#00FF00";
             return RedirectToAction ("Index");
         }
         else {
-            return Error ();
+            TempData ["Mensaje"] = "Un error ha ocurrido. Algún campo es inválido.";
+            TempData ["ColorMensaje"] = "#FF0000";
+            return RedirectToAction ("Editar");
         }
     }
 
@@ -52,19 +56,27 @@ public class InquilinoController : Controller
     public IActionResult Nuevo (Inquilino inquilino) {
         var repo = new RepositorioInquilino ();
         if (repo.Nuevo (inquilino) != -1) {
+            TempData ["Mensaje"] = "Inquilino añadido con éxito.";
+            TempData ["ColorMensaje"] = "#00FF00";
             return RedirectToAction ("Index");
         }
         else {
-            return View ();
+            TempData ["Mensaje"] = "Un error ha ocurrido. Algún campo es inválido.";
+            TempData ["ColorMensaje"] = "#FF0000";
+            return RedirectToAction ("Nuevo");
         }
     }
 
     public IActionResult Borrar (int id, Inquilino inquilino) {
         if (repo.Borrar (id, inquilino) != -1) {
+            TempData ["Mensaje"] = "Inquilino borrado";
+            TempData ["ColorMensaje"] = "#FF0000";
             return RedirectToAction ("Index");
         }
         else {
-            return Error ();
+            TempData ["Mensaje"] = "Un error ha ocurrido.";
+            TempData ["ColorMensaje"] = "#FF0000";
+            return RedirectToAction ("Index");
         }
     }
 

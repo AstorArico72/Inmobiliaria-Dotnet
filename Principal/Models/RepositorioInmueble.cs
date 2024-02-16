@@ -14,10 +14,6 @@ public class RepositorioInmueble : IRepo <Inmueble> {
         var resultado = new List<Inmueble> ();
         string SQLQuery = @"SELECT DISTINCT i.ID, i.Dirección, i.Superficie, i.Precio, i.Propietario, p.Nombre, p.ID FROM Inmuebles i " +
         "LEFT JOIN Propietarios p ON p.ID = i.Propietario";
-        //Bien, ¿Cómo devuelvo los nulos? ¿Así?
-        //Lector (5): NOMBRE del propietario.
-        //Lector (4): ID del propietario.
-        //Lector (3): Precio.
 
         using (var con = new MySqlConnection (ConnectionString)) {
             using (var com = new MySqlCommand (SQLQuery, con)) {
@@ -124,7 +120,7 @@ public class RepositorioInmueble : IRepo <Inmueble> {
         return resultado;
     }
 
-    public Inmueble BuscarPorID (int id) {
+    public Inmueble? BuscarPorID (int id) {
         var NuevoItem = new Inmueble ();
         string SQLQuery = @"SELECT ID, Dirección, Superficie, Precio, Propietario FROM Inmuebles WHERE ID = " + id;
         try {
@@ -151,6 +147,10 @@ public class RepositorioInmueble : IRepo <Inmueble> {
                     }
                     NuevoItem.Dirección = lector.GetString (1);
                     NuevoItem.Superficie = lector.GetInt16 (2);
+                }
+                if (!lector.HasRows) {
+                    con.Close ();
+                    return null;
                 }
                 con.Close ();
                 }

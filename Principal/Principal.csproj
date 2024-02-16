@@ -4,7 +4,7 @@
     <TargetFramework>net7.0</TargetFramework>
     <Nullable>enable</Nullable>
     <ImplicitUsings>enable</ImplicitUsings>
-    <RootNamespace>TP1_ASP</RootNamespace>
+    <RootNamespace>Principal</RootNamespace>
   </PropertyGroup>
 
   <ItemGroup>

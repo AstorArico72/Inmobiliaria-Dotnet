@@ -83,7 +83,7 @@ public class RepositorioInquilino : IRepo <Inquilino> {
         return resultado;
     }
 
-    public Inquilino BuscarPorID (int id) {
+    public Inquilino? BuscarPorID (int id) {
         var resultado = new Inquilino ();
         string SQLQuery = @"SELECT * FROM Inquilinos WHERE ID = " + id;
         using (var con = new MySqlConnection (ConnectionString)) {
@@ -93,8 +93,12 @@ public class RepositorioInquilino : IRepo <Inquilino> {
                 while (lector.Read ()) {
                         resultado.Nombre = lector.GetString ("Nombre");
                         resultado.ID = lector.GetInt32 ("ID");
-                    }
                 }
+                if (!lector.HasRows) {
+                    con.Close ();
+                    return null;
+                }
+            }
             con.Close ();
             return resultado;
         }

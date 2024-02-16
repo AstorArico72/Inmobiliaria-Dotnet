@@ -47,35 +47,56 @@ public class ContratoController : Controller {
         ViewBag.Propietarios = repoPropietarios.ObtenerTodos ();
         ViewBag.Inmuebles = repoInmuebles.ObtenerTodos ();
         ViewBag.Inquilinos = repoInquilinos.ObtenerTodos ();
-        return View (repo.BuscarPorID (id));
+        Contrato? resultado = repo.BuscarPorID (id);
+        if (resultado == null) {
+            return Error ();
+        } else {
+            return View (resultado);
+        }
     }
 
     [HttpPost]
     public IActionResult Editar (int id, Contrato contrato) {
-        if (repo.Editar (id, contrato) != -1) {
+        int resultado = repo.Editar (id, contrato);
+        if (resultado >= 0) {
+            TempData ["Mensaje"] = "Contrato editado con éxito.";
+            TempData ["ColorMensaje"] = "#00FF00";
             return RedirectToAction ("Index");
-        }
-        else {
-            return Error ();
+        } else if (resultado == -2) {
+            TempData ["Mensaje"] = "Un contrato ocupa la fecha seleccionada.";
+            TempData ["ColorMensaje"] = "#FFFF00";
+            return RedirectToAction ("Editar");
+        } else {
+            return RedirectToAction ("Editar");
         }
     }
 
     public IActionResult Borrar (int id, Contrato contrato) {
         if (repo.Borrar (id, contrato) != -1) {
+            TempData ["Mensaje"] = "Contrato borrado.";
+            TempData ["ColorMensaje"] = "#FF0000";
             return RedirectToAction ("Index");
         }
         else {
-            return Error ();
+            TempData ["Mensaje"] = "Un error ha ocurrido.";
+            TempData ["ColorMensaje"] = "#FF0000";
+            return RedirectToAction ("Index");
         }
     }
 
     [HttpPost]
     public IActionResult Nuevo (Contrato contrato) {
-        if (repo.Nuevo (contrato) != -1) {
+        int resultado = repo.Nuevo (contrato);
+        if (resultado >= 0) {
+            TempData ["Mensaje"] = "Nuevo contrato añadido.";
+            TempData ["ColorMensaje"] = "#00FF00";
             return RedirectToAction ("Index");
-        }
-        else {
-            return View ();
+        } else if (resultado == -2) {
+            TempData ["Mensaje"] = "Un contrato ocupa la fecha seleccionada.";
+            TempData ["ColorMensaje"] = "#FFFF00";
+            return RedirectToAction ("Nuevo");
+        } else {
+            return RedirectToAction ("Nuevo");
         }
     }
 

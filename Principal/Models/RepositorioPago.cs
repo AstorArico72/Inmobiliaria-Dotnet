@@ -89,7 +89,7 @@ public class RepositorioPago : IRepo <Pago> {
         return resultado;
     }
 
-    public Pago BuscarPorID (int id) {
+    public Pago? BuscarPorID (int id) {
         var NuevoItem = new Pago ();
         string SQLQuery = @"SELECT ID, NumeroPago, IdContrato, Monto FROM Pagos WHERE ID = " + id;
         try {
@@ -102,6 +102,10 @@ public class RepositorioPago : IRepo <Pago> {
                     NuevoItem.NumeroPago = lector.GetInt32 (1);
                     NuevoItem.IdContrato = lector.GetInt32 (2);
                     NuevoItem.Monto = lector.GetInt32 (3);
+                }
+                if (!lector.HasRows) {
+                    con.Close ();
+                    return null;
                 }
                 con.Close ();
                 }
