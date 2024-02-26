@@ -66,6 +66,10 @@ public class ContratoController : Controller {
             TempData ["Mensaje"] = "Un contrato ocupa la fecha seleccionada.";
             TempData ["ColorMensaje"] = "#FFFF00";
             return RedirectToAction ("Editar");
+        } else if (resultado == -3) {
+            TempData ["Mensaje"] = "La fecha seleccionada es inválida. Debe ser al menos un día después de la fecha de inicio.";
+            TempData ["ColorMensaje"] = "#FF0000";
+            return RedirectToAction ("Editar");
         } else {
             return RedirectToAction ("Editar");
         }
@@ -94,6 +98,10 @@ public class ContratoController : Controller {
         } else if (resultado == -2) {
             TempData ["Mensaje"] = "Un contrato ocupa la fecha seleccionada.";
             TempData ["ColorMensaje"] = "#FFFF00";
+            return RedirectToAction ("Nuevo");
+        } else if (resultado == -3) {
+            TempData ["Mensaje"] = "La fecha seleccionada es inválida. Debe ser al menos un día después de la fecha de inicio.";
+            TempData ["ColorMensaje"] = "#FF0000";
             return RedirectToAction ("Nuevo");
         } else {
             return RedirectToAction ("Nuevo");

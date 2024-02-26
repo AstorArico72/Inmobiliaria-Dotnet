@@ -42,6 +42,10 @@ public class RepositorioContrato : IRepo <Contrato> {
                     comm.Parameters.AddWithValue ("@Propiedad", co.Propiedad);
                     comm.Parameters.AddWithValue ("@FechaLímite", co.FechaLímite);
                     comm.Parameters.AddWithValue ("@FechaContrato", co.FechaContrato);
+                    if (co.FechaLímite.CompareTo (co.FechaContrato) <= 0) {
+                        resultado = -3;
+                        return resultado;
+                    }
                     bool EstaOcupado = PropiedadOcupada (co.Propiedad, co.FechaContrato, co.FechaLímite);
                     if (EstaOcupado) {
                         resultado = -2;
@@ -68,6 +72,10 @@ public class RepositorioContrato : IRepo <Contrato> {
                     comm.Parameters.AddWithValue ("@Locatario", co.Locatario);
                     comm.Parameters.AddWithValue ("@Propiedad", co.Propiedad);
                     comm.Parameters.AddWithValue ("@FechaLímite", co.FechaLímite);
+                    if (co.FechaLímite.CompareTo (co.FechaContrato) <= 0) {
+                        resultado = -3;
+                        return resultado;
+                    }
                     bool ocupado = PropiedadOcupada (co.Propiedad, co.FechaLímite);
                     if (ocupado) {
                         resultado = -2;
