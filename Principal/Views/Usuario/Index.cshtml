@@ -22,11 +22,12 @@
                 <td> <img src="@item.URLFoto" class="img-thumbnail" width="128" height="128"> </td>
                 <td>@item.NombreUsuario</td>
                 <td>@item.Rol</td>
-            @if (item.Rol != "Admin") {
-                <td><a class="text-danger" asp-action="Borrar" asp-route-id="@item.ID">Borrar</a> </td>
-            } else {
-                <td>No puede borrarse </td>
-            }
+                @if (item.Rol != "Admin") {
+                    <td><a class="text-danger" asp-action="Borrar" asp-route-id="@item.ID">Borrar</a> </td>
+                } else {
+                    <td>No puede borrarse </td>
+                }
+                <td><a class="text-warning" asp-action="Editar" asp-route-id="@item.ID">Editar</a></td>
             </tr>
         }
     </table>

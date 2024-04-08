@@ -26,7 +26,11 @@ public class RepositorioUsuario : IRepo <Usuario> {
                     NuevoItem.Clave = lector.GetString ("Clave");
                     NuevoItem.NombreUsuario = lector.GetString ("Nombre");
                     NuevoItem.Rol = lector.GetString ("Rol");
-                    NuevoItem.URLFoto = lector.GetString ("UrlImagen");
+                    if (lector.IsDBNull (4)) {
+                        NuevoItem.URLFoto = "/medios/Nulo.png";
+                    } else {
+                        NuevoItem.URLFoto = lector.GetString ("UrlImagen");
+                    }
                     resultado.Add (NuevoItem);
                 }
                 con.Close ();
@@ -62,11 +66,11 @@ public class RepositorioUsuario : IRepo <Usuario> {
         return resultado;
     }
 
-    public int Editar (int id, Usuario u) {
+    public int CambiarClave (int id, Usuario u) {
         int resultado = -1;
         try {
             using (var con = new MySqlConnection (ConnectionString)) {
-                string SQLQuery = @"UPDATE Usuarios SET Nombre = @Nombre, Clave = @Clave, Rol = @Rol, UrlImagen = @UrlImagen WHERE ID = " + id;
+                string SQLQuery = @"UPDATE Usuarios SET Clave = @Clave WHERE ID = " + id;
                 using (var comm = new MySqlCommand (SQLQuery, con)) {
                     u.Clave = Convert.ToBase64String(KeyDerivation.Pbkdf2(
 			            password: u.Clave,
@@ -75,8 +79,26 @@ public class RepositorioUsuario : IRepo <Usuario> {
 			            iterationCount: 1000,
 			            numBytesRequested: 256 / 8
                     ));
-                    comm.Parameters.AddWithValue ("@Nombre", u.NombreUsuario);
                     comm.Parameters.AddWithValue ("@Clave", u.Clave);
+                    con.Open ();
+
+                    resultado = Convert.ToInt32 (comm.ExecuteNonQuery ());
+                    con.Close ();
+                }
+            }
+        } catch (MySqlException ex) {
+            throw ex;
+        }
+        return resultado;
+    }
+
+    public int Editar (int id, Usuario u) {
+        int resultado = -1;
+        try {
+            using (var con = new MySqlConnection (ConnectionString)) {
+                string SQLQuery = @"UPDATE Usuarios SET Nombre = @Nombre, Rol = @Rol, UrlImagen = @UrlImagen WHERE ID = " + id;
+                using (var comm = new MySqlCommand (SQLQuery, con)) {
+                    comm.Parameters.AddWithValue ("@Nombre", u.NombreUsuario);
                     comm.Parameters.AddWithValue ("@Rol", u.Rol);
                     comm.Parameters.AddWithValue ("@UrlImagen", u.URLFoto);
                     con.Open ();
@@ -110,7 +132,7 @@ public class RepositorioUsuario : IRepo <Usuario> {
 
     public Usuario? BuscarPorID (int id) {
         var NuevoItem = new Usuario ();
-        string SQLQuery = @"SELECT ID, Clave, Nombre, Rol FROM Usuarios WHERE ID = " + id;
+        string SQLQuery = @"SELECT ID, Clave, Nombre, Rol, UrlImagen FROM Usuarios WHERE ID = " + id;
         try {
             using (var con = new MySqlConnection (ConnectionString)) {
                 using (var comm = new MySqlCommand (SQLQuery, con)) {
@@ -121,6 +143,11 @@ public class RepositorioUsuario : IRepo <Usuario> {
                         NuevoItem.Clave = lector.GetString ("Clave");
                         NuevoItem.NombreUsuario = lector.GetString ("Nombre");
                         NuevoItem.Rol = lector.GetString ("Rol");
+                        if (lector.IsDBNull (4)) {
+                            NuevoItem.URLFoto = "/medios/Nulo.png";
+                        } else {
+                            NuevoItem.URLFoto = lector.GetString ("UrlImagen");
+                        }
                     }
                     if (!lector.HasRows) {
                         con.Close ();
@@ -137,7 +164,7 @@ public class RepositorioUsuario : IRepo <Usuario> {
 
     public Usuario BuscarPorNombre (string nombre) {
         var NuevoItem = new Usuario ();
-        string SQLQuery = @"SELECT ID, Nombre, Clave, Rol FROM Usuarios WHERE Nombre = '" + nombre + "'";
+        string SQLQuery = @"SELECT ID, Nombre, Clave, Rol, UrlImagen FROM Usuarios WHERE Nombre = '" + nombre + "'";
         try {
             using (var con = new MySqlConnection (ConnectionString)) {
                 using (var comm = new MySqlCommand (SQLQuery, con)) {
@@ -148,6 +175,11 @@ public class RepositorioUsuario : IRepo <Usuario> {
                         NuevoItem.Clave = lector.GetString ("Clave");
                         NuevoItem.NombreUsuario = lector.GetString ("Nombre");
                         NuevoItem.Rol = lector.GetString ("Rol");
+                        if (lector.IsDBNull (4)) {
+                            NuevoItem.URLFoto = "/medios/Nulo.png";
+                        } else {
+                            NuevoItem.URLFoto = lector.GetString ("UrlImagen");
+                        }
                     }
                     con.Close ();
                 }

@@ -1,0 +1,16 @@
+@model Usuario;
+@{
+    ViewData["Title"] = "Editar Usuario";
+}
+
+<div class="text-center">
+    <h1 class="display-4">Cambiando clave de @Model.NombreUsuario</h1>
+
+    <form asp-action="CambiarClave" method="post" enctype="multipart/form-data">
+        <input type="hidden" name="NombreUsuario" value="@Model.NombreUsuario"/>
+        <input type="hidden" name="Rol" value="@Model.Rol"/>
+        <input type="hidden" name="Foto" value="@Model.Foto"/>
+        <input type="password" class="form-control" name="Clave" id="CampoClave"/> <br>
+        <button type="submit" class="btn btn-primary" class="btn btn-primary">Guardar cambios</button>
+    </form>
+</div>

@@ -9,9 +9,9 @@
     <form asp-action="Editar" method="post" enctype="multipart/form-data">
         <input type="text" class="form-control" name="NombreUsuario" id="CampoNombre" value="@Model.NombreUsuario"/> <br>
         <input type="hidden" name="Rol" value="@Model.Rol"/>
-        <input type="hidden" name="Clave" value="@Model.Clave"/>
         <label for="CampoImagen">Imágen &#40;tamaño recomendado 128x128&#41;: </label>
-        <input type="file" name="Foto" id="CampoImagen" value="@Model.Foto"/>
+        <input type="file" name="Foto" id="CampoImagen" value="@Model.Foto"/> <br>
         <button type="submit" class="btn btn-primary" class="btn btn-primary">Guardar cambios</button>
     </form>
+    <a asp-action="CambiarClave" asp-route-id="@Model.ID"> <button class="btn btn-danger"> Cambiar clave </button> </a> <br>
 </div>

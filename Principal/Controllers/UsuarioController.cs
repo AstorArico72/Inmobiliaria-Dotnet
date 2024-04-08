@@ -70,7 +70,7 @@ public class UsuarioController : Controller
 
         Usuario UsuarioSeleccionado = repo.BuscarPorNombre (data.NombreUsuario);
 
-        if (UsuarioSeleccionado == null || UsuarioSeleccionado.Clave != ContraseñaConHash) {
+        if (UsuarioSeleccionado == null || ContraseñaConHash != UsuarioSeleccionado.Clave) {
             TempData ["Mensaje"] = "Usuario o clave incorrectas";
             TempData ["ColorMensaje"] = "#FF0000";
             return RedirectToAction ("Login");
@@ -119,31 +119,49 @@ public class UsuarioController : Controller
     }
 
     [HttpGet]
-    [Authorize]
     public IActionResult Editar (int id) {
-        int? IdUsuario;
         var ClaimUsuario = User.Claims.FirstOrDefault (claim => claim.Type == "IdUsuario");
         if (ClaimUsuario != null) {
-            IdUsuario = int.Parse (ClaimUsuario.Value);
-            if (IdUsuario == id && IdUsuario != null) {
-                return View (repo.BuscarPorID (id));
-            } else {
-                TempData ["Mensaje"] = "No está permitido editar perfiles de otros usuarios.";
-                TempData ["ColorMensaje"] = "#FFFF00";
-                return RedirectToAction ("Login");
-            }
+            return View (repo.BuscarPorID (id));
+        } else {
+            return RedirectToAction ("Login");
+        }
+    }
+
+    [HttpGet]
+    public IActionResult CambiarClave (int id) {
+        var ClaimUsuario = User.Claims.FirstOrDefault (claim => claim.Type == "IdUsuario");
+        if (ClaimUsuario != null) {
+            return View (repo.BuscarPorID (id));
         } else {
             return RedirectToAction ("Login");
         }
     }
 
     [HttpPost]
-    [Authorize]
+    [Authorize (policy:"Admin")]
     public IActionResult Editar (int id, Usuario usuario) {
         var ClaimUsuario = User.Claims.FirstOrDefault (claim => claim.Type == "IdUsuario");
         int? IdUsuario = int.Parse (ClaimUsuario.Value);
-        if (repo.Editar (id, usuario) != -1 && IdUsuario == id && IdUsuario != null) {
+        if (repo.Editar (id, usuario) != -1 && IdUsuario != null) {
             SubirFoto (usuario, ENV, repo);
+            TempData ["Mensaje"] = "Cuenta editada con éxito.";
+            TempData ["ColorMensaje"] = "#00FF00";
+            return RedirectToAction ("Index", "Home");
+        }
+        else {
+            TempData ["Mensaje"] = "Un error ha ocurrido. Algún campo es inválido.";
+            TempData ["ColorMensaje"] = "#FF0000";
+            return RedirectToAction ("Login");
+        }
+    }
+
+    [HttpPost]
+    [Authorize (policy:"Admin")]
+    public IActionResult CambiarClave (int id, Usuario usuario) {
+        var ClaimUsuario = User.Claims.FirstOrDefault (claim => claim.Type == "IdUsuario");
+        int? IdUsuario = int.Parse (ClaimUsuario.Value);
+        if (repo.CambiarClave (id, usuario) != -1 && IdUsuario != null) {
             TempData ["Mensaje"] = "Cuenta editada con éxito.";
             TempData ["ColorMensaje"] = "#00FF00";
             return RedirectToAction ("Index", "Home");
