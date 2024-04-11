@@ -48,6 +48,7 @@ public class PropietarioController : Controller
         }
     }
 
+    [Authorize (policy:"Admin")]
     public IActionResult Borrar (int id, Propietario propietario) {
         if (repo.Borrar (id, propietario) != -1) {
             TempData ["Mensaje"] = "Propietario borrado.";

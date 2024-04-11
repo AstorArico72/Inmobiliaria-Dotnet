@@ -67,6 +67,7 @@ public class InquilinoController : Controller
         }
     }
 
+    [Authorize (policy:"Admin")]
     public IActionResult Borrar (int id, Inquilino inquilino) {
         if (repo.Borrar (id, inquilino) != -1) {
             TempData ["Mensaje"] = "Inquilino borrado";

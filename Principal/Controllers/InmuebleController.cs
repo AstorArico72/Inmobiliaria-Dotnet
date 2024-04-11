@@ -58,6 +58,7 @@ public class InmuebleController : Controller
         }
     }
 
+    [Authorize (policy:"Admin")]
     public IActionResult Borrar (int id, Inmueble inmueble) {
         if (repo.Borrar (id, inmueble) != -1) {
             TempData ["Mensaje"] = "Inmueble borrado.";

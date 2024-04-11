@@ -75,6 +75,7 @@ public class ContratoController : Controller {
         }
     }
 
+    [Authorize (policy:"Admin")]
     public IActionResult Borrar (int id, Contrato contrato) {
         if (repo.Borrar (id, contrato) != -1) {
             TempData ["Mensaje"] = "Contrato borrado.";

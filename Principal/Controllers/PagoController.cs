@@ -54,6 +54,7 @@ public class PagoController : Controller
         }
     }
 
+    [Authorize (policy:"Admin")]
     public IActionResult Borrar (int id, Pago pago) {
         if (repo.Borrar (id, pago) != -1) {
             TempData ["Mensaje"] = "Pago borrado.";
