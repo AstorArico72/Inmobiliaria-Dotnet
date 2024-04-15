@@ -12,13 +12,15 @@ public class ContratoController : Controller {
     private IRepo <Propietario> repoPropietarios;
     private IRepo <Inmueble> repoInmuebles;
     private IRepo <Inquilino> repoInquilinos;
+    private IRepo <Pago> repoPagos;
 
-    public ContratoController(ILogger<ContratoController> logger, IRepo <Contrato> repo, IRepo <Inmueble> repoInmueble, IRepo <Propietario> repoPropietario, IRepo <Inquilino> repoInquilino) {
+    public ContratoController(ILogger<ContratoController> logger, IRepo <Contrato> repo, IRepo <Inmueble> repoInmueble, IRepo <Propietario> repoPropietario, IRepo <Inquilino> repoInquilino, IRepo<Pago> repoPago) {
         _logger = logger;
         this.repo = repo;
         this.repoPropietarios = repoPropietario;
         this.repoInmuebles = repoInmueble;
         this.repoInquilinos = repoInquilino;
+        this.repoPagos = repoPago;
     }
 
     public IActionResult Index () {
@@ -47,6 +49,7 @@ public class ContratoController : Controller {
         ViewBag.Propietarios = repoPropietarios.ObtenerTodos ();
         ViewBag.Inmuebles = repoInmuebles.ObtenerTodos ();
         ViewBag.Inquilinos = repoInquilinos.ObtenerTodos ();
+        ViewBag.Pagos = repoPagos.ObtenerTodos ();
         Contrato? resultado = repo.BuscarPorID (id);
         if (resultado == null) {
             return Error ();

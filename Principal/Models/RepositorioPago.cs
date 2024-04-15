@@ -24,6 +24,7 @@ public class RepositorioPago : IRepo <Pago> {
                     NuevoItem.NumeroPago = lector.GetInt32 (1);
                     NuevoItem.IdContrato = lector.GetInt32 (2);
                     NuevoItem.Monto = lector.GetInt32 (3);
+                    NuevoItem.FechaPago = lector.GetDateTime (4);
                     resultado.Add (NuevoItem);
                 }
                 con.Close ();
@@ -36,11 +37,12 @@ public class RepositorioPago : IRepo <Pago> {
         int resultado = -1;
         try {
             using (var con = new MySqlConnection (ConnectionString)) {
-                string SQLQuery = @"INSERT INTO Pagos (NumeroPago, IdContrato, Monto) VALUES (@NumPago, @NumContrato, @Importe); SELECT LAST_INSERT_ID ()";
+                string SQLQuery = @"INSERT INTO Pagos (NumeroPago, IdContrato, Monto, FechaPago) VALUES (@NumPago, @NumContrato, @Importe, @Fecha); SELECT LAST_INSERT_ID ()";
                 using (var comm = new MySqlCommand (SQLQuery, con)) {
                     comm.Parameters.AddWithValue ("@NumPago", pa.NumeroPago);
                     comm.Parameters.AddWithValue ("@NumContrato", pa.IdContrato);
                     comm.Parameters.AddWithValue ("@Importe", pa.Monto);
+                    comm.Parameters.AddWithValue ("@Fecha", pa.FechaPago);
                     con.Open ();
                     resultado = Convert.ToInt32 (comm.ExecuteScalar ());
                     con.Close ();
@@ -56,11 +58,12 @@ public class RepositorioPago : IRepo <Pago> {
         int resultado = -1;
         try {
             using (var con = new MySqlConnection (ConnectionString)) {
-                string SQLQuery = @"UPDATE Pagos SET NumeroPago = @NumPago, IdContrato = @Contrato, Monto = @Importe WHERE ID = " + id;
+                string SQLQuery = @"UPDATE Pagos SET NumeroPago = @NumPago, IdContrato = @Contrato, Monto = @Importe, FechaPago = @Fecha WHERE ID = " + id;
                 using (var comm = new MySqlCommand (SQLQuery, con)) {
                     comm.Parameters.AddWithValue ("@NumPago", pa.NumeroPago);
                     comm.Parameters.AddWithValue ("@Contrato", pa.IdContrato);
                     comm.Parameters.AddWithValue ("@Importe", pa.Monto);
+                    comm.Parameters.AddWithValue ("@Fecha", pa.FechaPago);
                     con.Open ();
                     resultado = Convert.ToInt32 (comm.ExecuteNonQuery ());
                     con.Close ();
@@ -91,7 +94,7 @@ public class RepositorioPago : IRepo <Pago> {
 
     public Pago? BuscarPorID (int id) {
         var NuevoItem = new Pago ();
-        string SQLQuery = @"SELECT ID, NumeroPago, IdContrato, Monto FROM Pagos WHERE ID = " + id;
+        string SQLQuery = @"SELECT ID, NumeroPago, IdContrato, Monto, FechaPago FROM Pagos WHERE ID = " + id;
         try {
             using (var con = new MySqlConnection (ConnectionString)) {
                 using (var comm = new MySqlCommand (SQLQuery, con)) {
@@ -102,6 +105,7 @@ public class RepositorioPago : IRepo <Pago> {
                     NuevoItem.NumeroPago = lector.GetInt32 (1);
                     NuevoItem.IdContrato = lector.GetInt32 (2);
                     NuevoItem.Monto = lector.GetInt32 (3);
+                    NuevoItem.FechaPago = lector.GetDateTime (4);
                 }
                 if (!lector.HasRows) {
                     con.Close ();

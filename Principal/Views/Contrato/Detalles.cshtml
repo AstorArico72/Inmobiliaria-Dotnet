@@ -6,14 +6,19 @@
     List <Inquilino> ListaInquilinos = ViewBag.Inquilinos;
     List <Inmueble> ListaInmuebles = ViewBag.Inmuebles;
     List <Propietario> ListaPropietarios = ViewBag.Propietarios;
+    List <Pago> ListaPagos = ViewBag.Pagos;
     Inquilino InquilinoSeleccionado = ListaInquilinos.Where (item => item.ID == Model.Locatario).First ();
     Inmueble InmuebleSeleccionado = ListaInmuebles.Where (item => item.ID == Model.Propiedad).First ();
     Propietario DueñoInmueble = ListaPropietarios.Where(item => item.ID == InmuebleSeleccionado.IDPropietario).First ();
+    List <Pago> PagosDelContrato = ListaPagos.FindAll (item => item.IdContrato == Model.ID);
     if (DueñoInmueble == null) {
-        DueñoAMostrar = "La inmobiliaria";
+        DueñoAMostrar = "Se vende";
     } else {
         DueñoAMostrar = DueñoInmueble.Nombre;
     }
+    var ParametrosURL = new Dictionary <string, string> {
+        {"Contrato", Model.ID.ToString ()}
+    };
 }
 
 <div class="text-center">
@@ -25,7 +30,29 @@
         Fecha de inicio del contrato: @Model.FechaContrato.Year - @Model.FechaContrato.Month - @Model.FechaContrato.Day <br>
         Fecha límite del contrato: @Model.FechaLímite.Year - @Model.FechaLímite.Month - @Model.FechaLímite.Day <br>
     </p>
+    @if (PagosDelContrato.Count > 0) {
+        <h3>Pagos</h3>
+        <table class="table text-center">
+            <thead>
+                <th>Número</th>
+                <th>Monto</th>
+                <th>Fecha del pago</th>
+            </thead>
+            <tbody>
+                @foreach (var item in PagosDelContrato) {
+                    <tr>
+                    <td>@item.NumeroPago</td>
+                    <td>@item.Monto</td>
+                    <td>@item.FechaPago.Day - @item.FechaPago.Month - @item.FechaPago.Year</td>
+                    </tr>
+                }
+            </tbody>
+        </table>
+    } else {
+        <h3 class="text-danger"> No hay pagos </h3>
+    }
     <a asp-action="Editar" asp-route-id="@Model.ID"><button class="btn btn-warning">Editar éste contrato</button></a>
-    <a asp-action="Borrar" asp-route-id="@Model.ID"><button class="btn btn-danger">Borrar éste contrato</button></a> <br><br>
+    <a asp-action="Borrar" asp-route-id="@Model.ID"><button class="btn btn-danger">Borrar éste contrato</button></a>
+    <a asp-action="Nuevo" asp-controller="Pago" asp-all-route-data="ParametrosURL"><button class="btn btn-info">Pagar éste contrato</button></a> <br>
     <a asp-action="Nuevo"><button class="btn btn-success">Añadir uno nuevo</button></a>
 </div>

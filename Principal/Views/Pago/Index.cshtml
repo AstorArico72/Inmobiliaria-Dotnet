@@ -14,12 +14,14 @@
         <th>Contrato</th>
         <th>Pago #</th>
         <th>Monto</th>
+        <th>Fecha del pago</th>
         @foreach (var item in Model) {
             <tr>
                 <td>@item.ID</td>
                 <td>@item.IdContrato</td>
                 <td>@item.NumeroPago</td>
                 <td>@item.Monto</td>
+                <td>@item.FechaPago.Day - @item.FechaPago.Month - @item.FechaPago.Year </td>
                 <td><a asp-action="Editar" asp-route-id= "@item.ID">Editar</a></td>
                 <td><a asp-action="Borrar" asp-route-id= "@item.ID">Borrar</a></td>
             </tr>
