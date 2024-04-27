@@ -23,6 +23,26 @@
             }
         </select>
         <br>
+        <label for="CampoTipo">Tipo:</label>
+        <select id="CampoTipo" name="Tipo">
+            <option value="null">Sin especificar</option>
+            <option value="Casa">Casa</option>
+            <option value="Departamento">Departamento</option>
+            <option value="Galpón">Galpón</option>
+            <option value="Local">Local</option>
+            <option value="Terreno">Terreno</option>
+        </select>
+        <br>
+        <label for="CampoUso">Para uso:</label>
+        <select id="CampoUso" name="Uso">
+            <option value="null">Sin especificar</option>
+            <option value="Personal">Personal</option>
+            <option value="Comercial">Comercial</option>
+        </select>
+        <br>
+        <label for="CampoAmbientes"><abbr title="Especificar 0 ambientes si es un terreno.">Ambientes</abbr></label>
+        <input type="number" name="Ambientes" min="0" max="127" size="3" id="CampoAmbientes"/>
+        <br>
         <button type="submit" class="btn btn-primary">Guardar</button>
     </form>
 </div>

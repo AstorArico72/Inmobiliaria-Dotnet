@@ -20,7 +20,8 @@ public class RepositorioPropietario : IRepo <Propietario> {
                 while (lector.Read ()) {
                     var NuevoItem = new Propietario (
                         lector.GetString ("Nombre"),
-                        lector.GetInt32 ("ID")
+                        lector.GetInt32 ("ID"),
+                        lector.GetString ("Contacto")
                     );
 
                     resultado.Add (NuevoItem);
@@ -34,9 +35,10 @@ public class RepositorioPropietario : IRepo <Propietario> {
         int resultado = -1;
         try {
             using (var con = new MySqlConnection (ConnectionString)) {
-                string SQLQuery = @"INSERT INTO Propietarios (Nombre) VALUES (@Nombre); SELECT LAST_INSERT_ID ()";
+                string SQLQuery = @"INSERT INTO Propietarios (Nombre, Contacto) VALUES (@Nombre, @Contacto); SELECT LAST_INSERT_ID ()";
                 using (var comm = new MySqlCommand (SQLQuery, con)) {
                     comm.Parameters.AddWithValue ("@Nombre", pr.Nombre);
+                    comm.Parameters.AddWithValue ("@Contacto", pr.Contacto);
                     con.Open ();
                     resultado = Convert.ToInt32 (comm.ExecuteScalar ()); // <-- Aquí hay un error crítico que no sé cómo resolver.
                     con.Close ();
@@ -52,9 +54,10 @@ public class RepositorioPropietario : IRepo <Propietario> {
         int resultado = -1;
         try {
             using (var con = new MySqlConnection (ConnectionString)) {
-                string SQLQuery = @"UPDATE Propietarios SET Nombre = @Nombre WHERE ID = " + id;
+                string SQLQuery = @"UPDATE Propietarios SET Nombre = @Nombre, Contacto = @Contacto WHERE ID = " + id;
                 using (var comm = new MySqlCommand (SQLQuery, con)) {
                     comm.Parameters.AddWithValue ("@Nombre", pr.Nombre);
+                    comm.Parameters.AddWithValue ("@Contacto", pr.Contacto);
                     con.Open ();
                     resultado = Convert.ToInt32 (comm.ExecuteScalar ());
                     con.Close ();
@@ -93,6 +96,7 @@ public class RepositorioPropietario : IRepo <Propietario> {
                 while (lector.Read ()) {
                     resultado.Nombre = lector.GetString ("Nombre");
                     resultado.ID = lector.GetInt32 ("ID");
+                    resultado.Contacto = lector.GetString ("Contacto");
                 }
                 if (!lector.HasRows) {
                     con.Close ();

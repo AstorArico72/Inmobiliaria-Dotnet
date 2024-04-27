@@ -10,15 +10,22 @@ public class Inmueble {
         [DisplayFormat(ConvertEmptyStringToNull = true, NullDisplayText = "No está en alquiler", ApplyFormatInEditMode=true)]
         public int? Precio {get; set;}
         public int? IDPropietario {get; set;}
-        [DisplayFormat(ConvertEmptyStringToNull = true, NullDisplayText = "Propiedad de la inmobiliaria", ApplyFormatInEditMode=true)]
+        [DisplayFormat(ConvertEmptyStringToNull = true, NullDisplayText = "Dueño no especificado", ApplyFormatInEditMode=true)]
         public Propietario? Dueño {get; set;}
-        public Inmueble (int id, string? direccion, short area, int? precio, int? numDueño, Propietario? dueño) {
+        [DisplayFormat(ConvertEmptyStringToNull = true, NullDisplayText = "Sin especificar", ApplyFormatInEditMode=true)]
+        public string? Tipo {get; set;}
+        public string? Uso {get; set;}
+        public byte Ambientes {get; set;}
+        public Inmueble (int id, string? direccion, short area, int? precio, int? numDueño, Propietario? dueño, string? tipo, string? uso, byte ambientes) {
             this.ID = id;
             this.Dirección = direccion;
             this.Superficie = area;
             this.Precio = precio;
             this.IDPropietario = numDueño;
             this.Dueño = dueño;
+            this.Tipo = tipo;
+            this.Uso = uso;
+            this.Ambientes = ambientes;
         }
     
         //Sin parámetros

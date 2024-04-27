@@ -6,13 +6,34 @@
 <div class="text-center">
     <h1 class="display-4">@ViewData["Title"]</h1>
     <p>
-        Éstos son los inmuebles registrados en la inmobiliaria. <br>
+        Si aparece aquí es porque está en alquiler.<br>
         <a asp-action="Nuevo">Nueva entrada</a>
     </p>
     <ul>
 
     </ul>
-    @foreach (var item in Model) {
-            <li>#@item.ID, ubicado en <a asp-action="Detalles" asp-route-id= "@item.ID">@item.Dirección</a></li>
-    }
+    <table class="table">
+        <thead>
+            <tr>
+            <th>#</th>
+            <th>Dirección</th>
+            <th>Tipo</th>
+            <th>Superficie en m&#178;</th>
+            <th>Uso</th>
+            <th>Precio</th>
+            </tr>
+        </thead>
+        <tbody>
+        @foreach (var item in Model) {
+            <tr>
+                <td>@item.ID</td>
+                <td><a asp-action="Detalles" asp-route-id= "@item.ID">@item.Dirección</a></td>
+                <td>@item.Tipo</td>
+                <td>@item.Superficie</td>
+                <td>@item.Uso</td>
+                <td>@item.Precio</td>
+            </tr>
+        }
+        </tbody>
+    </table>
 </div>

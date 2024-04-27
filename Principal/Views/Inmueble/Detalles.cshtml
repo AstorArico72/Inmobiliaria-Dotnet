@@ -6,18 +6,21 @@
     if (Dueños.Count () != 0) {
         DatoAMostrar = Dueños.First ().Nombre;
     } else {
-        DatoAMostrar = "Propiedad de la inmobiliaria";
+        DatoAMostrar = "Dueño no especificado.";
     }
     
-    ViewData["Title"] = "Inmueble #" + @Model.ID;
+    ViewData["Title"] = @Model.Dirección;
 }
 
 <div class="text-center">
     <h1 class="display-4">@ViewData["Title"]</h1>
     <p>
-        Inmueble registrado en la inmobiliaria. <br>
+        <h2>@Model.Tipo</h2>
+        <h2>Para uso @Model.Uso</h2>
+        @if (Model.Tipo != "Terreno") {
+            <h2>@Model.Ambientes ambiente(s)</h2>
+        }
         <p>
-            Dirección: @Html.DisplayFor(Model => Model.Dirección) <br>
             Superficie: @Html.DisplayFor(Model => Model.Superficie) m&#178; <br>
             @if (Model.IDPropietario != null) {
                 <span>Dueño: <a asp-action="Detalles" asp-controller="Propietario" asp-route-id="@Model.IDPropietario"> @DatoAMostrar </a> <br></span>

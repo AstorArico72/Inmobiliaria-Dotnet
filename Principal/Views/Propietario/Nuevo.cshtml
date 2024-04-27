@@ -6,7 +6,8 @@
     <h1 class="display-4">@ViewData["Title"]</h1>
 
     <form asp-action="Nuevo" method="post">
-        <input type="text" name="Nombre" id="CampoNombre" class="form-select" placeholder="Nombre"/> <br>
+        <input type="text" name="Nombre" class="form-select" placeholder="Nombre"/> <br>
+        <textarea name="Contacto" class="form-control" placeholder="Datos de contacto (Se aceptan direcciones, números de teléfono, y correos electrónicos.)" rows="10" cols="60"></textarea>
         <button type="submit" class="btn btn-primary">Guardar</button>
     </form>
 </div>

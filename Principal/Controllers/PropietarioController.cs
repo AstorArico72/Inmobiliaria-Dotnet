@@ -34,10 +34,14 @@ public class PropietarioController : Controller
         return View (repo.BuscarPorID (id));
     }
 
+    public IActionResult Editar (int id) {
+        return View (repo.BuscarPorID (id));
+    }
+
     [HttpPost]
     public IActionResult Editar (int id, Propietario propietario) {
         if (repo.Editar (id, propietario) != -1) {
-            TempData ["Mensaje"] = "Propietario añadido con éxito.";
+            TempData ["Mensaje"] = "Propietario editado con éxito.";
             TempData ["ColorMensaje"] = "#00FF00";
             return RedirectToAction ("Index");
         }

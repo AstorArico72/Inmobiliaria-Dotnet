@@ -28,6 +28,26 @@
                 <option value="@item.ID">@item.Nombre &#40;#@item.ID&#41;</option>
             }
         </select>
+        <label for="CampoTipo">Tipo:</label>
+        <select id="CampoTipo" name="Tipo">
+            <option value="@Model.Tipo" selected>@Model.Tipo</option>
+            <option value="null">Sin especificar</option>
+            <option value="Casa">Casa</option>
+            <option value="Departamento">Departamento</option>
+            <option value="Galpón">Galpón</option>
+            <option value="Local">Local</option>
+            <option value="Terreno">Terreno</option>
+        </select>
+        <br>
+        <label for="CampoUso">Para uso:</label>
+        <select id="CampoUso" name="Uso">
+            <option value="@Model.Uso" selected>@Model.Uso</option>
+            <option value="null">Sin especificar</option>
+            <option value="Personal">Personal</option>
+            <option value="Comercial">Comercial</option>
+        </select>
+        <label for="CampoAmbientes"><abbr title="Especificar 0 ambientes si es un terreno.">Ambientes</abbr></label>
+        <input type="number" name="Ambientes" min="0" max="127" size="3" id="CampoAmbientes" placeholder="@Model.Ambientes" value="@Model.Ambientes"/>
         <br>
         <button type="submit" class="btn btn-primary">Guardar</button>
     </form>

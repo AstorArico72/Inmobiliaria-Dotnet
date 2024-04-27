@@ -1,12 +1,16 @@
+@model Propietario;
 @{
     ViewData["Title"] = "Editar Propietario";
 }
 
 <div class="text-center">
-    <h1 class="display-4">Editando Propietario</h1>
+    <h1 class="display-4">Editando a @Model.Nombre</h1>
 
     <form asp-action="Editar" method="post">
-        <input type="text" name="Nombre" id="CampoNombre" class="form-control" placeholder="Nombre"/> <br>
+        <label for="CampoNombre">Nombre:</label>
+        <input type="text" name="Nombre" id="CampoNombre" class="form-control" placeholder="@Model.Nombre" value="@Model.Nombre"/> <br>
+        <label for="CampoContacto"><abbr title="Se aceptan direcciones, números de teléfono, y correos electrónicos.">Datos de contacto:</abbr></label>
+        <textarea name="Contacto" class="form-control" placeholder="@Model.Contacto" rows="10" cols="60" value="@Model.Contacto" id="CampoContacto"> </textarea>
         <button type="submit" class="btn btn-primary">Guardar cambios</button>
     </form>
 </div>
