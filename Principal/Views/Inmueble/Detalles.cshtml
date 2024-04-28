@@ -13,7 +13,11 @@
 }
 
 <div class="text-center">
-    <h1 class="display-4">@ViewData["Title"]</h1>
+    @if (Model.Disponible == 0) {
+        <h1 class="display-4 text-danger">@ViewData["Title"]</h1>
+    } else {
+        <h1 class="display-4">@ViewData["Title"]</h1>
+    }
     <p>
         <h2>@Model.Tipo</h2>
         <h2>Para uso @Model.Uso</h2>
@@ -27,7 +31,11 @@
             } else {
                 <span>@DatoAMostrar<br></span>
             }
-            En alquiler por $@Model.Precio <br>
+            @if (Model.Disponible == 0) {
+                <span> Inmueble no disponible </span> <br>
+            } else {
+                <span>En alquiler por $@Model.Precio</span> <br>
+            }
         </p>
     </p>
     <a asp-action="Editar" asp-route-id= "@Model.ID"> <button class="btn btn-warning">Editar éste inmueble</button> </a><br>

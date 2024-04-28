@@ -47,7 +47,11 @@ public class RepositorioContrato : IRepo <Contrato> {
                         return resultado;
                     }
                     bool EstaOcupado = PropiedadOcupada (co.Propiedad, co.FechaContrato, co.FechaLímite);
-                    if (EstaOcupado) {
+                    byte NoDisponible = InmuebleNoDisponible (co.Propiedad);
+                    if (NoDisponible == 0) {
+                        resultado = -4;
+                        return resultado;
+                    } else if (EstaOcupado) {
                         resultado = -2;
                         return resultado;
                     } else {
@@ -77,7 +81,10 @@ public class RepositorioContrato : IRepo <Contrato> {
                         return resultado;
                     }
                     bool ocupado = PropiedadOcupada (co.Propiedad, co.FechaLímite);
-                    if (ocupado) {
+                    byte NoDisponible = InmuebleNoDisponible (co.Propiedad);
+                    if (NoDisponible == 0) {
+                        resultado = -4;
+                    } else if (ocupado) {
                         resultado = -2;
                     } else {
                         con.Open ();
@@ -192,6 +199,23 @@ public class RepositorioContrato : IRepo <Contrato> {
         } catch (MySqlException ex) {
             Console.WriteLine (ex);
             return true;
+        }
+    }
+
+    private byte InmuebleNoDisponible (int propiedad) {
+        byte disponible = 0;
+        string SQLQuery = @"SELECT Disponible FROM Inmuebles WHERE ID = @propiedad";
+        using (var con = new MySqlConnection (ConnectionString)) {
+            using (var comm = new MySqlCommand (SQLQuery, con)) {
+                con.Open ();
+                comm.Parameters.AddWithValue ("@propiedad", propiedad);
+                var lector = comm.ExecuteReader ();
+                while (lector.Read ()) {
+                    disponible = lector.GetByte (0);
+                }
+                con.Close ();
+                return disponible;
+            }
         }
     }
 }

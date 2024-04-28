@@ -16,7 +16,8 @@ public class Inmueble {
         public string? Tipo {get; set;}
         public string? Uso {get; set;}
         public byte Ambientes {get; set;}
-        public Inmueble (int id, string? direccion, short area, int? precio, int? numDueño, Propietario? dueño, string? tipo, string? uso, byte ambientes) {
+        public byte Disponible {get; set;}
+        public Inmueble (int id, string? direccion, short area, int? precio, int? numDueño, Propietario? dueño, string? tipo, string? uso, byte ambientes, byte disponible) {
             this.ID = id;
             this.Dirección = direccion;
             this.Superficie = area;
@@ -26,6 +27,7 @@ public class Inmueble {
             this.Tipo = tipo;
             this.Uso = uso;
             this.Ambientes = ambientes;
+            this.Disponible = disponible;
         }
     
         //Sin parámetros

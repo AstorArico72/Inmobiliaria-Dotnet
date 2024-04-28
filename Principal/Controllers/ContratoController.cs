@@ -61,20 +61,25 @@ public class ContratoController : Controller {
     [HttpPost]
     public IActionResult Editar (int id, Contrato contrato) {
         int resultado = repo.Editar (id, contrato);
-        if (resultado >= 0) {
-            TempData ["Mensaje"] = "Contrato editado con éxito.";
-            TempData ["ColorMensaje"] = "#00FF00";
-            return RedirectToAction ("Index");
-        } else if (resultado == -2) {
-            TempData ["Mensaje"] = "Un contrato ocupa la fecha seleccionada.";
-            TempData ["ColorMensaje"] = "#FFFF00";
-            return RedirectToAction ("Editar");
-        } else if (resultado == -3) {
-            TempData ["Mensaje"] = "La fecha seleccionada es inválida. Debe ser al menos un día después de la fecha de inicio.";
-            TempData ["ColorMensaje"] = "#FF0000";
-            return RedirectToAction ("Editar");
-        } else {
-            return RedirectToAction ("Editar");
+        switch (resultado) {
+            case >= 0:
+                TempData ["Mensaje"] = "Contrato editado con éxito.";
+                TempData ["ColorMensaje"] = "#00FF00";
+                return RedirectToAction ("Index");
+            case -2:
+                TempData ["Mensaje"] = "Un contrato ocupa la fecha seleccionada.";
+                TempData ["ColorMensaje"] = "#FFFF00";
+                return RedirectToAction ("Editar");
+            case -3:
+                TempData ["Mensaje"] = "La fecha seleccionada es inválida. Debe ser al menos un día después de la fecha de inicio.";
+                TempData ["ColorMensaje"] = "#FF0000";
+                return RedirectToAction ("Editar");
+            case -4:
+                TempData ["Mensaje"] = "El inmueble seleccionado no está disponible.";
+                TempData ["ColorMensaje"] = "#FF0000";
+                return RedirectToAction ("Editar");
+            default:
+                return RedirectToAction ("Editar");
         }
     }
 
@@ -95,20 +100,25 @@ public class ContratoController : Controller {
     [HttpPost]
     public IActionResult Nuevo (Contrato contrato) {
         int resultado = repo.Nuevo (contrato);
-        if (resultado >= 0) {
-            TempData ["Mensaje"] = "Nuevo contrato añadido.";
-            TempData ["ColorMensaje"] = "#00FF00";
-            return RedirectToAction ("Index");
-        } else if (resultado == -2) {
-            TempData ["Mensaje"] = "Un contrato ocupa la fecha seleccionada.";
-            TempData ["ColorMensaje"] = "#FFFF00";
-            return RedirectToAction ("Nuevo");
-        } else if (resultado == -3) {
-            TempData ["Mensaje"] = "La fecha seleccionada es inválida. Debe ser al menos un día después de la fecha de inicio.";
-            TempData ["ColorMensaje"] = "#FF0000";
-            return RedirectToAction ("Nuevo");
-        } else {
-            return RedirectToAction ("Nuevo");
+        switch (resultado) {
+            case >= 0:
+                TempData ["Mensaje"] = "Contrato editado con éxito.";
+                TempData ["ColorMensaje"] = "#00FF00";
+                return RedirectToAction ("Index");
+            case -2:
+                TempData ["Mensaje"] = "Un contrato ocupa la fecha seleccionada.";
+                TempData ["ColorMensaje"] = "#FFFF00";
+                return RedirectToAction ("Nuevo");
+            case -3:
+                TempData ["Mensaje"] = "La fecha seleccionada es inválida. Debe ser al menos un día después de la fecha de inicio.";
+                TempData ["ColorMensaje"] = "#FF0000";
+                return RedirectToAction ("Nuevo");
+            case -4:
+                TempData ["Mensaje"] = "El inmueble seleccionado no está disponible.";
+                TempData ["ColorMensaje"] = "#FF0000";
+                return RedirectToAction ("Nuevo");
+            default:
+                return RedirectToAction ("Nuevo");
         }
     }
 

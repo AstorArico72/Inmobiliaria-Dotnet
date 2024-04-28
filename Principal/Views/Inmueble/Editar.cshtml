@@ -28,6 +28,7 @@
                 <option value="@item.ID">@item.Nombre &#40;#@item.ID&#41;</option>
             }
         </select>
+        <br>
         <label for="CampoTipo">Tipo:</label>
         <select id="CampoTipo" name="Tipo">
             <option value="@Model.Tipo" selected>@Model.Tipo</option>
@@ -46,8 +47,14 @@
             <option value="Personal">Personal</option>
             <option value="Comercial">Comercial</option>
         </select>
+        <br>
         <label for="CampoAmbientes"><abbr title="Especificar 0 ambientes si es un terreno.">Ambientes</abbr></label>
         <input type="number" name="Ambientes" min="0" max="127" size="3" id="CampoAmbientes" placeholder="@Model.Ambientes" value="@Model.Ambientes"/>
+        <br>
+        <label for="Disponible1">Disponible</label>
+        <input class="form-check-input" type="radio" name="Disponible" value="1" id="Disponible1" checked> <br>
+        <label for="Disponible0">No disponible</label>
+        <input class="form-check-input" type="radio" name="Disponible" value="0" id="Disponible0">
         <br>
         <button type="submit" class="btn btn-primary">Guardar</button>
     </form>

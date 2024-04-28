@@ -25,14 +25,16 @@
         </thead>
         <tbody>
         @foreach (var item in Model) {
-            <tr>
+            if (item.Disponible == 1) {
+                <tr>
                 <td>@item.ID</td>
                 <td><a asp-action="Detalles" asp-route-id= "@item.ID">@item.Dirección</a></td>
                 <td>@item.Tipo</td>
                 <td>@item.Superficie</td>
                 <td>@item.Uso</td>
                 <td>@item.Precio</td>
-            </tr>
+                </tr>
+            }
         }
         </tbody>
     </table>

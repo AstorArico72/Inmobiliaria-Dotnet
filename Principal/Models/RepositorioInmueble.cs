@@ -12,7 +12,7 @@ public class RepositorioInmueble : IRepo <Inmueble> {
 
     public List<Inmueble> ObtenerTodos () {
         var resultado = new List<Inmueble> ();
-        string SQLQuery = @"SELECT DISTINCT i.ID, i.Dirección, i.Superficie, i.Precio, i.Propietario, p.Nombre, p.ID, i.Tipo, i.Uso, p.Contacto, i.Ambientes FROM Inmuebles i " +
+        string SQLQuery = @"SELECT DISTINCT i.ID, i.Dirección, i.Superficie, i.Precio, i.Propietario, p.Nombre, p.ID, i.Tipo, i.Uso, p.Contacto, i.Ambientes, i.Disponible FROM Inmuebles i " +
         "LEFT JOIN Propietarios p ON p.ID = i.Propietario";
 
         using (var con = new MySqlConnection (ConnectionString)) {
@@ -25,6 +25,7 @@ public class RepositorioInmueble : IRepo <Inmueble> {
                     NuevoItem.Tipo = lector.GetString (7);
                     NuevoItem.Uso = lector.GetString (8);
                     NuevoItem.Ambientes = lector.GetByte (10);
+                    NuevoItem.Disponible = lector.GetByte (11);
                     if (lector.IsDBNull (3) || lector.IsDBNull (4)) {
                         if (lector.IsDBNull (3) && !lector.IsDBNull (4)) {
                             //Sin precio pero con propietario
@@ -68,9 +69,8 @@ public class RepositorioInmueble : IRepo <Inmueble> {
         int resultado = -1;
         try {
             using (var con = new MySqlConnection (ConnectionString)) {
-                string SQLQuery = @"INSERT INTO Inmuebles (Dirección, Superficie, Precio, Propietario, Tipo, Uso, Ambientes) VALUES (@Dirección, @Superficie, @Precio, @Propietario, @Tipo, @Uso, @Ambientes); SELECT LAST_INSERT_ID ()";
+                string SQLQuery = @"INSERT INTO Inmuebles (Dirección, Superficie, Precio, Propietario, Tipo, Uso, Ambientes, Disponible) VALUES (@Dirección, @Superficie, @Precio, @Propietario, @Tipo, @Uso, @Ambientes, 1); SELECT LAST_INSERT_ID ()";
                 using (var comm = new MySqlCommand (SQLQuery, con)) {
-                    //comm.Parameters.AddWithValue ("@Nombre", im.Nombre);
                     comm.Parameters.AddWithValue ("@Dirección", im.Dirección);
                     comm.Parameters.AddWithValue ("@Superficie", im.Superficie);
                     comm.Parameters.AddWithValue ("@Precio", im.Precio);
@@ -93,7 +93,7 @@ public class RepositorioInmueble : IRepo <Inmueble> {
         int resultado = -1;
         try {
             using (var con = new MySqlConnection (ConnectionString)) {
-                string SQLQuery = @"UPDATE Inmuebles SET Dirección = @Dirección, Superficie = @Superficie, Precio = @Precio, Propietario = @Propietario, Tipo = @Tipo, Uso = @Uso, Ambientes = @Ambientes WHERE ID = " + id;
+                string SQLQuery = @"UPDATE Inmuebles SET Dirección = @Dirección, Superficie = @Superficie, Precio = @Precio, Propietario = @Propietario, Tipo = @Tipo, Uso = @Uso, Ambientes = @Ambientes, Disponible = @Disponible WHERE ID = " + id;
                 using (var comm = new MySqlCommand (SQLQuery, con)) {
                     comm.Parameters.AddWithValue ("@Dirección", im.Dirección);
                     comm.Parameters.AddWithValue ("@Superficie", im.Superficie);
@@ -102,6 +102,7 @@ public class RepositorioInmueble : IRepo <Inmueble> {
                     comm.Parameters.AddWithValue ("@Tipo", im.Tipo);
                     comm.Parameters.AddWithValue ("@Uso", im.Uso);
                     comm.Parameters.AddWithValue ("@Ambientes", im.Ambientes);
+                    comm.Parameters.AddWithValue ("@Disponible", im.Disponible);
                     con.Open ();
                     resultado = Convert.ToInt32 (comm.ExecuteNonQuery ());
                     con.Close ();
@@ -132,7 +133,7 @@ public class RepositorioInmueble : IRepo <Inmueble> {
 
     public Inmueble? BuscarPorID (int id) {
         var NuevoItem = new Inmueble ();
-        string SQLQuery = @"SELECT ID, Dirección, Superficie, Precio, Propietario, Tipo, Uso, Ambientes FROM Inmuebles WHERE ID = " + id;
+        string SQLQuery = @"SELECT ID, Dirección, Superficie, Precio, Propietario, Tipo, Uso, Ambientes, Disponible FROM Inmuebles WHERE ID = " + id;
         try {
             using (var con = new MySqlConnection (ConnectionString)) {
                 using (var comm = new MySqlCommand (SQLQuery, con)) {
@@ -143,6 +144,7 @@ public class RepositorioInmueble : IRepo <Inmueble> {
                     NuevoItem.Tipo = lector.GetString (5);
                     NuevoItem.Uso = lector.GetString (6);
                     NuevoItem.Ambientes = lector.GetByte (7);
+                    NuevoItem.Disponible = lector.GetByte (8);
                     if (lector.IsDBNull (3) || lector.IsDBNull (4)) {
                         if (lector.IsDBNull (3) && !lector.IsDBNull (4)) {
                             NuevoItem.Precio = null;

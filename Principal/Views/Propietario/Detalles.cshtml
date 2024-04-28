@@ -20,9 +20,18 @@
             </li>
         } else {
             foreach (var item in InmueblesSeleccionados) {
-                <li>
+                if (item.Disponible == 0) {
+                    <li class="text-danger">
+                        <del>
+                            <a asp-action="Detalles" asp-controller="Inmueble" asp-route-id="@item.ID"> @item.Dirección </a> &#40;#@item.ID&#41;
+                        </del>
+                        (No disponible)
+                    </li>
+                } else {
+                    <li>
                     <a asp-action="Detalles" asp-controller="Inmueble" asp-route-id="@item.ID"> @item.Dirección </a> &#40;#@item.ID&#41;
-                </li>
+                    </li>
+                }
             }
         }
     </ul>
