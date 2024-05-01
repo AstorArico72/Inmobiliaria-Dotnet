@@ -140,9 +140,14 @@ public class RepositorioContrato : IRepo <Contrato> {
         }
     }
 
-    private bool PropiedadOcupada (int propiedad, DateTime fechaComienzo, DateTime fechaLimite) {
+    public bool PropiedadOcupada (int propiedad, DateTime fechaComienzo, DateTime fechaLimite) {
         string limite = fechaLimite.ToString ("yyyy-MM-dd");
         string comienzo = fechaComienzo.ToString ("yyyy-MM-dd");
+        if (fechaComienzo > fechaLimite) {
+            throw new ArgumentException ("Error: La fecha de inicio es posterior a la fecha de fin. La fecha de inicio debe ser al menos un día anterior a la fecha de fin.");
+        } else if (fechaComienzo == fechaLimite) {
+            throw new ArgumentException ("Error: La fecha de inicio es igual a la fecha de fin. La fecha de inicio debe ser al menos un día anterior a la fecha de fin.");
+        }
         string SQLQuery = @"SELECT * FROM Contratos WHERE Propiedad = @Propiedad AND '" + limite + "' >= FechaContrato AND '" + comienzo + "' <= FechaLímite";
         int? resultado = null;
         try {

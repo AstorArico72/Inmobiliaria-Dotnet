@@ -9,10 +9,10 @@ namespace TP1_ASP.Controllers;
 public class InmuebleController : Controller
 {
     private readonly ILogger<InmuebleController> _logger;
-    private IRepo <Inmueble> repo;
+    private RepositorioInmueble repo;
     private IRepo <Propietario> repoPropietarios;
 
-    public InmuebleController(ILogger<InmuebleController> logger, IRepo <Inmueble> repoInmuebles, IRepo <Propietario> repoPropietario) {
+    public InmuebleController(ILogger<InmuebleController> logger, RepositorioInmueble repoInmuebles, IRepo <Propietario> repoPropietario) {
         _logger = logger;
         this.repo = repoInmuebles;
         this.repoPropietarios = repoPropietario;
@@ -42,6 +42,16 @@ public class InmuebleController : Controller
         } else {
             return View (resultado);
         }
+    }
+
+    public IActionResult BuscarPorFecha () {
+        return View ();
+    }
+
+    [HttpGet]
+    public IActionResult Busqueda (DateTime FechaInicio, DateTime FechaFin) {
+        List <Inmueble>? Lista = repo.BuscarPorFecha (FechaInicio, FechaFin);
+        return View (Lista);
     }
 
     [HttpPost]

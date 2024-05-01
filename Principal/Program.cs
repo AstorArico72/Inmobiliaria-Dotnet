@@ -5,7 +5,7 @@ using Microsoft.IdentityModel;
 using Microsoft.IdentityModel.Tokens;
 
 var builder = WebApplication.CreateBuilder(args);
-builder.Services.AddTransient <IRepo <Inmueble>, RepositorioInmueble> ();
+builder.Services.AddTransient <RepositorioInmueble, RepositorioInmueble> ();
 builder.Services.AddTransient <IRepo <Propietario>, RepositorioPropietario> ();
 builder.Services.AddTransient <IRepo <Inquilino>, RepositorioInquilino> ();
 builder.Services.AddTransient <IRepo <Contrato>, RepositorioContrato> ();

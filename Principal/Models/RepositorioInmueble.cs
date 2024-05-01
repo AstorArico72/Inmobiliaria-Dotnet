@@ -175,4 +175,21 @@ public class RepositorioInmueble : IRepo <Inmueble> {
         }
         return NuevoItem;
     }
+
+    public List <Inmueble> BuscarPorFecha (DateTime FechaInicio, DateTime FechaFin) {
+        RepositorioContrato repo = new RepositorioContrato ();
+        List <Inmueble> Resultado = new List<Inmueble> ();
+
+        List <Inmueble> Todos = ObtenerTodos ().Where (item => item.Disponible == 1).ToList ();
+
+        foreach (var inmueble in Todos) {
+            int id = inmueble.ID;
+            bool ocupada = repo.PropiedadOcupada (id, FechaInicio, FechaFin);
+
+            if (!ocupada) {
+                Resultado.Add (inmueble);
+            }
+        }
+        return Resultado;
+    }
 }

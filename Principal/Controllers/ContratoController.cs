@@ -10,11 +10,11 @@ public class ContratoController : Controller {
     private readonly ILogger<ContratoController> _logger;
     private IRepo <Contrato> repo;
     private IRepo <Propietario> repoPropietarios;
-    private IRepo <Inmueble> repoInmuebles;
+    private RepositorioInmueble repoInmuebles;
     private IRepo <Inquilino> repoInquilinos;
     private IRepo <Pago> repoPagos;
 
-    public ContratoController(ILogger<ContratoController> logger, IRepo <Contrato> repo, IRepo <Inmueble> repoInmueble, IRepo <Propietario> repoPropietario, IRepo <Inquilino> repoInquilino, IRepo<Pago> repoPago) {
+    public ContratoController(ILogger<ContratoController> logger, IRepo <Contrato> repo, RepositorioInmueble repoInmueble, IRepo <Propietario> repoPropietario, IRepo <Inquilino> repoInquilino, IRepo<Pago> repoPago) {
         _logger = logger;
         this.repo = repo;
         this.repoPropietarios = repoPropietario;
