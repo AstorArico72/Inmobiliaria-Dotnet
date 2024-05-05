@@ -25,6 +25,7 @@ public class RepositorioPago : IRepo <Pago> {
                     NuevoItem.IdContrato = lector.GetInt32 (2);
                     NuevoItem.Monto = lector.GetInt32 (3);
                     NuevoItem.FechaPago = lector.GetDateTime (4);
+                    NuevoItem.Pagado = lector.GetByte (5);
                     resultado.Add (NuevoItem);
                 }
                 con.Close ();
@@ -58,12 +59,13 @@ public class RepositorioPago : IRepo <Pago> {
         int resultado = -1;
         try {
             using (var con = new MySqlConnection (ConnectionString)) {
-                string SQLQuery = @"UPDATE Pagos SET NumeroPago = @NumPago, IdContrato = @Contrato, Monto = @Importe, FechaPago = @Fecha WHERE ID = " + id;
+                string SQLQuery = @"UPDATE Pagos SET NumeroPago = @NumPago, IdContrato = @Contrato, Monto = @Importe, FechaPago = @Fecha, Pagado = @Pagado WHERE ID = " + id;
                 using (var comm = new MySqlCommand (SQLQuery, con)) {
                     comm.Parameters.AddWithValue ("@NumPago", pa.NumeroPago);
                     comm.Parameters.AddWithValue ("@Contrato", pa.IdContrato);
                     comm.Parameters.AddWithValue ("@Importe", pa.Monto);
                     comm.Parameters.AddWithValue ("@Fecha", pa.FechaPago);
+                    comm.Parameters.AddWithValue ("@Pagado", pa.Pagado);
                     con.Open ();
                     resultado = Convert.ToInt32 (comm.ExecuteNonQuery ());
                     con.Close ();
@@ -94,7 +96,7 @@ public class RepositorioPago : IRepo <Pago> {
 
     public Pago? BuscarPorID (int id) {
         var NuevoItem = new Pago ();
-        string SQLQuery = @"SELECT ID, NumeroPago, IdContrato, Monto, FechaPago FROM Pagos WHERE ID = " + id;
+        string SQLQuery = @"SELECT * FROM Pagos WHERE ID = " + id;
         try {
             using (var con = new MySqlConnection (ConnectionString)) {
                 using (var comm = new MySqlCommand (SQLQuery, con)) {
@@ -106,6 +108,7 @@ public class RepositorioPago : IRepo <Pago> {
                     NuevoItem.IdContrato = lector.GetInt32 (2);
                     NuevoItem.Monto = lector.GetInt32 (3);
                     NuevoItem.FechaPago = lector.GetDateTime (4);
+                    NuevoItem.Pagado = lector.GetByte (5);
                 }
                 if (!lector.HasRows) {
                     con.Close ();

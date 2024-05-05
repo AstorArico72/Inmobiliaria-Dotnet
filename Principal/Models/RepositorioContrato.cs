@@ -58,6 +58,9 @@ public class RepositorioContrato : IRepo <Contrato> {
                         con.Open ();
                         resultado = Convert.ToInt32 (comm.ExecuteScalar ());
                         con.Close ();
+                        if (resultado >= 0) {
+                            GenerarPagos (co);
+                        }
                     }
                 }
             }
@@ -220,6 +223,46 @@ public class RepositorioContrato : IRepo <Contrato> {
                 }
                 con.Close ();
                 return disponible;
+            }
+        }
+    }
+
+    private void GenerarPagos (Contrato co) {
+        string SQLQuery2 = @"SELECT Precio FROM Inmuebles WHERE ID = @id";
+        int Precio = 0;
+        int Meses = ((co.FechaLímite.Year - co.FechaContrato.Year) *12) + co.FechaLímite.Month - co.FechaContrato.Month;
+        var con2 = new MySqlConnection (ConnectionString);
+        var con3 = new MySqlConnection (ConnectionString);
+        var con4 = new MySqlConnection (ConnectionString);
+        using (var com2 = new MySqlCommand (SQLQuery2, con2)) {
+            con2.Open ();
+            com2.Parameters.AddWithValue ("@id", co.Propiedad);
+            var lector = com2.ExecuteReader ();
+            while (lector.Read ()) {
+                Precio = lector.GetInt32 (0);
+            }
+            con2.Close ();
+        }
+        int UltimoId = -1;
+        string SQLQuery4 = @"SELECT MAX(id) FROM Contratos";
+        using (var com4 = new MySqlCommand (SQLQuery4, con4)) {
+            con4.Open ();
+            var lector = com4.ExecuteReader ();
+            while (lector.Read ()) {
+                UltimoId = lector.GetInt32 (0);
+            }
+            con4.Close ();
+        }
+        string SQLQuery3 = @"INSERT INTO Pagos (NumeroPago, IdContrato, Monto, FechaPago) VALUES (@NumPago, @NumContrato, @Importe, @Fecha); SELECT LAST_INSERT_ID ()";
+        for (int i = 1; i <= Meses; i++) {
+            using (var com3 = new MySqlCommand (SQLQuery3, con3)) {
+                con3.Open ();
+                com3.Parameters.AddWithValue ("@NumPago", i);
+                com3.Parameters.AddWithValue ("@NumContrato", UltimoId);
+                com3.Parameters.AddWithValue ("@Importe", Precio);
+                com3.Parameters.AddWithValue ("@Fecha", co.FechaContrato.AddMonths (i -1));
+                com3.ExecuteScalar ();
+                con3.Close ();
             }
         }
     }

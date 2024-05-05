@@ -102,7 +102,7 @@ public class ContratoController : Controller {
         int resultado = repo.Nuevo (contrato);
         switch (resultado) {
             case >= 0:
-                TempData ["Mensaje"] = "Contrato editado con éxito.";
+                TempData ["Mensaje"] = "Contrato registrado con éxito.";
                 TempData ["ColorMensaje"] = "#00FF00";
                 return RedirectToAction ("Index");
             case -2:

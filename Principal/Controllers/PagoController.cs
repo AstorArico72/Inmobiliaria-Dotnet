@@ -13,7 +13,7 @@ public class PagoController : Controller
     private IRepo <Inmueble> repoInmuebles;
     private IRepo <Contrato> repoContratos;
 
-    public PagoController(ILogger<PagoController> logger, IRepo <Pago> repo, IRepo <Inmueble> repoinmuebles, IRepo <Contrato> repocontratos) {
+    public PagoController(ILogger<PagoController> logger, IRepo <Pago> repo, RepositorioInmueble repoinmuebles, IRepo <Contrato> repocontratos) {
         _logger = logger;
         this.repo = repo;
         this.repoInmuebles = repoinmuebles;
@@ -43,7 +43,7 @@ public class PagoController : Controller
     [HttpPost]
     public IActionResult Editar (int id, Pago pago) {
         if (repo.Editar (id, pago) != -1) {
-            TempData ["Mensaje"] = "Pago añadido con éxito.";
+            TempData ["Mensaje"] = "Pago editado con éxito.";
             TempData ["ColorMensaje"] = "#00FF00";
             return RedirectToAction ("Index");
         }
