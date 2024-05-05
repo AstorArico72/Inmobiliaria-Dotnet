@@ -25,11 +25,19 @@
         </thead>
         @foreach (var item in Model) {
             Inmueble InmuebleSeleccionado = ListaInmuebles.Where(i => i.ID == item.Propiedad).First ();
-            <tr>
+            if (item.Vigente == 0) {
+                <tr class="bg-danger">
+                <td>@item.ID</td>
+                <td><a asp-controller="Inmueble" asp-action="Detalles" asp-route-id="@InmuebleSeleccionado.ID"> @InmuebleSeleccionado.Dirección</a></td>
+                <td>Expirado <a asp-action="Detalles" asp-route-id="@item.ID"> (Detalles) </a></td>
+                </tr>
+            } else {
+                <tr>
                 <td>@item.ID</td>
                 <td><a asp-controller="Inmueble" asp-action="Detalles" asp-route-id="@InmuebleSeleccionado.ID"> @InmuebleSeleccionado.Dirección</a></td>
                 <td><a asp-action="Detalles" asp-route-id="@item.ID"> Detalles </a></td>
-            </tr>
+                </tr>
+            }
         }
     </table>
 </div>

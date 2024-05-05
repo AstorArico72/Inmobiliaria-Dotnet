@@ -24,6 +24,7 @@ public class RepositorioContrato : IRepo <Contrato> {
                     NuevoItem.Propiedad = lector.GetInt32 (2);
                     NuevoItem.FechaLímite = lector.GetDateTime (3);
                     NuevoItem.FechaContrato = lector.GetDateTime (4);
+                    NuevoItem.Vigente = lector.GetByte (5);
                     resultado.Add (NuevoItem);
                 }
                 con.Close ();
@@ -72,13 +73,29 @@ public class RepositorioContrato : IRepo <Contrato> {
 
     public int Editar (int id, Contrato co) {
         int resultado = -1;
+        int multa = 0;
+        DateTime hoy = DateTime.Now;
         try {
             using (var con = new MySqlConnection (ConnectionString)) {
-                string SQLQuery = @"UPDATE Contratos SET Locatario = @Locatario, Propiedad = @Propiedad, FechaLímite = @FechaLímite WHERE ID = " + id;
+                string SQLQuery = @"UPDATE Contratos SET Locatario = @Locatario, Propiedad = @Propiedad, FechaLímite = @FechaLímite, Vigente = @Vigente WHERE ID = " + id;
                 using (var comm = new MySqlCommand (SQLQuery, con)) {
                     comm.Parameters.AddWithValue ("@Locatario", co.Locatario);
                     comm.Parameters.AddWithValue ("@Propiedad", co.Propiedad);
-                    comm.Parameters.AddWithValue ("@FechaLímite", co.FechaLímite);
+                    if (co.Vigente == 0) {
+                        if (hoy > co.FechaContrato) {
+                            comm.Parameters.AddWithValue ("@Vigente", co.Vigente);
+                            comm.Parameters.AddWithValue ("@FechaLímite", hoy);
+
+                            //Por dónde informo de la multa!?
+                            multa = CalcularMulta (co);
+                        } else {
+                            resultado = -5;
+                            return resultado;
+                        }
+                    } else {
+                        comm.Parameters.AddWithValue ("@Vigente", co.Vigente);
+                        comm.Parameters.AddWithValue ("@FechaLímite", co.FechaLímite);
+                    }
                     if (co.FechaLímite.CompareTo (co.FechaContrato) <= 0) {
                         resultado = -3;
                         return resultado;
@@ -87,11 +104,19 @@ public class RepositorioContrato : IRepo <Contrato> {
                     byte NoDisponible = InmuebleNoDisponible (co.Propiedad);
                     if (NoDisponible == 0) {
                         resultado = -4;
+                        return resultado;
                     } else if (ocupado) {
                         resultado = -2;
+                        return resultado;
                     } else {
                         con.Open ();
-                        resultado = Convert.ToInt32 (comm.ExecuteNonQuery ());
+                        if (multa > 0) {
+                            comm.ExecuteNonQuery ();
+                            resultado = multa;
+                        } else {
+                            comm.ExecuteNonQuery ();
+                            resultado = 0;
+                        }
                         con.Close ();
                     }
                 }
@@ -132,6 +157,7 @@ public class RepositorioContrato : IRepo <Contrato> {
                         resultado.Propiedad = lector.GetInt32 (2);
                         resultado.FechaLímite = lector.GetDateTime (3);
                         resultado.FechaContrato = lector.GetDateTime (4);
+                        resultado.Vigente = lector.GetByte (5);
                 }
                 if (!lector.HasRows) {
                     con.Close ();
@@ -151,15 +177,13 @@ public class RepositorioContrato : IRepo <Contrato> {
         } else if (fechaComienzo == fechaLimite) {
             throw new ArgumentException ("Error: La fecha de inicio es igual a la fecha de fin. La fecha de inicio debe ser al menos un día anterior a la fecha de fin.");
         }
-        string SQLQuery = @"SELECT * FROM Contratos WHERE Propiedad = @Propiedad AND '" + limite + "' >= FechaContrato AND '" + comienzo + "' <= FechaLímite";
+        string SQLQuery = @"SELECT * FROM Contratos WHERE Propiedad = @Propiedad AND '" + limite + "' >= FechaContrato AND '" + comienzo + "' <= FechaLímite AND Vigente = 1";
         int? resultado = null;
         try {
             using (var con = new MySqlConnection (ConnectionString)) {
                 using (var comm = new MySqlCommand (SQLQuery, con)) {
                     con.Open ();
                     comm.Parameters.AddWithValue ("@Propiedad", propiedad);
-                    //comm.Parameters.AddWithValue ("@FechaLimite", fechaLimite.ToString ("yyyy-MM-dd"));
-                    //comm.Parameters.AddWithValue ("@FechaComienzo", fechaComienzo.ToString ("yyyy-MM-dd"));
                     var lector = comm.ExecuteReader ();
                     while (lector.Read ()) {
                         resultado = lector.GetInt32 ("ID");
@@ -183,7 +207,7 @@ public class RepositorioContrato : IRepo <Contrato> {
 
     private bool PropiedadOcupada (int propiedad, DateTime fechaLimite) {
         bool ocupada;
-        string SQLQuery = @"SELECT id FROM Contratos WHERE Propiedad = @propiedad AND @fechaLimite BETWEEN FechaLímite AND FechaContrato";
+        string SQLQuery = @"SELECT id FROM Contratos WHERE Propiedad = @propiedad AND Vigente = 1 AND @fechaLimite BETWEEN FechaLímite AND FechaContrato";
         int? resultado = null;
         try {
             using (var con = new MySqlConnection (ConnectionString)) {
@@ -264,6 +288,34 @@ public class RepositorioContrato : IRepo <Contrato> {
                 com3.ExecuteScalar ();
                 con3.Close ();
             }
+        }
+    }
+
+    private int CalcularMulta (Contrato co) {
+        DateTime Hoy = DateTime.Now;
+        int MesesContrato = ((co.FechaLímite.Year - co.FechaContrato.Year) *12) + co.FechaLímite.Month - co.FechaContrato.Month;
+        int MesesMulta = ((co.FechaLímite.Year - Hoy.Year) *12) + co.FechaLímite.Month - Hoy.Month;
+        int Precio = 0;
+
+        var con = new MySqlConnection (ConnectionString);
+        string SQLQuery = @"SELECT Precio FROM Inmuebles WHERE ID = @id";
+
+        using (var com = new MySqlCommand (SQLQuery, con)) {
+            con.Open ();
+            com.Parameters.AddWithValue ("@id", co.Propiedad);
+            var lector = com.ExecuteReader ();
+            while (lector.Read ()) {
+                Precio = lector.GetInt32 (0);
+            }
+            con.Close ();
+        }
+
+        if (MesesMulta >= MesesContrato/2) {
+            return Precio * 2;
+        } else if (MesesMulta <= 0) {
+            return 0;
+        } else {
+            return Precio;
         }
     }
 }

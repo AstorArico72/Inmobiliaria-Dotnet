@@ -62,7 +62,11 @@ public class ContratoController : Controller {
     public IActionResult Editar (int id, Contrato contrato) {
         int resultado = repo.Editar (id, contrato);
         switch (resultado) {
-            case >= 0:
+            case > 0:
+                TempData ["Mensaje"] = "Contrato terminado. Multa a pagar: $" + resultado;
+                TempData ["ColorMensaje"] = "#00FF00";
+                return RedirectToAction ("Index");
+            case 0:
                 TempData ["Mensaje"] = "Contrato editado con éxito.";
                 TempData ["ColorMensaje"] = "#00FF00";
                 return RedirectToAction ("Index");
@@ -78,6 +82,10 @@ public class ContratoController : Controller {
                 TempData ["Mensaje"] = "El inmueble seleccionado no está disponible.";
                 TempData ["ColorMensaje"] = "#FF0000";
                 return RedirectToAction ("Editar");
+            case -5:
+                TempData ["Mensaje"] = "El contrato no puede terminarse, aún no comenzó.";
+                TempData ["ColorMensaje"] = "#FFFF00";
+                return RedirectToAction ("Index");
             default:
                 return RedirectToAction ("Editar");
         }

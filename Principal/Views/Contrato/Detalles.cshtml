@@ -19,8 +19,12 @@
 }
 
 <div class="text-center">
-    using System.Diagnostics;
-    <h1 class="display-4">@ViewData["Title"]</h1>
+    @if (Model.Vigente == 0) {
+        <h1 class="display-4 text-danger">@ViewData["Title"]</h1>
+        <h2>Contrato expirado.</h2>
+    } else {
+        <h1 class="display-4">@ViewData["Title"]</h1>
+    }
     <p>Locatario: <a asp-action="Detalles" asp-controller="Inquilino" asp-route-id="@InquilinoSeleccionado.ID">@InquilinoSeleccionado.Nombre</a></p>
     <p>Inmueble: <a asp-action="Detalles" asp-controller="Inmueble" asp-route-id="@InmuebleSeleccionado.ID">@InmuebleSeleccionado.Dirección</a></p>
     <p>Dueño del inmueble: @DueñoAMostrar</p>
