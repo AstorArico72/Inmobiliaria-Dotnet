@@ -9,7 +9,7 @@
 <div class="text-center">
     <h1 class="display-4">@ViewData["Title"]</h1>
     <p>
-        Contratos de alquiler registrados en la inmobiliaria. Clic en la dirección para saber más. <br>
+        Contratos de alquiler registrados en la inmobiliaria.<br>
         <a asp-action="Nuevo">Nuevo contrato</a>
     </p>
     <table class="table primary">
@@ -26,16 +26,16 @@
         @foreach (var item in Model) {
             Inmueble InmuebleSeleccionado = ListaInmuebles.Where(i => i.ID == item.Propiedad).First ();
             if (item.Vigente == 0) {
-                <tr class="bg-danger">
+                <tr>
                 <td>@item.ID</td>
                 <td><a asp-controller="Inmueble" asp-action="Detalles" asp-route-id="@InmuebleSeleccionado.ID"> @InmuebleSeleccionado.Dirección</a></td>
                 <td>Expirado <a asp-action="Detalles" asp-route-id="@item.ID"> (Detalles) </a></td>
                 </tr>
             } else {
-                <tr>
+                <tr class="bg-success">
                 <td>@item.ID</td>
                 <td><a asp-controller="Inmueble" asp-action="Detalles" asp-route-id="@InmuebleSeleccionado.ID"> @InmuebleSeleccionado.Dirección</a></td>
-                <td><a asp-action="Detalles" asp-route-id="@item.ID"> Detalles </a></td>
+                <td>Vigente <a asp-action="Detalles" asp-route-id="@item.ID">(Detalles)</a></td>
                 </tr>
             }
         }

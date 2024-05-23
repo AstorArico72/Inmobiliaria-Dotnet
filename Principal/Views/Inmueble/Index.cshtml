@@ -26,10 +26,19 @@
         </thead>
         <tbody>
         @foreach (var item in Model) {
-            if (item.Disponible == 1) {
+            if (item.Disponible != 0) {
                 <tr>
                 <td>@item.ID</td>
                 <td><a asp-action="Detalles" asp-route-id= "@item.ID">@item.Dirección</a></td>
+                <td>@item.Tipo</td>
+                <td>@item.Superficie</td>
+                <td>@item.Uso</td>
+                <td>@item.Precio</td>
+                </tr>
+            } else {
+                <tr class="bg-danger">
+                <td>@item.ID</td>
+                <td><a asp-action="Detalles" asp-route-id= "@item.ID">@item.Dirección (No disponible)</a></td>
                 <td>@item.Tipo</td>
                 <td>@item.Superficie</td>
                 <td>@item.Uso</td>

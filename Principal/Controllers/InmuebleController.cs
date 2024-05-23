@@ -11,11 +11,15 @@ public class InmuebleController : Controller
     private readonly ILogger<InmuebleController> _logger;
     private RepositorioInmueble repo;
     private IRepo <Propietario> repoPropietarios;
+    private IRepo <Contrato> repoContratos;
+    private IRepo <Inquilino> repoInquilinos;
 
-    public InmuebleController(ILogger<InmuebleController> logger, RepositorioInmueble repoInmuebles, IRepo <Propietario> repoPropietario) {
+    public InmuebleController(ILogger<InmuebleController> logger, RepositorioInmueble repoInmuebles, IRepo <Propietario> repoPropietario, IRepo <Contrato> repoContrato, IRepo <Inquilino> repoInquilino) {
         _logger = logger;
         this.repo = repoInmuebles;
         this.repoPropietarios = repoPropietario;
+        this.repoContratos = repoContrato;
+        this.repoInquilinos = repoInquilino;
     }
 
     public IActionResult Index () {
@@ -36,6 +40,8 @@ public class InmuebleController : Controller
 
     public IActionResult Detalles (int id) {
         ViewBag.Propietarios = repoPropietarios.ObtenerTodos ();
+        ViewBag.Contratos = repoContratos.ObtenerTodos ();
+        ViewBag.Inquilinos = repoInquilinos.ObtenerTodos ();
         Inmueble? resultado = repo.BuscarPorID (id);
         if (resultado == null) {
             return Error ();
