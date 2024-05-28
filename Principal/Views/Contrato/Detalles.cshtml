@@ -64,7 +64,14 @@
     } else {
         <h3 class="text-danger"> No hay pagos </h3>
     }
-    <a asp-action="Editar" asp-route-id="@Model.ID"><button class="btn btn-warning">Editar éste contrato</button></a>
-    <a asp-action="Borrar" asp-route-id="@Model.ID"><button class="btn btn-danger">Borrar éste contrato</button></a>
-    <a asp-action="Nuevo"><button class="btn btn-success">Añadir uno nuevo</button></a>
+    @if (Model.Vigente == 0) {
+        <a asp-action="Editar" asp-route-id="@Model.ID"><button class="btn btn-warning">Editar éste contrato</button></a>
+        <a asp-action="Borrar" asp-route-id="@Model.ID"><button class="btn btn-danger">Borrar éste contrato</button></a>
+        <a asp-action="Nuevo" asp-route-RenovarContrato="@Model.ID"><button class="btn btn-info">Renovar éste contrato</button></a>
+        <a asp-action="Nuevo"><button class="btn btn-success">Añadir uno nuevo</button></a>
+    } else {
+        <a asp-action="Editar" asp-route-id="@Model.ID"><button class="btn btn-warning">Editar éste contrato</button></a>
+        <a asp-action="Borrar" asp-route-id="@Model.ID"><button class="btn btn-danger">Borrar éste contrato</button></a>
+        <a asp-action="Nuevo"><button class="btn btn-success">Añadir uno nuevo</button></a>
+    }
 </div>

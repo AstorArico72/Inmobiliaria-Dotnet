@@ -1,10 +1,8 @@
-@model Inmueble; //El inmueble resultado de RepoInmuebles.BuscarPorID ();
+@model Inmueble;
 @{
     ViewData["Title"] = "Editando un Inmueble";
-    List <Propietario> ListaPropietarios = ViewBag.Propietarios; //Igual al resultado de RepositorioPropietarios.ObtenerTodos ();
-    int IDSeleccionado = Model.ID; //ID del inmueble que recibe por la URL (ver arriba)
-    
-    //Conseguir el ID del propietario que corresponde al inmueble, si es aplicable.
+    List <Propietario> ListaPropietarios = ViewBag.Propietarios;
+    int IDSeleccionado = Model.ID;
     IEnumerable <Propietario> ItemsSeleccionados = ListaPropietarios.Where(item => item.ID == Model.IDPropietario);
 }
 

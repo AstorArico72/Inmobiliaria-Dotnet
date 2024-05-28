@@ -35,6 +35,7 @@ public class ContratoController : Controller {
         ViewBag.Propietarios = repoPropietarios.ObtenerTodos ();
         ViewBag.Inmuebles = repoInmuebles.ObtenerTodos ();
         ViewBag.Inquilinos = repoInquilinos.ObtenerTodos ();
+        ViewBag.Contratos = repo.ObtenerTodos ();
         return View (repo.ObtenerTodos ());
     }
 
