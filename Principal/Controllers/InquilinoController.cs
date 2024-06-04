@@ -41,7 +41,7 @@ public class InquilinoController : Controller
     [HttpPost]
     public IActionResult Editar (int id, Inquilino inquilino) {
         if (repo.Editar (id, inquilino) != -1) {
-            TempData ["Mensaje"] = "Inquilino añadido con éxito.";
+            TempData ["Mensaje"] = "Inquilino editado con éxito.";
             TempData ["ColorMensaje"] = "#00FF00";
             return RedirectToAction ("Index");
         }

@@ -1,14 +1,24 @@
 @model List<Inmueble>;
 @{
     ViewData["Title"] = "Central de Inmuebles";
+    int? SoloDisponibles = Convert.ToInt32 (Context.Request.Query["SoloDisponibles"].FirstOrDefault ());
 }
 
 <div class="text-center">
     <h1 class="display-4">@ViewData["Title"]</h1>
     <p>
-        Si aparece aquí es porque está en alquiler.<br>
-        <a asp-action="Nuevo">Nueva entrada</a> <br>
-        <a asp-action="BuscarPorFecha">Buscar por fecha</a>
+        @if (SoloDisponibles == 1) {
+            <span>@Model.Where(item => item.Disponible == 1).Count() inmuebles disponibles.</span> <br>
+        } else {
+            <span>@Model.Count() inmuebles registrados.</span> <br>
+        }
+        <a asp-action="Nuevo"> <button class="btn btn-success"> Nueva entrada </button> </a> <br>
+        <a asp-action="BuscarPorFecha"> <button class="btn btn-info"> Buscar por fecha </button> </a> <br>
+        @if (SoloDisponibles == 0) {
+            <a asp-action="Index" asp-route-SoloDisponibles="1"> <button class="btn btn-primary"> Ver sólo inmuebles disponibles </button> </a>
+        } else {
+            <a asp-action="Index" asp-route-SoloDisponibles="0"> <button class="btn btn-primary"> Ver todos los inmuebles </button> </a>
+        }
     </p>
     <ul>
 
@@ -25,27 +35,42 @@
             </tr>
         </thead>
         <tbody>
-        @foreach (var item in Model) {
-            if (item.Disponible != 0) {
-                <tr>
-                <td>@item.ID</td>
-                <td><a asp-action="Detalles" asp-route-id= "@item.ID">@item.Dirección</a></td>
-                <td>@item.Tipo</td>
-                <td>@item.Superficie</td>
-                <td>@item.Uso</td>
-                <td>@item.Precio</td>
-                </tr>
+            @if (SoloDisponibles == 1) {
+                @foreach (var item in Model) {
+                    if (item.Disponible != 0) {
+                        <tr>
+                        <td>@item.ID</td>
+                        <td><a asp-action="Detalles" asp-route-id= "@item.ID">@item.Dirección</a></td>
+                        <td>@item.Tipo</td>
+                        <td>@item.Superficie</td>
+                        <td>@item.Uso</td>
+                        <td>@item.Precio</td>
+                        </tr>
+                    }
+                }
             } else {
-                <tr class="bg-danger">
-                <td>@item.ID</td>
-                <td><a asp-action="Detalles" asp-route-id= "@item.ID">@item.Dirección (No disponible)</a></td>
-                <td>@item.Tipo</td>
-                <td>@item.Superficie</td>
-                <td>@item.Uso</td>
-                <td>@item.Precio</td>
-                </tr>
+                @foreach (var item in Model) {
+                    if (item.Disponible != 0) {
+                        <tr>
+                        <td>@item.ID</td>
+                        <td><a asp-action="Detalles" asp-route-id= "@item.ID">@item.Dirección</a></td>
+                        <td>@item.Tipo</td>
+                        <td>@item.Superficie</td>
+                        <td>@item.Uso</td>
+                        <td>@item.Precio</td>
+                        </tr>
+                    } else {
+                        <tr class="bg-danger">
+                        <td>@item.ID</td>
+                        <td><a asp-action="Detalles" asp-route-id= "@item.ID">@item.Dirección (No disponible)</a></td>
+                        <td>@item.Tipo</td>
+                        <td>@item.Superficie</td>
+                        <td>@item.Uso</td>
+                        <td>@item.Precio</td>
+                        </tr>
+                    }
+                }
             }
-        }
         </tbody>
     </table>
 </div>

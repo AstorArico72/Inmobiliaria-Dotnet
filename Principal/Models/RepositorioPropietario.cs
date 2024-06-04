@@ -21,7 +21,8 @@ public class RepositorioPropietario : IRepo <Propietario> {
                     var NuevoItem = new Propietario (
                         lector.GetString ("Nombre"),
                         lector.GetInt32 ("ID"),
-                        lector.GetString ("Contacto")
+                        lector.GetString ("Contacto"),
+                        lector.GetString ("DNI")
                     );
 
                     resultado.Add (NuevoItem);
@@ -35,12 +36,13 @@ public class RepositorioPropietario : IRepo <Propietario> {
         int resultado = -1;
         try {
             using (var con = new MySqlConnection (ConnectionString)) {
-                string SQLQuery = @"INSERT INTO Propietarios (Nombre, Contacto) VALUES (@Nombre, @Contacto); SELECT LAST_INSERT_ID ()";
+                string SQLQuery = @"INSERT INTO Propietarios (Nombre, Contacto, DNI) VALUES (@Nombre, @Contacto, @DNI); SELECT LAST_INSERT_ID ()";
                 using (var comm = new MySqlCommand (SQLQuery, con)) {
                     comm.Parameters.AddWithValue ("@Nombre", pr.Nombre);
                     comm.Parameters.AddWithValue ("@Contacto", pr.Contacto);
+                    comm.Parameters.AddWithValue ("@DNI", pr.DNI);
                     con.Open ();
-                    resultado = Convert.ToInt32 (comm.ExecuteScalar ()); // <-- Aquí hay un error crítico que no sé cómo resolver.
+                    resultado = Convert.ToInt32 (comm.ExecuteScalar ());
                     con.Close ();
                 }
             }
@@ -54,10 +56,11 @@ public class RepositorioPropietario : IRepo <Propietario> {
         int resultado = -1;
         try {
             using (var con = new MySqlConnection (ConnectionString)) {
-                string SQLQuery = @"UPDATE Propietarios SET Nombre = @Nombre, Contacto = @Contacto WHERE ID = " + id;
+                string SQLQuery = @"UPDATE Propietarios SET Nombre = @Nombre, Contacto = @Contacto, DNI = @DNI WHERE ID = " + id;
                 using (var comm = new MySqlCommand (SQLQuery, con)) {
                     comm.Parameters.AddWithValue ("@Nombre", pr.Nombre);
                     comm.Parameters.AddWithValue ("@Contacto", pr.Contacto);
+                    comm.Parameters.AddWithValue ("@DNI", pr.DNI);
                     con.Open ();
                     resultado = Convert.ToInt32 (comm.ExecuteScalar ());
                     con.Close ();
@@ -97,6 +100,7 @@ public class RepositorioPropietario : IRepo <Propietario> {
                     resultado.Nombre = lector.GetString ("Nombre");
                     resultado.ID = lector.GetInt32 ("ID");
                     resultado.Contacto = lector.GetString ("Contacto");
+                    resultado.DNI = lector.GetString ("DNI");
                 }
                 if (!lector.HasRows) {
                     con.Close ();

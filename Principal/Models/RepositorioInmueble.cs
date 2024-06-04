@@ -12,7 +12,7 @@ public class RepositorioInmueble : IRepo <Inmueble> {
 
     public List<Inmueble> ObtenerTodos () {
         var resultado = new List<Inmueble> ();
-        string SQLQuery = @"SELECT DISTINCT i.ID, i.Dirección, i.Superficie, i.Precio, i.Propietario, p.Nombre, p.ID, i.Tipo, i.Uso, p.Contacto, i.Ambientes, i.Disponible FROM Inmuebles i " +
+        string SQLQuery = @"SELECT DISTINCT i.ID, i.Dirección, i.Superficie, i.Precio, i.Propietario, p.Nombre, p.ID, i.Tipo, i.Uso, p.Contacto, i.Ambientes, i.Disponible, p.DNI FROM Inmuebles i " +
         "LEFT JOIN Propietarios p ON p.ID = i.Propietario";
 
         using (var con = new MySqlConnection (ConnectionString)) {
@@ -34,7 +34,8 @@ public class RepositorioInmueble : IRepo <Inmueble> {
                             NuevoItem.Dueño = new Propietario (
                                 lector.GetString (5),
                                 lector.GetInt32 (4),
-                                lector.GetString (9)
+                                lector.GetString (9),
+                                lector.GetString (10)
                             );
                         } else if (lector.IsDBNull (4) && !lector.IsDBNull (3)) {
                             //Con precio pero sin propietario (es decir, propiedad de la inmobiliaria)

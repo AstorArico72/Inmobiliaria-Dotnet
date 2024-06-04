@@ -4,9 +4,12 @@
     List <Inmueble> ListaInmuebles = ViewBag.Inmuebles;
     List <Inquilino> ListaInquilinos = ViewBag.Inquilinos;
     List <Contrato> ListaContratos = ViewBag.Contratos;
-    int? ContratoARenovar = Convert.ToInt32 (Context.Request.Query ["RenovarContrato"].First ());
-    Contrato? ContratoSeleccionado = ListaContratos.Where (item => item.ID == ContratoARenovar).First ();
-    string FechaNueva = ContratoSeleccionado.FechaLímite.ToString ("yyyy-MM-dd");
+    int? ContratoARenovar = Convert.ToInt32 (Context.Request.Query ["RenovarContrato"].FirstOrDefault ());
+    Contrato? ContratoSeleccionado = ListaContratos.Where (item => item.ID == ContratoARenovar).FirstOrDefault ();
+    string FechaNueva = "";
+    if (ContratoSeleccionado != null) {
+        FechaNueva = ContratoSeleccionado.FechaLímite.ToString ("yyyy-MM-dd");
+    }
 }
 
 <div class="text-center">
@@ -16,7 +19,7 @@
         <label class="display-6" for="CampoInmueble">Inmueble:</label>
         <select class="form-select" id="CampoInmueble" name="Propiedad" class="form-select">
             @foreach (var item in ListaInmuebles) {
-                if (ContratoARenovar != null && item.ID == ContratoSeleccionado.Propiedad) {
+                if (ContratoSeleccionado != null && item.ID == ContratoSeleccionado.Propiedad) {
                     <option value="@ContratoSeleccionado.Propiedad" selected>@item.Dirección &#40;#@item.ID&#41;, propiedad de @item.Dueño.Nombre</option>
                 }
                 if (item.Dueño != null) {
@@ -29,7 +32,7 @@
         <select class="form-select" id="CampoLocatario" name="Locatario" class="form-select">
             @foreach (var item in ListaInquilinos) {
                 <option value="@item.ID">@item.Nombre &#40;#@item.ID&#41;</option>
-                if (ContratoARenovar != null && item.ID == ContratoSeleccionado.Locatario) {
+                if (ContratoSeleccionado != null && item.ID == ContratoSeleccionado.Locatario) {
                     <option value="@ContratoSeleccionado.Locatario" selected>@item.Nombre &#40;#@item.ID&#41;</option>
                 }
             }

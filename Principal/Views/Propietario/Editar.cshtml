@@ -9,8 +9,10 @@
     <form asp-action="Editar" method="post">
         <label for="CampoNombre">Nombre:</label>
         <input type="text" name="Nombre" id="CampoNombre" class="form-control" placeholder="@Model.Nombre" value="@Model.Nombre"/> <br>
+        <label for="CampoDni">DNI:</label>
+        <input type="text" name="DNI" size="10" id="CampoDni" value="@Model.DNI"/> <br>
         <label for="CampoContacto"><abbr title="Se aceptan direcciones, números de teléfono, y correos electrónicos.">Datos de contacto:</abbr></label>
-        <textarea name="Contacto" class="form-control" placeholder="@Model.Contacto" rows="10" cols="60" value="@Model.Contacto" id="CampoContacto"> </textarea>
+        <textarea name="Contacto" class="form-control" placeholder="@Model.Contacto" rows="10" cols="60" id="CampoContacto"> @Model.Contacto </textarea>
         <button type="submit" class="btn btn-primary">Guardar cambios</button>
     </form>
 </div>

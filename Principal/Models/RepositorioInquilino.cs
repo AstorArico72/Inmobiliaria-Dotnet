@@ -1,4 +1,6 @@
 namespace TP1_ASP.Models;
+
+using System.Data;
 using MySql.Data.MySqlClient;
 
 public class RepositorioInquilino : IRepo <Inquilino> {
@@ -20,7 +22,9 @@ public class RepositorioInquilino : IRepo <Inquilino> {
                 while (lector.Read ()) {
                     var NuevoItem = new Inquilino (
                         lector.GetString ("Nombre"),
-                        lector.GetInt32 ("ID")
+                        lector.GetInt32 ("ID"),
+                        lector.GetString ("DNI"),
+                        lector.GetString ("Contacto")
                     );
 
                     resultado.Add (NuevoItem);
@@ -34,11 +38,13 @@ public class RepositorioInquilino : IRepo <Inquilino> {
         int resultado = -1;
         try {
             using (var con = new MySqlConnection (ConnectionString)) {
-                string SQLQuery = @"INSERT INTO Inquilinos (Nombre) VALUES (@Nombre); SELECT LAST_INSERT_ID ()";
+                string SQLQuery = @"INSERT INTO Inquilinos (Nombre, DNI, Contacto) VALUES (@Nombre, @DNI, @Contacto); SELECT LAST_INSERT_ID ()";
                 using (var comm = new MySqlCommand (SQLQuery, con)) {
                     comm.Parameters.AddWithValue ("@Nombre", iq.Nombre);
+                    comm.Parameters.AddWithValue ("@DNI", iq.DNI);
+                    comm.Parameters.AddWithValue ("@Contacto", iq.Contacto);
                     con.Open ();
-                    resultado = Convert.ToInt32 (comm.ExecuteScalar ()); // <-- Aquí hay un error crítico que no sé cómo resolver.
+                    resultado = Convert.ToInt32 (comm.ExecuteScalar ());
                     con.Close ();
                 }
             }
@@ -52,9 +58,11 @@ public class RepositorioInquilino : IRepo <Inquilino> {
         int resultado = -1;
         try {
             using (var con = new MySqlConnection (ConnectionString)) {
-                string SQLQuery = @"UPDATE Inquilinos SET Nombre = @Nombre WHERE ID = " + id;
+                string SQLQuery = @"UPDATE Inquilinos SET Nombre = @Nombre, DNI = @DNI, Contacto = @Contacto WHERE ID = " + id;
                 using (var comm = new MySqlCommand (SQLQuery, con)) {
                     comm.Parameters.AddWithValue ("@Nombre", iq.Nombre);
+                    comm.Parameters.AddWithValue ("@DNI", iq.DNI);
+                    comm.Parameters.AddWithValue ("@Contacto", iq.Contacto);
                     con.Open ();
                     resultado = Convert.ToInt32 (comm.ExecuteScalar ());
                     con.Close ();
@@ -91,8 +99,10 @@ public class RepositorioInquilino : IRepo <Inquilino> {
                 con.Open ();
                 var lector = com.ExecuteReader ();
                 while (lector.Read ()) {
-                        resultado.Nombre = lector.GetString ("Nombre");
-                        resultado.ID = lector.GetInt32 ("ID");
+                    resultado.Nombre = lector.GetString ("Nombre");
+                    resultado.ID = lector.GetInt32 ("ID");
+                    resultado.DNI = lector.GetString ("DNI");
+                    resultado.Contacto = lector.GetString ("Contacto");
                 }
                 if (!lector.HasRows) {
                     con.Close ();

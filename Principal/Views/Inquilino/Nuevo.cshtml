@@ -3,11 +3,15 @@
 }
 
 <div class="text-center">
-    <h1 class="display-4">@ViewData["Title"]</h1>
+    <h1 class="display-4">Nuevo Inquilino</h1>
 
-    <form asp-action="Nuevo" method="post">
+    <form asp-action="Editar" method="post">
         <label for="CampoNombre">Nombre:</label>
         <input type="text" name="Nombre" id="CampoNombre"/> <br>
-        <button type="submit" class="btn btn-primary">Guardar</button>
+        <label for="CampoDni">DNI:</label>
+        <input type="text" name="DNI" size="10" id="CampoDni"/> <br>
+        <label for="CampoContacto"><abbr title="Se aceptan direcciones, números de teléfono, y correos electrónicos.">Datos de contacto:</abbr></label>
+        <textarea name="Contacto" class="form-control" id="CampoContacto" rows="10" cols="60"></textarea>
+        <button type="submit" class="btn btn-primary">Guardar cambios</button>
     </form>
 </div>

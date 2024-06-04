@@ -7,7 +7,10 @@
 
     <form asp-action="Nuevo" method="post">
         <input type="text" name="Nombre" class="form-select" placeholder="Nombre"/> <br>
-        <textarea name="Contacto" class="form-control" placeholder="Datos de contacto (Se aceptan direcciones, números de teléfono, y correos electrónicos.)" rows="10" cols="60"></textarea>
+        <label for="CampoDni">DNI:</label>
+        <input type="text" name="DNI" size="10" id="CampoDni"/> <br>
+        <label for="CampoContacto"><abbr title="Se aceptan direcciones, números de teléfono, y correos electrónicos.">Datos de contacto:</abbr></label>
+        <textarea name="Contacto" id="CampoContacto" class="form-control" rows="10" cols="60"></textarea>
         <button type="submit" class="btn btn-primary">Guardar</button>
     </form>
 </div>
