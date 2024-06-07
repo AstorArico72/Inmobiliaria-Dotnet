@@ -8,13 +8,13 @@ namespace TP1_ASP.Controllers;
 [Authorize]
 public class ContratoController : Controller {
     private readonly ILogger<ContratoController> _logger;
-    private IRepo <Contrato> repo;
+    private RepositorioContrato repo;
     private IRepo <Propietario> repoPropietarios;
     private RepositorioInmueble repoInmuebles;
     private IRepo <Inquilino> repoInquilinos;
     private IRepo <Pago> repoPagos;
 
-    public ContratoController(ILogger<ContratoController> logger, IRepo <Contrato> repo, RepositorioInmueble repoInmueble, IRepo <Propietario> repoPropietario, IRepo <Inquilino> repoInquilino, IRepo<Pago> repoPago) {
+    public ContratoController(ILogger<ContratoController> logger, RepositorioContrato repo, RepositorioInmueble repoInmueble, IRepo <Propietario> repoPropietario, IRepo <Inquilino> repoInquilino, IRepo<Pago> repoPago) {
         _logger = logger;
         this.repo = repo;
         this.repoPropietarios = repoPropietario;
@@ -28,6 +28,17 @@ public class ContratoController : Controller {
         ViewBag.Propietarios = repoPropietarios.ObtenerTodos ();
         ViewBag.Inmuebles = repoInmuebles.ObtenerTodos ();
         ViewBag.Inquilinos = repoInquilinos.ObtenerTodos ();
+        return View (lista);
+    }
+
+    public IActionResult BuscarPorFecha () {
+        return View ();
+    }
+
+    [HttpGet]
+    public IActionResult Busqueda (DateTime FechaInicio, DateTime FechaFin) {
+        List <Contrato>? lista = repo.BuscarPorFecha (FechaInicio, FechaFin);
+        ViewBag.Inmuebles = repoInmuebles.ObtenerTodos ();
         return View (lista);
     }
 

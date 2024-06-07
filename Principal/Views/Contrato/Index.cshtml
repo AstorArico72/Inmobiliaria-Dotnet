@@ -1,27 +1,20 @@
 @model List<Contrato>;
 @{
     ViewData["Title"] = "Contratos de alquiler";
-    @* List <Inquilino> ListaInquilinos = ViewBag.Inquilinos; *@
     List <Inmueble> ListaInmuebles = ViewBag.Inmuebles;
-    @* List <Propietario> ListaPropietarios = ViewBag.Propietarios; *@
 }
 
 <div class="text-center">
     <h1 class="display-4">@ViewData["Title"]</h1>
     <p>
-        Contratos de alquiler registrados en la inmobiliaria.<br>
-        <a asp-action="Nuevo">Nuevo contrato</a>
+        @Model.Count() contratos registrados. <br>
+        <a asp-action="Nuevo"> <button class="btn btn-success"> Nuevo contrato </button> </a> <br>
+        <a asp-action="BuscarPorFecha"> <button class="btn btn-info"> Buscar por fecha </button> </a> <br>
     </p>
     <table class="table primary">
         <thead>
             <th>#</th>
             <th>Propiedad</th>
-            <!--
-            <th>Locatario</th>
-            <th>Locador</th>
-            <th>Desde</th>
-            <th>Hasta</th>
-            -->
         </thead>
         @foreach (var item in Model) {
             Inmueble InmuebleSeleccionado = ListaInmuebles.Where(i => i.ID == item.Propiedad).First ();

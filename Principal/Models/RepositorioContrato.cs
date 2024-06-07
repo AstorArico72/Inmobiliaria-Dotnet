@@ -33,6 +33,36 @@ public class RepositorioContrato : IRepo <Contrato> {
         return resultado;
     }
 
+    public List<Contrato>? BuscarPorFecha (DateTime FechaInicio, DateTime FechaFin) {
+        var resultado = new List<Contrato> ();
+        string limite = FechaFin.ToString ("yyyy-MM-dd");
+        string comienzo = FechaInicio.ToString ("yyyy-MM-dd");
+        if (FechaInicio > FechaFin) {
+            throw new ArgumentException ("Error: La fecha de inicio es posterior a la fecha de fin. La fecha de inicio debe ser al menos un día anterior a la fecha de fin.");
+        } else if (FechaInicio == FechaFin) {
+            throw new ArgumentException ("Error: La fecha de inicio es igual a la fecha de fin. La fecha de inicio debe ser al menos un día anterior a la fecha de fin.");
+        }
+        string SQLQuery = @"SELECT * FROM Contratos WHERE FechaContrato >= '" + comienzo + "' AND FechaLímite <= '" + limite + "' AND Vigente = 1";
+        using (var con = new MySqlConnection (ConnectionString)) {
+            using (var com = new MySqlCommand (SQLQuery, con)) {
+                con.Open ();
+                var lector = com.ExecuteReader ();
+                while (lector.Read ()) {
+                    var NuevoItem = new Contrato ();
+                    NuevoItem.ID = lector.GetInt32 (0);
+                    NuevoItem.Locatario = lector.GetInt32 (1);
+                    NuevoItem.Propiedad = lector.GetInt32 (2);
+                    NuevoItem.FechaLímite = lector.GetDateTime (3);
+                    NuevoItem.FechaContrato = lector.GetDateTime (4);
+                    NuevoItem.Vigente = lector.GetByte (5);
+                    resultado.Add (NuevoItem);
+                }
+                con.Close ();
+            }
+        }
+        return resultado;
+    }
+
     public int Nuevo (Contrato co) {
         int resultado = -1;
         try {

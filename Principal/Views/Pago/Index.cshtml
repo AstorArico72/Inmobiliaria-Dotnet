@@ -6,8 +6,8 @@
 <div class="text-center">
     <h1 class="display-4">@ViewData["Title"]</h1>
     <p>
-        No se me ocurre qué poner aquí por ahora. <br>
-        <a asp-action="Nuevo">Nueva entrada</a>
+        @Model.Count() transacciones registradas. <br>
+        <a asp-action="Nuevo"> <button class="btn btn-success"> Nuevo pago </button> </a>
     </p>
     <table class="table primary">
         <th>#</th>

@@ -6,8 +6,8 @@
 <div class="text-center">
     <h1 class="display-4">@ViewData["Title"]</h1>
     <p>
-        Los inquilinos que están registrados. <br>
-        <a asp-action="Nuevo">Nueva entrada</a>
+        @Model.Count() inquilinos registrados. <br>
+        <a asp-action="Nuevo"> <button class="btn btn-success"> Registrar inquilino </button> </a>
     </p>
     <table class="table primary">
         <thead>
