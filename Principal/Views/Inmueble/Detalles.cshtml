@@ -39,6 +39,17 @@
             } else {
                 <span>En alquiler por $@Model.Precio</span> <br>
             }
+            Coordenadas:&#20;
+            @if (Model.CoordenadasX < 0) {
+                <span>@Math.Abs(Model.CoordenadasX) O, </span>
+            } else {
+                <span>@Model.CoordenadasX E,</span>
+            }
+            @if (Model.CoordenadasY < 0) {
+                <span>@Math.Abs(Model.CoordenadasY) S </span>
+            } else {
+                <span>@Model.CoordenadasY N</span>
+            }
         </p>
         @if (Contratos.Count () > 0) {
             <h3>Contratos que usaron éste inmueble</h3>

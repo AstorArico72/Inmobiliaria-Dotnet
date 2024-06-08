@@ -17,7 +17,9 @@ public class Inmueble {
         public string? Uso {get; set;}
         public byte Ambientes {get; set;}
         public byte Disponible {get; set;}
-        public Inmueble (int id, string? direccion, short area, int? precio, int? numDueño, Propietario? dueño, string? tipo, string? uso, byte ambientes, byte disponible) {
+        public float CoordenadasX {get; set;}
+        public float CoordenadasY {get; set;}
+        public Inmueble (int id, string? direccion, short area, int? precio, int? numDueño, Propietario? dueño, string? tipo, string? uso, byte ambientes, byte disponible, float x, float y) {
             this.ID = id;
             this.Dirección = direccion;
             this.Superficie = area;
@@ -28,6 +30,8 @@ public class Inmueble {
             this.Uso = uso;
             this.Ambientes = ambientes;
             this.Disponible = disponible;
+            this.CoordenadasX = x;
+            this.CoordenadasY = y;
         }
     
         //Sin parámetros

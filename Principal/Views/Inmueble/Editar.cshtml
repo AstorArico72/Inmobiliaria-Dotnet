@@ -1,6 +1,6 @@
 @model Inmueble;
 @{
-    ViewData["Title"] = "Editando un Inmueble";
+    ViewData["Title"] = "Editando Inmueble #" + Model.ID;
     List <Propietario> ListaPropietarios = ViewBag.Propietarios;
     int IDSeleccionado = Model.ID;
     IEnumerable <Propietario> ItemsSeleccionados = ListaPropietarios.Where(item => item.ID == Model.IDPropietario);
@@ -15,7 +15,7 @@
         <label for="CampoNombre">Superficie en m&#178;:</label>
         <input type="tel" name="Superficie" id="CampoSuperficie" max="65535" min="1" size="5" placeholder="@Model.Superficie" value="@Model.Superficie"/> <br>
         <label for="CampoNombre">Precio del alquiler:</label>
-        <input type="tel" name="Precio" id="CampoPrecio" max="2147483647" min="0" size="10" placeholder="@Model.Precio" value="@Model.Precio"/> <br>
+        <input type="tel" name="Precio" id="CampoPrecio" max="2147483647" min="1" size="10" placeholder="@Model.Precio" value="@Model.Precio"/> <br>
         <label for="CampoPropietario">Dueño:</label>
         <select id="CampoPropietario" name="IDPropietario">
             <option value="null">Sin dueño</option>
@@ -53,6 +53,12 @@
         <input class="form-check-input" type="radio" name="Disponible" value="1" id="Disponible1" checked> <br>
         <label for="Disponible0">No disponible</label>
         <input class="form-check-input" type="radio" name="Disponible" value="0" id="Disponible0">
+        <br>
+        <label for="lat"><abbr title="Ubicación en el eje norte-sur. Un valor negativo quiere decir que está al sur del Ecuador.">Latitud</abbr></label>
+        <input type="number" name="CoordenadasY" min="-90" max="90" size="14" step=".001" id="lat" value="@Model.CoordenadasY"/>
+        <br>
+        <label for="lng"><abbr title="Ubicación en el eje este-oeste. Un valor negativo quiere decir que está al oeste de Greenwich.">Longitud</abbr></label>
+        <input type="number" name="CoordenadasX" min="-180" max="180" size="14" step=".001" id="lng" value="@Model.CoordenadasX"/>
         <br>
         <button type="submit" class="btn btn-primary">Guardar</button>
     </form>

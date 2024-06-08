@@ -11,9 +11,9 @@
         <label for="CampoNombre">Dirección:</label>
         <input type="text" name="Dirección" id="CampoDirección"/> <br>
         <label for="CampoNombre">Superficie en m&#178;:</label>
-        <input type="tel" name="Superficie" id="CampoSuperficie" max="65535" min="1" size="5"/> <br>
+        <input type="tel" name="Superficie" id="CampoSuperficie" min="1" max="65535" min="1" size="5"/> <br>
         <label for="CampoNombre">Precio del alquiler:</label>
-        <input type="tel" name="Precio" id="CampoPrecio" max="2147483647" min="0" size="6"/> <br>
+        <input type="tel" name="Precio" id="CampoPrecio" min="1" max="2147483647" min="0" size="6"/> <br>
         <label for="CampoPropietario">Dueño:</label>
         <select id="CampoPropietario" name="IDPropietario">
             <option value="null">Sin dueño</option>
@@ -41,6 +41,12 @@
         <br>
         <label for="CampoAmbientes"><abbr title="Especificar 0 ambientes si es un terreno.">Ambientes</abbr></label>
         <input type="number" name="Ambientes" min="0" max="127" size="3" id="CampoAmbientes"/>
+        <br>
+        <label for="lat"><abbr title="Ubicación en el eje norte-sur. Un valor negativo quiere decir que está al sur del Ecuador.">Latitud</abbr></label>
+        <input type="number" name="CoordenadasY" min="-90" max="90" size="14" step=".001" id="lat" value="-33.0000000000"/>
+        <br>
+        <label for="lng"><abbr title="Ubicación en el eje este-oeste. Un valor negativo quiere decir que está al oeste de Greenwich.">Longitud</abbr></label>
+        <input type="number" name="CoordenadasX" min="-180" max="180" size="14" step=".001" id="lng" value="-66.0000000000"/>
         <br>
         <button type="submit" class="btn btn-primary">Guardar</button>
     </form>
