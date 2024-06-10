@@ -45,7 +45,7 @@ public class PagoController : Controller
         if (repo.Editar (id, pago) != -1) {
             TempData ["Mensaje"] = "Pago editado con éxito.";
             TempData ["ColorMensaje"] = "#00FF00";
-            return RedirectToAction ("Index");
+            return RedirectToAction ("Detalles", "Contrato", new {id= TempData["RedirigirAContrato"]});
         }
         else {
             TempData ["Mensaje"] = "Un error ha ocurrido. Algún campo es inválido.";

@@ -1,6 +1,7 @@
 @model Pago;
 @{
     ViewData["Title"] = "Editar Pago";
+    TempData["RedirigirAContrato"] = Model.IdContrato;
     string FechaPago = Model.FechaPago.ToString ("yyyy-MM-dd");
 }
 
@@ -17,10 +18,12 @@
         <label for="CampoFecha">Fecha del pago</label>
         <input type="date" name="FechaPago" id="CampoFecha" value="@FechaPago"/> <br>
         @if (Model.Pagado != 1) {
+            <label for="PagadoFalse">Próximo</label>
+            <input class="form-check-input" type="radio" name="Pagado" value="0" id="PagadoFalse" checked> <br>
             <label for="PagadoTrue">Pagado</label>
             <input class="form-check-input" type="radio" name="Pagado" value="1" id="PagadoTrue"> <br>
-            <label for="PagadoFalse">Sin pagar</label>
-            <input class="form-check-input" type="radio" name="Pagado" value="0" id="PagadoFalse" checked> <br>
+            <label for="APagar">Pendiente</label>
+            <input class="form-check-input" type="radio" name="Pagado" value="2" id="APagar"> <br>
         } else {
             <input type="hidden" name="Pagado" value="1"/>
             <h4>Pagado.</h4>

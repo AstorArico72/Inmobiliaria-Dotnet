@@ -45,18 +45,27 @@
             <tbody>
                 @foreach (var item in PagosDelContrato) {
                     <tr>
-                    @if (item.Pagado == 1) {
-                        <td class="bg-success">Pagado</td>
-                    } else {
-                        <td class="bg-danger">Sin pagar</td>
-                    }
-                    <td>@item.ID</td>
-                    <td>@item.NumeroPago</td>
-                    <td>@item.Monto</td>
-                    <td>@item.FechaPago.Day - @item.FechaPago.Month - @item.FechaPago.Year</td>
-                    <td>
-                        <a type="button" asp-controller="Pago" asp-action="Editar" asp-route-id="@item.ID">Editar/Pagar</a>
-                    </td>
+                        @switch (item.Pagado) {
+                            case 0:
+                                <td class="bg-secondary">Próximo</td>
+                                break;
+                            case 1:
+                                <td class="bg-success">Pagado</td>
+                                break;
+                            case 2:
+                                <td class="bg-danger">Pendiente</td>
+                                break;
+                            default:
+                                <td>Próximo</td>
+                                break;
+                        }
+                        <td>@item.ID</td>
+                        <td>@item.NumeroPago</td>
+                        <td>@item.Monto</td>
+                        <td>@item.FechaPago.Day - @item.FechaPago.Month - @item.FechaPago.Year</td>
+                        <td>
+                            <a type="button" asp-controller="Pago" asp-action="Editar" asp-route-id="@item.ID">Editar/Pagar</a>
+                        </td>
                     </tr>
                 }
             </tbody>

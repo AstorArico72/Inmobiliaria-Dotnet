@@ -98,6 +98,10 @@ public class ContratoController : Controller {
                 TempData ["Mensaje"] = "El contrato no puede terminarse, aún no comenzó.";
                 TempData ["ColorMensaje"] = "#FFFF00";
                 return RedirectToAction ("Index");
+            case -6:
+                TempData ["Mensaje"] = "Hay pagos pendientes, no puede terminarse el contrato.";
+                TempData ["ColorMensaje"] = "#FFFF00";
+                return RedirectToAction ("Index");
             default:
                 return RedirectToAction ("Editar");
         }

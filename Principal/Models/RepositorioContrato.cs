@@ -102,6 +102,8 @@ public class RepositorioContrato : IRepo <Contrato> {
     }
 
     public int Editar (int id, Contrato co) {
+        RepositorioPago pagos = new RepositorioPago ();
+        List <Pago> ListaPagos = pagos.ObtenerTodos ().Where (item => item.IdContrato == id).ToList ();
         int resultado = -1;
         int multa = 0;
         DateTime hoy = DateTime.Now;
@@ -132,6 +134,11 @@ public class RepositorioContrato : IRepo <Contrato> {
                     }
                     bool ocupado = PropiedadOcupada (co.Propiedad, co.FechaLímite);
                     byte NoDisponible = InmuebleNoDisponible (co.Propiedad);
+                    IEnumerable <Pago> PagosPendientes = ListaPagos.Where (pago => pago.Pagado == 2);
+                    if (PagosPendientes.Any ()) {
+                        resultado = -6;
+                        return resultado;
+                    }
                     if (NoDisponible == 0) {
                         resultado = -4;
                         return resultado;
