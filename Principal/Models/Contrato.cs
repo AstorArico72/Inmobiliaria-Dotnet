@@ -7,14 +7,16 @@ public class Contrato {
     public DateTime FechaLímite {get; set;}
     public DateTime FechaContrato {get; set;}
     public byte Vigente {get; set;}
+    public int Monto {get; set;}
 
-    public Contrato (int id, int inquilino, int inmueble, DateTime fechalimite, DateTime fechacontrato, byte vigente) {
+    public Contrato (int id, int inquilino, int inmueble, DateTime fechalimite, DateTime fechacontrato, byte vigente, int monto) {
         this.ID = id;
         this.Locatario = inquilino;
         this.Propiedad = inmueble;
         this.FechaLímite = fechalimite;
         this.FechaContrato = fechacontrato;
         this.Vigente = vigente;
+        this.Monto = monto;
     }
     public Contrato () {
 

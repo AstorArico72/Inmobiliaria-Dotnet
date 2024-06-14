@@ -67,12 +67,13 @@ public class RepositorioContrato : IRepo <Contrato> {
         int resultado = -1;
         try {
             using (var con = new MySqlConnection (ConnectionString)) {
-                string SQLQuery = @"INSERT INTO Contratos (Locatario, Propiedad, FechaLímite, FechaContrato) VALUES (@Locatario, @Propiedad, @FechaLímite, @FechaContrato); SELECT LAST_INSERT_ID ()";
+                string SQLQuery = @"INSERT INTO Contratos (Locatario, Propiedad, FechaLímite, FechaContrato, Monto) VALUES (@Locatario, @Propiedad, @FechaLímite, @FechaContrato, @Monto); SELECT LAST_INSERT_ID ()";
                 using (var comm = new MySqlCommand (SQLQuery, con)) {
                     comm.Parameters.AddWithValue ("@Locatario", co.Locatario);
                     comm.Parameters.AddWithValue ("@Propiedad", co.Propiedad);
                     comm.Parameters.AddWithValue ("@FechaLímite", co.FechaLímite);
                     comm.Parameters.AddWithValue ("@FechaContrato", co.FechaContrato);
+                    comm.Parameters.AddWithValue ("@Monto", co.Monto);
                     if (co.FechaLímite.CompareTo (co.FechaContrato) <= 0) {
                         resultado = -3;
                         return resultado;
@@ -117,8 +118,6 @@ public class RepositorioContrato : IRepo <Contrato> {
                         if (hoy > co.FechaContrato) {
                             comm.Parameters.AddWithValue ("@Vigente", co.Vigente);
                             comm.Parameters.AddWithValue ("@FechaLímite", hoy);
-
-                            //Por dónde informo de la multa!?
                             multa = CalcularMulta (co);
                         } else {
                             resultado = -5;
@@ -189,12 +188,13 @@ public class RepositorioContrato : IRepo <Contrato> {
                 con.Open ();
                 var lector = com.ExecuteReader ();
                 while (lector.Read ()) {
-                        resultado.ID = lector.GetInt32 (0);
-                        resultado.Locatario = lector.GetInt32 (1);
-                        resultado.Propiedad = lector.GetInt32 (2);
-                        resultado.FechaLímite = lector.GetDateTime (3);
-                        resultado.FechaContrato = lector.GetDateTime (4);
-                        resultado.Vigente = lector.GetByte (5);
+                    resultado.ID = lector.GetInt32 (0);
+                    resultado.Locatario = lector.GetInt32 (1);
+                    resultado.Propiedad = lector.GetInt32 (2);
+                    resultado.FechaLímite = lector.GetDateTime (3);
+                    resultado.FechaContrato = lector.GetDateTime (4);
+                    resultado.Vigente = lector.GetByte (5);
+                    resultado.Monto = lector.GetInt32 (6);
                 }
                 if (!lector.HasRows) {
                     con.Close ();
@@ -289,41 +289,30 @@ public class RepositorioContrato : IRepo <Contrato> {
     }
 
     private void GenerarPagos (Contrato co) {
-        string SQLQuery2 = @"SELECT Precio FROM Inmuebles WHERE ID = @id";
-        int Precio = 0;
+        int Precio = co.Monto;
         int Meses = ((co.FechaLímite.Year - co.FechaContrato.Year) *12) + co.FechaLímite.Month - co.FechaContrato.Month;
+        var con1 = new MySqlConnection (ConnectionString);
         var con2 = new MySqlConnection (ConnectionString);
-        var con3 = new MySqlConnection (ConnectionString);
-        var con4 = new MySqlConnection (ConnectionString);
-        using (var com2 = new MySqlCommand (SQLQuery2, con2)) {
-            con2.Open ();
-            com2.Parameters.AddWithValue ("@id", co.Propiedad);
-            var lector = com2.ExecuteReader ();
-            while (lector.Read ()) {
-                Precio = lector.GetInt32 (0);
-            }
-            con2.Close ();
-        }
         int UltimoId = -1;
-        string SQLQuery4 = @"SELECT MAX(id) FROM Contratos";
-        using (var com4 = new MySqlCommand (SQLQuery4, con4)) {
-            con4.Open ();
-            var lector = com4.ExecuteReader ();
+        string SQLQuery = @"SELECT MAX(id) FROM Contratos";
+        using (var com1 = new MySqlCommand (SQLQuery, con1)) {
+            con1.Open ();
+            var lector = com1.ExecuteReader ();
             while (lector.Read ()) {
                 UltimoId = lector.GetInt32 (0);
             }
-            con4.Close ();
+            con1.Close ();
         }
-        string SQLQuery3 = @"INSERT INTO Pagos (NumeroPago, IdContrato, Monto, FechaPago) VALUES (@NumPago, @NumContrato, @Importe, @Fecha); SELECT LAST_INSERT_ID ()";
+        string SQLQuery2 = @"INSERT INTO Pagos (NumeroPago, IdContrato, Monto, FechaPago) VALUES (@NumPago, @NumContrato, @Importe, @Fecha); SELECT LAST_INSERT_ID ()";
         for (int i = 1; i <= Meses; i++) {
-            using (var com3 = new MySqlCommand (SQLQuery3, con3)) {
-                con3.Open ();
-                com3.Parameters.AddWithValue ("@NumPago", i);
-                com3.Parameters.AddWithValue ("@NumContrato", UltimoId);
-                com3.Parameters.AddWithValue ("@Importe", Precio);
-                com3.Parameters.AddWithValue ("@Fecha", co.FechaContrato.AddMonths (i -1));
-                com3.ExecuteScalar ();
-                con3.Close ();
+            using (var com2 = new MySqlCommand (SQLQuery2, con2)) {
+                con2.Open ();
+                com2.Parameters.AddWithValue ("@NumPago", i);
+                com2.Parameters.AddWithValue ("@NumContrato", UltimoId);
+                com2.Parameters.AddWithValue ("@Importe", Precio);
+                com2.Parameters.AddWithValue ("@Fecha", co.FechaContrato.AddMonths (i -1));
+                com2.ExecuteScalar ();
+                con2.Close ();
             }
         }
     }
@@ -332,20 +321,7 @@ public class RepositorioContrato : IRepo <Contrato> {
         DateTime Hoy = DateTime.Now;
         int MesesContrato = ((co.FechaLímite.Year - co.FechaContrato.Year) *12) + co.FechaLímite.Month - co.FechaContrato.Month;
         int MesesMulta = ((co.FechaLímite.Year - Hoy.Year) *12) + co.FechaLímite.Month - Hoy.Month;
-        int Precio = 0;
-
-        var con = new MySqlConnection (ConnectionString);
-        string SQLQuery = @"SELECT Precio FROM Inmuebles WHERE ID = @id";
-
-        using (var com = new MySqlCommand (SQLQuery, con)) {
-            con.Open ();
-            com.Parameters.AddWithValue ("@id", co.Propiedad);
-            var lector = com.ExecuteReader ();
-            while (lector.Read ()) {
-                Precio = lector.GetInt32 (0);
-            }
-            con.Close ();
-        }
+        int Precio = co.Monto;
 
         if (MesesMulta >= MesesContrato/2) {
             return Precio * 2;
