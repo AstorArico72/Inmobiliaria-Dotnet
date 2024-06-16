@@ -3,7 +3,7 @@
 -- https://www.phpmyadmin.net/
 --
 -- Servidor: localhost
--- Tiempo de generación: 16-06-2024 a las 19:11:06
+-- Tiempo de generación: 16-06-2024 a las 19:19:24
 -- Versión del servidor: 10.4.21-MariaDB
 -- Versión de PHP: 8.0.10
 
@@ -113,6 +113,17 @@ CREATE TABLE `Usuarios` (
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8 COLLATE=utf8_bin;
 
 --
+-- Volcado de datos para la tabla `Usuarios`
+--
+
+INSERT INTO `Usuarios` (`ID`, `Nombre`, `Clave`, `Rol`, `UrlImagen`) VALUES
+(12, 'Admin-3', 'ykxZ4qarZsJX8Y9kbVV+YlD3JQQkwGnzBpKZguYzEjU=', 'Admin', '/medios/Foto_03a030dd-a014-4dfc-9067-4fe476317fbd.png'),
+(13, 'MLuzza', 'j0pjGs6sN2eIU+vKhYFLivMhPEwZ2adbWqGW/Lu6GSg=', 'Empleado', '/medios/Nulo.png'),
+(14, 'LMercado', '8A6dzOhdAC1lRnIaT9Oxvg1BM/eYvg5Vc3ioWJ57Pgs=', 'Empleado', '/medios/Nulo.png'),
+(15, 'Admin-4', '2YtoOzjBzRID0/h24nW8UQ0YP+mcHjRhK+leNyh1Eak=', 'Admin', NULL),
+(16, 'AArico', 'Y7dSle5syteE43dPw0DJ7kYCF2y2MQCi4e6FJQeQgcQ=', 'Empleado', '/medios/Nulo.png');
+
+--
 -- Índices para tablas volcadas
 --
 
@@ -194,7 +205,7 @@ ALTER TABLE `Propietarios`
 -- AUTO_INCREMENT de la tabla `Usuarios`
 --
 ALTER TABLE `Usuarios`
-  MODIFY `ID` int(11) NOT NULL AUTO_INCREMENT;
+  MODIFY `ID` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=17;
 
 --
 -- Restricciones para tablas volcadas
