@@ -3,7 +3,7 @@
 -- https://www.phpmyadmin.net/
 --
 -- Servidor: localhost
--- Tiempo de generación: 01-07-2023 a las 19:16:26
+-- Tiempo de generación: 16-06-2024 a las 19:11:06
 -- Versión del servidor: 10.4.21-MariaDB
 -- Versión de PHP: 8.0.10
 
@@ -32,19 +32,10 @@ CREATE TABLE `Contratos` (
   `Locatario` int(11) NOT NULL,
   `Propiedad` int(11) NOT NULL,
   `FechaLímite` datetime NOT NULL,
-  `FechaContrato` datetime NOT NULL DEFAULT current_timestamp()
+  `FechaContrato` datetime NOT NULL DEFAULT current_timestamp(),
+  `Vigente` tinyint(1) NOT NULL DEFAULT 1,
+  `Monto` int(11) NOT NULL DEFAULT 0
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8 COLLATE=utf8_bin;
-
---
--- Volcado de datos para la tabla `Contratos`
---
-
-INSERT INTO `Contratos` (`ID`, `Locatario`, `Propiedad`, `FechaLímite`, `FechaContrato`) VALUES
-(3, 1, 1, '2025-06-01 00:00:00', '2023-04-18 15:19:38'),
-(6, 4, 14, '2023-09-15 00:00:00', '2023-04-18 15:19:38'),
-(7, 5, 2, '2024-01-01 00:00:00', '2023-04-18 17:25:09'),
-(8, 6, 14, '2025-11-10 00:00:00', '2023-04-25 17:06:20'),
-(9, 5, 14, '2025-08-01 00:00:00', '2023-06-23 16:53:51');
 
 -- --------------------------------------------------------
 
@@ -57,19 +48,14 @@ CREATE TABLE `Inmuebles` (
   `Dirección` varchar(255) COLLATE utf8_bin DEFAULT NULL,
   `Superficie` smallint(6) NOT NULL,
   `Precio` int(11) DEFAULT NULL,
-  `Propietario` int(11) DEFAULT NULL
+  `Propietario` int(11) DEFAULT NULL,
+  `Tipo` varchar(32) COLLATE utf8_bin DEFAULT NULL,
+  `Uso` varchar(32) COLLATE utf8_bin DEFAULT NULL,
+  `Ambientes` tinyint(4) NOT NULL DEFAULT 0,
+  `Disponible` tinyint(1) NOT NULL DEFAULT 1,
+  `CoordenadasX` float NOT NULL DEFAULT 0,
+  `CoordenadasY` float NOT NULL DEFAULT 0
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8 COLLATE=utf8_bin;
-
---
--- Volcado de datos para la tabla `Inmuebles`
---
-
-INSERT INTO `Inmuebles` (`ID`, `Dirección`, `Superficie`, `Precio`, `Propietario`) VALUES
-(1, '1001 Calle 123', 200, 48500, 4),
-(2, '1301 Calle 123', 450, 165000, 4),
-(3, '3201 Calle 123', 250, 112000, 5),
-(14, '835 Park Drive Dept. 1211', 103, 119000, 6),
-(15, '10333 Park Drive', 58, 84000, 7);
 
 -- --------------------------------------------------------
 
@@ -79,18 +65,10 @@ INSERT INTO `Inmuebles` (`ID`, `Dirección`, `Superficie`, `Precio`, `Propietari
 
 CREATE TABLE `Inquilinos` (
   `ID` int(11) NOT NULL,
-  `Nombre` varchar(128) COLLATE utf8_bin NOT NULL
+  `Nombre` varchar(128) COLLATE utf8_bin NOT NULL,
+  `DNI` varchar(10) COLLATE utf8_bin NOT NULL,
+  `Contacto` varchar(1000) COLLATE utf8_bin DEFAULT 'Sin especificar'
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8 COLLATE=utf8_bin;
-
---
--- Volcado de datos para la tabla `Inquilinos`
---
-
-INSERT INTO `Inquilinos` (`ID`, `Nombre`) VALUES
-(1, 'Vivo aquí'),
-(4, 'Jane Doe'),
-(5, 'Richard Roe'),
-(6, 'Sin identificar');
 
 -- --------------------------------------------------------
 
@@ -102,19 +80,10 @@ CREATE TABLE `Pagos` (
   `ID` int(11) NOT NULL,
   `NumeroPago` int(11) NOT NULL,
   `IdContrato` int(11) NOT NULL,
-  `Monto` int(11) NOT NULL
+  `Monto` int(11) NOT NULL,
+  `FechaPago` datetime NOT NULL DEFAULT current_timestamp(),
+  `Pagado` tinyint(1) NOT NULL DEFAULT 0
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8 COLLATE=utf8_bin;
-
---
--- Volcado de datos para la tabla `Pagos`
---
-
-INSERT INTO `Pagos` (`ID`, `NumeroPago`, `IdContrato`, `Monto`) VALUES
-(1, 1, 3, 44200),
-(3, 2, 3, 48500),
-(4, 3, 3, 48500),
-(5, 1, 6, 97000),
-(6, 1, 7, 125000);
 
 -- --------------------------------------------------------
 
@@ -124,19 +93,10 @@ INSERT INTO `Pagos` (`ID`, `NumeroPago`, `IdContrato`, `Monto`) VALUES
 
 CREATE TABLE `Propietarios` (
   `ID` int(11) NOT NULL,
-  `Nombre` varchar(128) COLLATE utf8_bin NOT NULL
+  `Nombre` varchar(128) COLLATE utf8_bin NOT NULL,
+  `Contacto` varchar(1000) COLLATE utf8_bin DEFAULT '"Sin especificar"',
+  `DNI` varchar(10) COLLATE utf8_bin NOT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8 COLLATE=utf8_bin;
-
---
--- Volcado de datos para la tabla `Propietarios`
---
-
-INSERT INTO `Propietarios` (`ID`, `Nombre`) VALUES
-(1, 'Nombre editado'),
-(4, 'Juan Pérez'),
-(5, 'John Doe'),
-(6, 'Joao da Silva'),
-(7, 'Joaquim Ribera');
 
 -- --------------------------------------------------------
 
@@ -151,13 +111,6 @@ CREATE TABLE `Usuarios` (
   `Rol` varchar(32) COLLATE utf8_bin NOT NULL,
   `UrlImagen` varchar(255) COLLATE utf8_bin DEFAULT '/medios/Nulo.png'
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8 COLLATE=utf8_bin;
-
---
--- Volcado de datos para la tabla `Usuarios`
---
-
-INSERT INTO `Usuarios` (`ID`, `Nombre`, `Clave`, `Rol`, `UrlImagen`) VALUES
-(12, 'Admin-3', 'ZQynNowY+yTLOAJU4mgZfa/WXDc/yEUtkwQN7lRluzY=', 'Admin', '/medios/Nulo.png');
 
 --
 -- Índices para tablas volcadas
@@ -211,37 +164,37 @@ ALTER TABLE `Usuarios`
 -- AUTO_INCREMENT de la tabla `Contratos`
 --
 ALTER TABLE `Contratos`
-  MODIFY `ID` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=10;
+  MODIFY `ID` int(11) NOT NULL AUTO_INCREMENT;
 
 --
 -- AUTO_INCREMENT de la tabla `Inmuebles`
 --
 ALTER TABLE `Inmuebles`
-  MODIFY `ID` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=16;
+  MODIFY `ID` int(11) NOT NULL AUTO_INCREMENT;
 
 --
 -- AUTO_INCREMENT de la tabla `Inquilinos`
 --
 ALTER TABLE `Inquilinos`
-  MODIFY `ID` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=7;
+  MODIFY `ID` int(11) NOT NULL AUTO_INCREMENT;
 
 --
 -- AUTO_INCREMENT de la tabla `Pagos`
 --
 ALTER TABLE `Pagos`
-  MODIFY `ID` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=7;
+  MODIFY `ID` int(11) NOT NULL AUTO_INCREMENT;
 
 --
 -- AUTO_INCREMENT de la tabla `Propietarios`
 --
 ALTER TABLE `Propietarios`
-  MODIFY `ID` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=8;
+  MODIFY `ID` int(11) NOT NULL AUTO_INCREMENT;
 
 --
 -- AUTO_INCREMENT de la tabla `Usuarios`
 --
 ALTER TABLE `Usuarios`
-  MODIFY `ID` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=13;
+  MODIFY `ID` int(11) NOT NULL AUTO_INCREMENT;
 
 --
 -- Restricciones para tablas volcadas
@@ -253,6 +206,12 @@ ALTER TABLE `Usuarios`
 ALTER TABLE `Contratos`
   ADD CONSTRAINT `Contratos_ibfk_2` FOREIGN KEY (`Locatario`) REFERENCES `Inquilinos` (`ID`) ON DELETE CASCADE,
   ADD CONSTRAINT `Contratos_ibfk_3` FOREIGN KEY (`Propiedad`) REFERENCES `Inmuebles` (`ID`) ON DELETE CASCADE;
+
+--
+-- Filtros para la tabla `Inmuebles`
+--
+ALTER TABLE `Inmuebles`
+  ADD CONSTRAINT `Inmuebles_ibfk_1` FOREIGN KEY (`Propietario`) REFERENCES `Propietarios` (`ID`);
 
 --
 -- Filtros para la tabla `Pagos`
