@@ -28,35 +28,21 @@ public class RepositorioInmueble : IRepo <Inmueble> {
                     NuevoItem.Disponible = lector.GetByte (11);
                     NuevoItem.CoordenadasX = lector.GetFloat (13);
                     NuevoItem.CoordenadasY = lector.GetFloat (14);
-                    if (lector.IsDBNull (3) || lector.IsDBNull (4)) {
-                        if (lector.IsDBNull (3) && !lector.IsDBNull (4)) {
-                            //Sin precio pero con propietario
-                            NuevoItem.Precio = null;
-                            NuevoItem.IDPropietario = lector.GetInt32 (4);
-                            NuevoItem.Dueño = new Propietario (
-                                lector.GetString (5),
-                                lector.GetInt32 (4),
-                                lector.GetString (9),
-                                lector.GetString (12)
-                            );
-                        } else if (lector.IsDBNull (4) && !lector.IsDBNull (3)) {
-                            //Con precio pero sin propietario (es decir, propiedad de la inmobiliaria)
-                            NuevoItem.Precio = lector.GetInt32 (3);
-                            NuevoItem.IDPropietario = null;
-                            NuevoItem.Dueño = null;
-                        } else if (lector.IsDBNull (4) && lector.IsDBNull (3)) {
-                            //Los dos nulos
-                            NuevoItem.IDPropietario = null;
-                            NuevoItem.Dueño = null;
-                            NuevoItem.Precio = null;
-                        }
-                    } else {
-                        //Ninguno nulo
-                        NuevoItem.Precio = lector.GetInt32 (3);
+                    NuevoItem.Dueño = new Propietario (
+                            lector.GetString (5),
+                            lector.GetInt32 (4),
+                            lector.GetString (9),
+                            lector.GetString (12)
+                        );
+                    if (lector.IsDBNull (3)) {
+                        NuevoItem.Precio = null;
                         NuevoItem.IDPropietario = lector.GetInt32 (4);
-                        NuevoItem.Dueño = new Propietario ();
-                        NuevoItem.Dueño.ID = lector.GetInt32 (4);
-                        NuevoItem.Dueño.Nombre = lector.GetString (5);
+                        NuevoItem.Dueño = new Propietario (
+                            lector.GetString (5),
+                            lector.GetInt32 (4),
+                            lector.GetString (9),
+                            lector.GetString (12)
+                        );
                     }
                     NuevoItem.Dirección = lector.GetString (1);
                     NuevoItem.Superficie = lector.GetInt16 (2);
@@ -158,20 +144,11 @@ public class RepositorioInmueble : IRepo <Inmueble> {
                     NuevoItem.Disponible = lector.GetByte (8);
                     NuevoItem.CoordenadasX = lector.GetFloat (9);
                     NuevoItem.CoordenadasY = lector.GetFloat (10);
-                    if (lector.IsDBNull (3) || lector.IsDBNull (4)) {
-                        if (lector.IsDBNull (3) && !lector.IsDBNull (4)) {
-                            NuevoItem.Precio = null;
-                            NuevoItem.IDPropietario = lector.GetInt32 (4);
-                        } else if (lector.IsDBNull (4) && !lector.IsDBNull (3)) {
-                            NuevoItem.Precio = lector.GetInt32 (3);
-                            NuevoItem.IDPropietario = null;
-                        } else if (lector.IsDBNull (4) && lector.IsDBNull (3)) {
-                            NuevoItem.IDPropietario = null;
-                            NuevoItem.Precio = null;
-                        }
+                    NuevoItem.IDPropietario = lector.GetInt32 (4);
+                    if (lector.IsDBNull (3)) {
+                        NuevoItem.Precio = null;
                     } else {
                         NuevoItem.Precio = lector.GetInt32 (3);
-                        NuevoItem.IDPropietario = lector.GetInt32 (4);
                     }
                     NuevoItem.Dirección = lector.GetString (1);
                     NuevoItem.Superficie = lector.GetInt16 (2);

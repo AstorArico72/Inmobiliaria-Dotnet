@@ -16,7 +16,6 @@
         <input type="tel" name="Precio" id="CampoPrecio" min="1" max="2147483647" min="0" size="6"/> <br>
         <label for="CampoPropietario">Dueño:</label>
         <select id="CampoPropietario" name="IDPropietario">
-            <option value="null">Sin dueño</option>
             @foreach (var item in ListaPropietarios) {
                 <option value="@item.ID">@item.Nombre &#40;#@item.ID&#41;</option>
             }

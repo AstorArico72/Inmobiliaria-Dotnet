@@ -1,17 +1,11 @@
 @model Inmueble;
 @{
-    string DatoAMostrar;
     List<Propietario> ListaPropietarios = ViewBag.Propietarios;
     IEnumerable <Propietario> Dueños = ListaPropietarios.Where (item => item.ID == Model.IDPropietario);
     List <Contrato> ListaContratos = ViewBag.Contratos;
     IEnumerable <Contrato> Contratos = ListaContratos.Where (item => item.Propiedad == Model.ID);
     List <Inquilino> Inquilinos = ViewBag.Inquilinos;
-    if (Dueños.Count () != 0) {
-        DatoAMostrar = Dueños.First ().Nombre;
-    } else {
-        DatoAMostrar = "Dueño no especificado.";
-    }
-    
+    string? DatoAMostrar = Dueños.First ().Nombre;
     ViewData["Title"] = @Model.Dirección;
 }
 

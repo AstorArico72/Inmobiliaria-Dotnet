@@ -2,7 +2,6 @@
 
 @{
     ViewData ["Title"] = "Contrato #" + Model.ID;
-    string DueñoAMostrar;
     List <Inquilino> ListaInquilinos = ViewBag.Inquilinos;
     List <Inmueble> ListaInmuebles = ViewBag.Inmuebles;
     List <Propietario> ListaPropietarios = ViewBag.Propietarios;
@@ -10,12 +9,8 @@
     Inquilino InquilinoSeleccionado = ListaInquilinos.Where (item => item.ID == Model.Locatario).First ();
     Inmueble InmuebleSeleccionado = ListaInmuebles.Where (item => item.ID == Model.Propiedad).First ();
     Propietario DueñoInmueble = ListaPropietarios.Where(item => item.ID == InmuebleSeleccionado.IDPropietario).First ();
+    string? DueñoAMostrar = DueñoInmueble.Nombre;
     List <Pago> PagosDelContrato = ListaPagos.FindAll (item => item.IdContrato == Model.ID);
-    if (DueñoInmueble == null) {
-        DueñoAMostrar = "Se vende";
-    } else {
-        DueñoAMostrar = DueñoInmueble.Nombre;
-    }
 }
 
 <div class="text-center">

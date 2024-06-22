@@ -18,7 +18,6 @@
         <input type="tel" name="Precio" id="CampoPrecio" max="2147483647" min="1" size="10" placeholder="@Model.Precio" value="@Model.Precio"/> <br>
         <label for="CampoPropietario">Dueño:</label>
         <select id="CampoPropietario" name="IDPropietario">
-            <option value="null">Sin dueño</option>
             @if (ItemsSeleccionados.Count() != 0) {
                 <option selected value="@Model.IDPropietario">Dueño original: @ItemsSeleccionados.First().Nombre</option>
             }
