@@ -1,25 +1,25 @@
-@model Inmueble;
+@model ConjuntoResultados;
 @{
-    ViewData["Title"] = "Editando Inmueble #" + Model.ID;
-    List <Propietario> ListaPropietarios = ViewBag.Propietarios;
-    int IDSeleccionado = Model.ID;
-    IEnumerable <Propietario> ItemsSeleccionados = ListaPropietarios.Where(item => item.ID == Model.IDPropietario);
+    ViewData["Title"] = "Editando Inmueble #" + Model.Inmueble.ID;
+    List <Propietario> ListaPropietarios = Model.Propietarios;
+    int IDSeleccionado = Model.Inmueble.ID;
+    Propietario DueñoInmueble = Model.Propietario;
 }
 
 <div class="text-center">
-    <h1 class="display-4">Editando Inmueble #@Model.ID</h1>
+    <h1 class="display-4">Editando Inmueble #@Model.Inmueble.ID</h1>
 
     <form asp-action="Editar" method="post">
         <label for="CampoNombre">Dirección:</label>
-        <input type="text" name="Dirección" id="CampoDirección" placeholder="@Model.Dirección" value="@Model.Dirección"/> <br>
+        <input type="text" name="Dirección" id="CampoDirección" placeholder="@Model.Inmueble.Dirección" value="@Model.Inmueble.Dirección"/> <br>
         <label for="CampoNombre">Superficie en m&#178;:</label>
-        <input type="tel" name="Superficie" id="CampoSuperficie" max="65535" min="1" size="5" placeholder="@Model.Superficie" value="@Model.Superficie"/> <br>
+        <input type="tel" name="Superficie" id="CampoSuperficie" max="65535" min="1" size="5" placeholder="@Model.Inmueble.Superficie" value="@Model.Inmueble.Superficie"/> <br>
         <label for="CampoNombre">Precio del alquiler:</label>
-        <input type="tel" name="Precio" id="CampoPrecio" max="2147483647" min="1" size="10" placeholder="@Model.Precio" value="@Model.Precio"/> <br>
+        <input type="tel" name="Precio" id="CampoPrecio" max="2147483647" min="1" size="10" placeholder="@Model.Inmueble.Precio" value="@Model.Inmueble.Precio"/> <br>
         <label for="CampoPropietario">Dueño:</label>
         <select id="CampoPropietario" name="IDPropietario">
-            @if (ItemsSeleccionados.Count() != 0) {
-                <option selected value="@Model.IDPropietario">Dueño original: @ItemsSeleccionados.First().Nombre</option>
+            @if (DueñoInmueble != null) {
+                <option selected value="@Model.Inmueble.IDPropietario">Dueño original: @DueñoInmueble.Nombre</option>
             }
             @foreach (var item in ListaPropietarios) {
                 <option value="@item.ID">@item.Nombre &#40;#@item.ID&#41;</option>
@@ -28,7 +28,7 @@
         <br>
         <label for="CampoTipo">Tipo:</label>
         <select id="CampoTipo" name="Tipo">
-            <option value="@Model.Tipo" selected>@Model.Tipo</option>
+            <option value="@Model.Inmueble.Tipo" selected>@Model.Inmueble.Tipo</option>
             <option value="null">Sin especificar</option>
             <option value="Casa">Casa</option>
             <option value="Departamento">Departamento</option>
@@ -39,14 +39,14 @@
         <br>
         <label for="CampoUso">Para uso:</label>
         <select id="CampoUso" name="Uso">
-            <option value="@Model.Uso" selected>@Model.Uso</option>
+            <option value="@Model.Inmueble.Uso" selected>@Model.Inmueble.Uso</option>
             <option value="null">Sin especificar</option>
             <option value="Personal">Personal</option>
             <option value="Comercial">Comercial</option>
         </select>
         <br>
         <label for="CampoAmbientes"><abbr title="Especificar 0 ambientes si es un terreno.">Ambientes</abbr></label>
-        <input type="number" name="Ambientes" min="0" max="127" size="3" id="CampoAmbientes" placeholder="@Model.Ambientes" value="@Model.Ambientes"/>
+        <input type="number" name="Ambientes" min="0" max="127" size="3" id="CampoAmbientes" placeholder="@Model.Inmueble.Ambientes" value="@Model.Inmueble.Ambientes"/>
         <br>
         <label for="Disponible1">Disponible</label>
         <input class="form-check-input" type="radio" name="Disponible" value="1" id="Disponible1" checked> <br>
@@ -54,10 +54,10 @@
         <input class="form-check-input" type="radio" name="Disponible" value="0" id="Disponible0">
         <br>
         <label for="lat"><abbr title="Ubicación en el eje norte-sur. Un valor negativo quiere decir que está al sur del Ecuador.">Latitud</abbr></label>
-        <input type="number" name="CoordenadasY" min="-90" max="90" size="14" step=".001" id="lat" value="@Model.CoordenadasY"/>
+        <input type="number" name="CoordenadasY" min="-90" max="90" size="14" step=".001" id="lat" value="@Model.Inmueble.CoordenadasY"/>
         <br>
         <label for="lng"><abbr title="Ubicación en el eje este-oeste. Un valor negativo quiere decir que está al oeste de Greenwich.">Longitud</abbr></label>
-        <input type="number" name="CoordenadasX" min="-180" max="180" size="14" step=".001" id="lng" value="@Model.CoordenadasX"/>
+        <input type="number" name="CoordenadasX" min="-180" max="180" size="14" step=".001" id="lng" value="@Model.Inmueble.CoordenadasX"/>
         <br>
         <button type="submit" class="btn btn-primary">Guardar</button>
     </form>

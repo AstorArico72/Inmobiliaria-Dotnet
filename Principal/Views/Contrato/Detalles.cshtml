@@ -1,20 +1,16 @@
-@model Contrato;
+@model ConjuntoResultados;
 
 @{
-    ViewData ["Title"] = "Contrato #" + Model.ID;
-    List <Inquilino> ListaInquilinos = ViewBag.Inquilinos;
-    List <Inmueble> ListaInmuebles = ViewBag.Inmuebles;
-    List <Propietario> ListaPropietarios = ViewBag.Propietarios;
-    List <Pago> ListaPagos = ViewBag.Pagos;
-    Inquilino InquilinoSeleccionado = ListaInquilinos.Where (item => item.ID == Model.Locatario).First ();
-    Inmueble InmuebleSeleccionado = ListaInmuebles.Where (item => item.ID == Model.Propiedad).First ();
-    Propietario DueñoInmueble = ListaPropietarios.Where(item => item.ID == InmuebleSeleccionado.IDPropietario).First ();
+    ViewData ["Title"] = "Contrato #" + Model.Contrato.ID;
+    Inquilino InquilinoSeleccionado = Model.Inquilino;
+    Inmueble InmuebleSeleccionado = Model.Inmueble;
+    Propietario DueñoInmueble = Model.Propietario;
     string? DueñoAMostrar = DueñoInmueble.Nombre;
-    List <Pago> PagosDelContrato = ListaPagos.FindAll (item => item.IdContrato == Model.ID);
+    List <Pago> PagosDelContrato = Model.Pagos;
 }
 
 <div class="text-center">
-    @if (Model.Vigente == 0) {
+    @if (Model.Contrato.Vigente == 0) {
         <h1 class="display-4 text-danger">@ViewData["Title"]</h1>
         <h2>Contrato expirado.</h2>
     } else {
@@ -24,8 +20,8 @@
     <p>Inmueble: <a asp-action="Detalles" asp-controller="Inmueble" asp-route-id="@InmuebleSeleccionado.ID">@InmuebleSeleccionado.Dirección</a></p>
     <p>Dueño del inmueble: @DueñoAMostrar</p>
     <p>
-        Fecha de inicio del contrato: @Model.FechaContrato.Year - @Model.FechaContrato.Month - @Model.FechaContrato.Day <br>
-        Fecha límite del contrato: @Model.FechaLímite.Year - @Model.FechaLímite.Month - @Model.FechaLímite.Day <br>
+        Fecha de inicio del contrato: @Model.Contrato.FechaContrato.Year - @Model.Contrato.FechaContrato.Month - @Model.Contrato.FechaContrato.Day <br>
+        Fecha límite del contrato: @Model.Contrato.FechaLímite.Year - @Model.Contrato.FechaLímite.Month - @Model.Contrato.FechaLímite.Day <br>
     </p>
     @if (PagosDelContrato.Count > 0) {
         <h3>Pagos</h3>
@@ -68,14 +64,14 @@
     } else {
         <h3 class="text-danger"> No hay pagos </h3>
     }
-    @if (Model.Vigente == 0) {
-        <a asp-action="Editar" asp-route-id="@Model.ID"><button class="btn btn-warning">Editar éste contrato</button></a>
-        <a asp-action="Borrar" asp-route-id="@Model.ID"><button class="btn btn-danger">Borrar éste contrato</button></a>
-        <a asp-action="Nuevo" asp-route-RenovarContrato="@Model.ID"><button class="btn btn-info">Renovar éste contrato</button></a>
+    @if (Model.Contrato.Vigente == 0) {
+        <a asp-action="Editar" asp-route-id="@Model.Contrato.ID"><button class="btn btn-warning">Editar éste contrato</button></a>
+        <a asp-action="Borrar" asp-route-id="@Model.Contrato.ID"><button class="btn btn-danger">Borrar éste contrato</button></a>
+        <a asp-action="Nuevo" asp-route-RenovarContrato="@Model.Contrato.ID"><button class="btn btn-info">Renovar éste contrato</button></a>
         <a asp-action="Nuevo"><button class="btn btn-success">Añadir uno nuevo</button></a>
     } else {
-        <a asp-action="Editar" asp-route-id="@Model.ID"><button class="btn btn-warning">Editar éste contrato</button></a>
-        <a asp-action="Borrar" asp-route-id="@Model.ID"><button class="btn btn-danger">Borrar éste contrato</button></a>
+        <a asp-action="Editar" asp-route-id="@Model.Contrato.ID"><button class="btn btn-warning">Editar éste contrato</button></a>
+        <a asp-action="Borrar" asp-route-id="@Model.Contrato.ID"><button class="btn btn-danger">Borrar éste contrato</button></a>
         <a asp-action="Nuevo"><button class="btn btn-success">Añadir uno nuevo</button></a>
     }
 </div>

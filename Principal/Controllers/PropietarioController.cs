@@ -10,30 +10,47 @@ public class PropietarioController : Controller
 {
     private readonly ILogger<PropietarioController> _logger;
     private IRepo <Propietario> repo;
+    private RepositorioInmueble repoInmuebles;
+    private RepositorioContrato repoContratos;
 
-    public PropietarioController(ILogger<PropietarioController> logger, IRepo <Propietario> repo) {
+    public PropietarioController(ILogger<PropietarioController> logger, IRepo <Propietario> repo, RepositorioContrato repoContrato, RepositorioInmueble repoInmueble) {
         _logger = logger;
         this.repo = repo;
+        this.repoContratos = repoContrato;
+        this.repoInmuebles = repoInmueble;
     }
 
+    [HttpGet]
     public IActionResult Index () {
         var lista = repo.ObtenerTodos ();
 
         return View (lista);
     }
 
+    [HttpGet]
     public IActionResult Nuevo() {
         return View ();
     }
 
+    [HttpGet]
     public IActionResult Detalles (int id) {
-        var RepoInmuebles = new RepositorioInmueble ();
-        var RepoContratos = new RepositorioContrato ();
-        ViewBag.ListaContratos = RepoContratos.ObtenerTodos ();
-        ViewBag.ListaInmuebles = RepoInmuebles.ObtenerTodos ();
-        return View (repo.BuscarPorID (id));
+        var PropietarioSeleccionado = repo.BuscarPorID (id);
+
+        if (PropietarioSeleccionado == null) {
+            return StatusCode (404);
+        } else {
+            var resultados = new ConjuntoResultados {
+                //Ése predicado debajo debería devolver todos los inmuebles del propietario seleccionado, pero por alguna razón no lo hace.
+                Inmuebles = repoInmuebles.ObtenerTodos ().FindAll (item => item.IDPropietario == PropietarioSeleccionado.ID),
+                Propietario = repo.BuscarPorID (id)
+            };
+            //Añadí ésto como control, pero "resultados.Inmuebles.Count" es 0.
+            Console.WriteLine ("Inmuebles encontrados: " + resultados.Inmuebles.Count);
+            return View (resultados);
+        }
     }
 
+    [HttpGet]
     public IActionResult Editar (int id) {
         return View (repo.BuscarPorID (id));
     }
@@ -53,6 +70,7 @@ public class PropietarioController : Controller
     }
 
     [Authorize (policy:"Admin")]
+    [HttpGet]
     public IActionResult Borrar (int id, Propietario propietario) {
         if (repo.Borrar (id, propietario) != -1) {
             TempData ["Mensaje"] = "Propietario borrado.";
@@ -81,8 +99,10 @@ public class PropietarioController : Controller
     }
 
     [ResponseCache(Duration = 0, Location = ResponseCacheLocation.None, NoStore = true)]
-    public IActionResult Error()
+    public IActionResult Error(string excepcion)
     {
-        return View(new ErrorViewModel { RequestId = Activity.Current?.Id ?? HttpContext.TraceIdentifier });
+        ErrorViewModel ErrorVM =new ErrorViewModel (excepcion);
+        ErrorVM.RequestId = Activity.Current?.Id ?? HttpContext.TraceIdentifier;
+        return View(ErrorVM);
     }
 }

@@ -26,12 +26,14 @@ public class UsuarioController : Controller
         this.ENV = environment;
     }
 
+    [HttpGet]
     public IActionResult Index () {
         var lista = repo.ObtenerTodos ();
 
         return View (lista);
     }
 
+    [HttpGet]
     public IActionResult Borrar (int id, Usuario usuario) {
         if (repo.Borrar (id, usuario) != -1) {
             TempData ["Mensaje"] = "Cuenta borrada.";
@@ -45,6 +47,7 @@ public class UsuarioController : Controller
         }
     }
 
+    [HttpGet]
     public IActionResult Detalles (int id) {
         return View (repo.BuscarPorID (id));
     }
@@ -173,6 +176,7 @@ public class UsuarioController : Controller
         }
     }
 
+    [HttpGet]
     public IActionResult Privacy()
     {
         return View();
@@ -185,26 +189,28 @@ public class UsuarioController : Controller
     }
 
     [ResponseCache(Duration = 0, Location = ResponseCacheLocation.None, NoStore = true)]
-    public IActionResult Error()
+    public IActionResult Error(string? excepcion)
     {
-        return View(new ErrorViewModel { RequestId = Activity.Current?.Id ?? HttpContext.TraceIdentifier });
+        ErrorViewModel ErrorVM =new ErrorViewModel (excepcion);
+        ErrorVM.RequestId = Activity.Current?.Id ?? HttpContext.TraceIdentifier;
+        return View(ErrorVM);
     }
 
-private void SubirFoto (Usuario usuario, IWebHostEnvironment ENV, IRepo <Usuario> repo) {
-    if (usuario.Foto != null && usuario.ID != 0) {
-            var NombreGuid = Guid.NewGuid ();
-            string Camino = Path.Combine (ENV.WebRootPath, "medios");
-            if (!Directory.Exists (Camino)) {
-                Directory.CreateDirectory (Camino);
+    private void SubirFoto (Usuario usuario, IWebHostEnvironment ENV, IRepo <Usuario> repo) {
+        if (usuario.Foto != null && usuario.ID != 0) {
+                var NombreGuid = Guid.NewGuid ();
+                string Camino = Path.Combine (ENV.WebRootPath, "medios");
+                if (!Directory.Exists (Camino)) {
+                    Directory.CreateDirectory (Camino);
+                }
+                string NombreArchivo = "Foto_" + NombreGuid;
+                string NombreArchivoCompleto = NombreArchivo + Path.GetExtension (usuario.Foto.FileName);
+                usuario.URLFoto = "/medios/" + NombreArchivoCompleto;
+                string ruta = Path.Combine (Camino, NombreArchivoCompleto);
+                using (FileStream stream = new FileStream (ruta, FileMode.Create)) {
+                    usuario.Foto.CopyTo (stream);
+                }
+                repo.Editar (usuario.ID, usuario);
             }
-            string NombreArchivo = "Foto_" + NombreGuid;
-            string NombreArchivoCompleto = NombreArchivo + Path.GetExtension (usuario.Foto.FileName);
-            usuario.URLFoto = "/medios/" + NombreArchivoCompleto;
-            string ruta = Path.Combine (Camino, NombreArchivoCompleto);
-            using (FileStream stream = new FileStream (ruta, FileMode.Create)) {
-                usuario.Foto.CopyTo (stream);
-            }
-            repo.Editar (usuario.ID, usuario);
         }
-    }
 }

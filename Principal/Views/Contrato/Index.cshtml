@@ -1,13 +1,12 @@
-@model List<Contrato>;
+@model ConjuntoResultados;
 @{
     ViewData["Title"] = "Contratos de alquiler";
-    List <Inmueble> ListaInmuebles = ViewBag.Inmuebles;
 }
 
 <div class="text-center">
     <h1 class="display-4">@ViewData["Title"]</h1>
     <p>
-        @Model.Count() contratos registrados. <br>
+        @Model.Contratos.Count() contratos registrados. <br>
         <a asp-action="Nuevo"> <button class="btn btn-success"> Nuevo contrato </button> </a> <br>
         <a asp-action="BuscarPorFecha"> <button class="btn btn-info"> Buscar por fecha </button> </a> <br>
     </p>
@@ -16,8 +15,8 @@
             <th>#</th>
             <th>Propiedad</th>
         </thead>
-        @foreach (var item in Model) {
-            Inmueble InmuebleSeleccionado = ListaInmuebles.Where(i => i.ID == item.Propiedad).First ();
+        @foreach (var item in Model.Contratos) {
+            Inmueble InmuebleSeleccionado = Model.Inmuebles.Where(i => i.ID == item.Propiedad).First ();
             if (item.Vigente == 0) {
                 <tr>
                 <td>@item.ID</td>

@@ -1,21 +1,20 @@
-@model Propietario;
+@model ConjuntoResultados;
 @{
-    ViewData["Title"] = Model.Nombre;
-    List <Inmueble> ListaInmuebles = ViewBag.ListaInmuebles;
-    List <Inmueble> InmueblesSeleccionados = ListaInmuebles.Where (item => item.IDPropietario == Model.ID).ToList ();
+    ViewData["Title"] = Model.Propietario.Nombre;
+    List <Inmueble> InmueblesSeleccionados = Model.Inmuebles;
 }
 
 <div class="text-center">
     <h1 class="display-4">@ViewData["Title"]</h1>
     <p>
-        Contacto: @Model.Contacto <br>
-        DNI: @Model.DNI
+        Contacto: @Model.Propietario.Contacto <br>
+        DNI: @Model.Propietario.DNI
     </p>
-    <p>
+    <h3>
         Propietario de éstos inmuebles:
-    </p>
+    </h3>
     <ul>
-        @if (InmueblesSeleccionados.Count () == 0) {
+        @if (InmueblesSeleccionados.Count == 0) {
             <li>
                 Ningún inmueble
             </li>
@@ -36,7 +35,7 @@
             }
         }
     </ul>
-    <a asp-action="Editar" asp-route-id="@Model.ID"><button class="btn btn-warning">Editar éste propietario</button></a>
-    <a asp-action="Borrar" asp-route-id="@Model.ID"><button class="btn btn-danger">Borrar éste propietario</button></a> <br><br>
+    <a asp-action="Editar" asp-route-id="@Model.Propietario.ID"><button class="btn btn-warning">Editar éste propietario</button></a>
+    <a asp-action="Borrar" asp-route-id="@Model.Propietario.ID"><button class="btn btn-danger">Borrar éste propietario</button></a> <br><br>
     <a asp-action="Nuevo"><button class="btn btn-success">Añadir uno nuevo</button></a>
 </div>

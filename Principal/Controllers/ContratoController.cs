@@ -23,50 +23,71 @@ public class ContratoController : Controller {
         this.repoPagos = repoPago;
     }
 
+    [HttpGet]
     public IActionResult Index () {
-        var lista = repo.ObtenerTodos ();
-        ViewBag.Propietarios = repoPropietarios.ObtenerTodos ();
-        ViewBag.Inmuebles = repoInmuebles.ObtenerTodos ();
-        ViewBag.Inquilinos = repoInquilinos.ObtenerTodos ();
-        return View (lista);
+        var resultados = new ConjuntoResultados {
+            Contratos = repo.ObtenerTodos (),
+            Inmuebles = repoInmuebles.ObtenerTodos ()
+        };
+        return View (resultados);
     }
 
+    [HttpGet]
     public IActionResult BuscarPorFecha () {
         return View ();
     }
 
     [HttpGet]
     public IActionResult Busqueda (DateTime FechaInicio, DateTime FechaFin) {
-        List <Contrato>? lista = repo.BuscarPorFecha (FechaInicio, FechaFin);
-        ViewBag.Inmuebles = repoInmuebles.ObtenerTodos ();
-        return View (lista);
+        var resultados = new ConjuntoResultados {
+            Contratos = repo.BuscarPorFecha (FechaInicio, FechaFin),
+            Inmuebles = repoInmuebles.ObtenerTodos ()
+        };
+        return View (resultados);
     }
 
+    [HttpGet]
     public IActionResult Nuevo() {
-        ViewBag.Propietarios = repoPropietarios.ObtenerTodos ();
-        ViewBag.Inmuebles = repoInmuebles.ObtenerTodos ();
-        ViewBag.Inquilinos = repoInquilinos.ObtenerTodos ();
-        ViewBag.Contratos = repo.ObtenerTodos ();
-        return View (repo.ObtenerTodos ());
+        var resultados = new ConjuntoResultados {
+            Contratos = repo.ObtenerTodos (),
+            Inmuebles = repoInmuebles.ObtenerTodos (),
+            Inquilinos = repoInquilinos.ObtenerTodos ()
+        };
+        return View (resultados);
     }
 
+    [HttpGet]
     public IActionResult Editar (int id) {
-        ViewBag.Propietarios = repoPropietarios.ObtenerTodos ();
-        ViewBag.Inmuebles = repoInmuebles.ObtenerTodos ();
-        ViewBag.Inquilinos = repoInquilinos.ObtenerTodos ();
-        return View (repo.BuscarPorID (id));
+        var resultados = new ConjuntoResultados {
+            Propietarios = repoPropietarios.ObtenerTodos (),
+            Inmuebles = repoInmuebles.ObtenerTodos (),
+            Inquilinos = repoInquilinos.ObtenerTodos (),
+            Contrato = repo.BuscarPorID (id),
+            Inmueble = repoInmuebles.BuscarPorID (id)
+        };
+        if (resultados.Contrato == null) {
+            return StatusCode (404);
+        } else {
+            return View (resultados);
+        }
     }
 
+    [HttpGet]
     public IActionResult Detalles (int id) {
-        ViewBag.Propietarios = repoPropietarios.ObtenerTodos ();
-        ViewBag.Inmuebles = repoInmuebles.ObtenerTodos ();
-        ViewBag.Inquilinos = repoInquilinos.ObtenerTodos ();
-        ViewBag.Pagos = repoPagos.ObtenerTodos ();
-        Contrato? resultado = repo.BuscarPorID (id);
-        if (resultado == null) {
-            return Error ();
+        var ContratoSeleccionado = repo.BuscarPorID (id);
+        var InmuebleSeleccionado = repoInmuebles.ObtenerTodos ().Where (item => item.ID == ContratoSeleccionado.Propiedad).First ();
+        
+        var resultados = new ConjuntoResultados {
+            Propietario = repoPropietarios.ObtenerTodos ().Where(item => item.ID == InmuebleSeleccionado.IDPropietario).First (),
+            Inmueble = InmuebleSeleccionado,
+            Inquilino = repoInquilinos.ObtenerTodos ().Where (item => item.ID == ContratoSeleccionado.Locatario).First (),
+            Pagos = repoPagos.ObtenerTodos ().FindAll (item => item.IdContrato == id),
+            Contrato = ContratoSeleccionado
+        };
+        if (resultados.Contrato == null) {
+            return StatusCode (404);
         } else {
-            return View (resultado);
+            return View (resultados);
         }
     }
 
@@ -103,11 +124,12 @@ public class ContratoController : Controller {
                 TempData ["ColorMensaje"] = "#FFFF00";
                 return RedirectToAction ("Index");
             default:
-                return RedirectToAction ("Editar");
+                return StatusCode (500);
         }
     }
 
     [Authorize (policy:"Admin")]
+    [HttpGet]
     public IActionResult Borrar (int id, Contrato contrato) {
         if (repo.Borrar (id, contrato) != -1) {
             TempData ["Mensaje"] = "Contrato borrado.";
@@ -115,9 +137,7 @@ public class ContratoController : Controller {
             return RedirectToAction ("Index");
         }
         else {
-            TempData ["Mensaje"] = "Un error ha ocurrido.";
-            TempData ["ColorMensaje"] = "#FF0000";
-            return RedirectToAction ("Index");
+            return StatusCode (500);
         }
     }
 
@@ -142,13 +162,15 @@ public class ContratoController : Controller {
                 TempData ["ColorMensaje"] = "#FF0000";
                 return RedirectToAction ("Nuevo");
             default:
-                return RedirectToAction ("Nuevo");
+                return StatusCode (500);
         }
     }
 
     [ResponseCache(Duration = 0, Location = ResponseCacheLocation.None, NoStore = true)]
-    public IActionResult Error()
+    public IActionResult Error(string? excepcion)
     {
-        return View(new ErrorViewModel { RequestId = Activity.Current?.Id ?? HttpContext.TraceIdentifier });
+        ErrorViewModel ErrorVM =new ErrorViewModel (excepcion);
+        ErrorVM.RequestId = Activity.Current?.Id ?? HttpContext.TraceIdentifier;
+        return View(ErrorVM);
     }
 }

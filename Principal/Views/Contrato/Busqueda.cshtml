@@ -1,15 +1,14 @@
-@model List<Contrato>;
+@model ConjuntoResultados;
 @{
     ViewData["Title"] = "Resultados de la búsqueda";
-    List <Inmueble> ListaInmuebles = ViewBag.Inmuebles;
     string? FechaInicio = Context.Request.Query ["FechaInicio"].First ();
     string? FechaFin = Context.Request.Query ["FechaFin"].First ();
 }
 
 <div class="text-center">
     <h1 class="display-4">@ViewData["Title"]</h1>
-    <h2>@Model.Count() contratos encontrados entre @FechaInicio y @FechaFin</h2>
-    @if (Model.Count () == 0) {
+    <h2>@Model.Contratos.Count() contratos encontrados entre @FechaInicio y @FechaFin</h2>
+    @if (Model.Contratos.Count () == 0) {
         <h1 class="text-danger">No hay resultados</h1>
     } else {
         <table class="table primary">
@@ -17,8 +16,8 @@
                 <th>#</th>
                 <th>Propiedad</th>
             </thead>
-            @foreach (var item in Model) {
-                Inmueble InmuebleSeleccionado = ListaInmuebles.Where(i => i.ID == item.Propiedad).First ();
+            @foreach (var item in Model.Contratos) {
+                Inmueble InmuebleSeleccionado = Model.Inmuebles.Where(i => i.ID == item.Propiedad).First ();
                 <tr>
                     <td>@item.ID</td>
                     <td><a asp-controller="Inmueble" asp-action="Detalles" asp-route-id="@InmuebleSeleccionado.ID"> @InmuebleSeleccionado.Dirección</a></td>

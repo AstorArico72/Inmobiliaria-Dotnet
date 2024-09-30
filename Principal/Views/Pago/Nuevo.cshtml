@@ -1,8 +1,6 @@
-@model List<Pago>;
+@model ConjuntoResultados;
 @{
     ViewData["Title"] = "Nuevo Pago";
-    List <Inmueble> ListaInmuebles = ViewBag.Inmuebles;
-    List <Contrato> ListaContratos = ViewBag.Contratos;
 }
 
 <div class="text-center">
@@ -13,9 +11,9 @@
         <input type="tel" name="NumeroPago" id="CampoNumPago" size="2"/> <br>
         <label for="CampoContrato">Contrato a pagar:</label>
         <select id="CampoContrato" name="IdContrato">
-        @foreach (var item in ListaContratos) {
-            Contrato ContratoSeleccionado = ListaContratos.Where (i => i.ID == item.ID).First ();
-            Inmueble InmuebleSeleccionado = ListaInmuebles.Where (i => i.ID == ContratoSeleccionado.Propiedad).First ();
+        @foreach (var item in Model.Contratos) {
+            Contrato ContratoSeleccionado = Model.Contratos.Where (i => i.ID == item.ID).First ();
+            Inmueble InmuebleSeleccionado = Model.Inmuebles.Where (i => i.ID == ContratoSeleccionado.Propiedad).First ();
             <option value="@ContratoSeleccionado.ID">#@ContratoSeleccionado.ID &#40;@InmuebleSeleccionado.Dirección&#41;</option>
         }
         </select>

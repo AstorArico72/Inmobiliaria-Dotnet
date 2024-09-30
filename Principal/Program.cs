@@ -1,7 +1,5 @@
 using TP1_ASP.Models;
 using Microsoft.AspNetCore.Authentication.Cookies;
-using System.Security.Claims;
-using Microsoft.IdentityModel;
 using Microsoft.IdentityModel.Tokens;
 
 var builder = WebApplication.CreateBuilder(args);
@@ -48,6 +46,7 @@ if (!app.Environment.IsDevelopment())
 }
 
 app.UseExceptionHandler("/Home/Error");
+app.UseStatusCodePagesWithReExecute ("/Home/Error", "?StatusCode={0}");
 app.UseHttpsRedirection();
 app.UseStaticFiles();
 app.UseRouting ();

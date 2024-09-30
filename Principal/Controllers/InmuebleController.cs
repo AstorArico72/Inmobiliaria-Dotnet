@@ -22,34 +22,51 @@ public class InmuebleController : Controller
         this.repoInquilinos = repoInquilino;
     }
 
+    [HttpGet]
     public IActionResult Index () {
-        var lista = repo.ObtenerTodos ();
-
-        return View (lista);
-    }
-
-    public IActionResult Nuevo() {
-        ViewBag.Propietarios = repoPropietarios.ObtenerTodos ();
         return View (repo.ObtenerTodos ());
     }
 
-    public IActionResult Editar (int id) {
-        ViewBag.Propietarios = repoPropietarios.ObtenerTodos ();
-        return View (repo.BuscarPorID (id));
+    [HttpGet]
+    public IActionResult Nuevo() {
+        return View (repoPropietarios.ObtenerTodos ());
     }
 
-    public IActionResult Detalles (int id) {
-        ViewBag.Propietarios = repoPropietarios.ObtenerTodos ();
-        ViewBag.Contratos = repoContratos.ObtenerTodos ();
-        ViewBag.Inquilinos = repoInquilinos.ObtenerTodos ();
-        Inmueble? resultado = repo.BuscarPorID (id);
-        if (resultado == null) {
-            return Error ();
+    [HttpGet]
+    public IActionResult Editar (int id) {
+        var InmuebleSeleccionado = repo.BuscarPorID (id);
+        if (InmuebleSeleccionado == null) {
+            TempData ["Mensaje"] = "El inmueble seleccionado no existe.";
+            TempData ["ColorMensaje"] = "#FF0000";
+            return StatusCode (400);
         } else {
-            return View (resultado);
+            var resultados = new ConjuntoResultados {
+                Propietarios = repoPropietarios.ObtenerTodos (),
+                Propietario = repoPropietarios.BuscarPorID ((int)InmuebleSeleccionado.IDPropietario),
+                Inmueble = InmuebleSeleccionado
+            };
+            return View (resultados);
         }
     }
 
+    [HttpGet]
+    public IActionResult Detalles (int id) {
+        var InmuebleSeleccionado = repo.BuscarPorID (id);
+
+        if (InmuebleSeleccionado == null) {
+            return StatusCode (404);
+        } else {
+            var resultados = new ConjuntoResultados {
+                Propietario = repoPropietarios.ObtenerTodos ().Where (item => item.ID == InmuebleSeleccionado.IDPropietario).First (),
+                Contratos = repoContratos.ObtenerTodos ().Where (item => item.Propiedad == InmuebleSeleccionado.ID).ToList (),
+                Inquilinos = repoInquilinos.ObtenerTodos (),
+                Inmueble = InmuebleSeleccionado
+            };
+            return View (resultados);
+        }
+    }
+
+    [HttpGet]
     public IActionResult BuscarPorFecha () {
         return View ();
     }
@@ -75,6 +92,7 @@ public class InmuebleController : Controller
     }
 
     [Authorize (policy:"Admin")]
+    [HttpGet]
     public IActionResult Borrar (int id, Inmueble inmueble) {
         if (repo.Borrar (id, inmueble) != -1) {
             TempData ["Mensaje"] = "Inmueble borrado.";
@@ -103,8 +121,10 @@ public class InmuebleController : Controller
     }
 
     [ResponseCache(Duration = 0, Location = ResponseCacheLocation.None, NoStore = true)]
-    public IActionResult Error()
+    public IActionResult Error(string? excepcion)
     {
-        return View(new ErrorViewModel { RequestId = Activity.Current?.Id ?? HttpContext.TraceIdentifier });
+        ErrorViewModel ErrorVM =new ErrorViewModel (excepcion);
+        ErrorVM.RequestId = Activity.Current?.Id ?? HttpContext.TraceIdentifier;
+        return View(ErrorVM);
     }
 }

@@ -1,48 +1,45 @@
-@model Inmueble;
+@model ConjuntoResultados;
 @{
-    List<Propietario> ListaPropietarios = ViewBag.Propietarios;
-    IEnumerable <Propietario> Dueños = ListaPropietarios.Where (item => item.ID == Model.IDPropietario);
-    List <Contrato> ListaContratos = ViewBag.Contratos;
-    IEnumerable <Contrato> Contratos = ListaContratos.Where (item => item.Propiedad == Model.ID);
-    List <Inquilino> Inquilinos = ViewBag.Inquilinos;
-    string? DatoAMostrar = Dueños.First ().Nombre;
-    ViewData["Title"] = @Model.Dirección;
+    Propietario Dueño = Model.Propietario;
+    List <Contrato> Contratos = Model.Contratos;
+    string? NombreDueño = Dueño.Nombre;
+    ViewData["Title"] = @Model.Inmueble.Dirección;
 }
 
 <div class="text-center">
-    @if (Model.Disponible == 0) {
+    @if (Model.Inmueble.Disponible == 0) {
         <h1 class="display-4 text-danger">@ViewData["Title"]</h1>
     } else {
         <h1 class="display-4">@ViewData["Title"]</h1>
     }
     <p>
-        <h2>@Model.Tipo</h2>
-        <h2>Para uso @Model.Uso</h2>
-        @if (Model.Tipo != "Terreno") {
-            <h2>@Model.Ambientes ambiente(s)</h2>
+        <h2>@Model.Inmueble.Tipo</h2>
+        <h2>Para uso @Model.Inmueble.Uso</h2>
+        @if (Model.Inmueble.Tipo != "Terreno") {
+            <h2>@Model.Inmueble.Ambientes ambiente(s)</h2>
         }
         <p>
-            Superficie: @Model.Superficie m&#178; <br>
-            @if (Model.IDPropietario != null) {
-                <span>Dueño: <a asp-action="Detalles" asp-controller="Propietario" asp-route-id="@Model.IDPropietario"> @DatoAMostrar </a> <br></span>
+            Superficie: @Model.Inmueble.Superficie m&#178; <br>
+            @if (Model.Inmueble.IDPropietario != null) {
+                <span>Dueño: <a asp-action="Detalles" asp-controller="Propietario" asp-route-id="@Model.Inmueble.IDPropietario"> @NombreDueño </a> <br></span>
             } else {
-                <span>@DatoAMostrar<br></span>
+                <span>@NombreDueño<br></span>
             }
-            @if (Model.Disponible == 0) {
+            @if (Model.Inmueble.Disponible == 0) {
                 <span> Inmueble no disponible </span> <br>
             } else {
-                <span>En alquiler por $@Model.Precio</span> <br>
+                <span>En alquiler por $@Model.Inmueble.Precio</span> <br>
             }
             Coordenadas:&#20;
-            @if (Model.CoordenadasX < 0) {
-                <span>@Math.Abs(Model.CoordenadasX) O, </span>
+            @if (Model.Inmueble.CoordenadasX < 0) {
+                <span>@Math.Abs(Model.Inmueble.CoordenadasX) O, </span>
             } else {
-                <span>@Model.CoordenadasX E,</span>
+                <span>@Model.Inmueble.CoordenadasX E,</span>
             }
-            @if (Model.CoordenadasY < 0) {
-                <span>@Math.Abs(Model.CoordenadasY) S </span>
+            @if (Model.Inmueble.CoordenadasY < 0) {
+                <span>@Math.Abs(Model.Inmueble.CoordenadasY) S </span>
             } else {
-                <span>@Model.CoordenadasY N</span>
+                <span>@Model.Inmueble.CoordenadasY N</span>
             }
         </p>
         @if (Contratos.Count () > 0) {
@@ -58,7 +55,7 @@
                 </thead>
                 <tbody>
                     @foreach (var item in Contratos) {
-                        var InquilinoSeleccionado = Inquilinos.Where (i => i.ID == item.Locatario).First ();
+                        var InquilinoSeleccionado = Model.Inquilinos.Where (i => i.ID == item.Locatario).First ();
                         @if (item.Vigente == 0) {
                             <tr>
                                 <td>@item.ID</td>
@@ -91,6 +88,6 @@
             <h3>Éste inmueble no fue alquilado aún.</h3>
         }
     </p>
-    <a asp-action="Editar" asp-route-id= "@Model.ID"> <button class="btn btn-warning">Editar éste inmueble</button> </a><br>
-    <a asp-action="Borrar" asp-route-id= "@Model.ID"><button class="btn btn-danger">Borrar éste inmueble</button></a>
+    <a asp-action="Editar" asp-route-id= "@Model.Inmueble.ID"> <button class="btn btn-warning">Editar éste inmueble</button> </a><br>
+    <a asp-action="Borrar" asp-route-id= "@Model.Inmueble.ID"><button class="btn btn-danger">Borrar éste inmueble</button></a>
 </div>

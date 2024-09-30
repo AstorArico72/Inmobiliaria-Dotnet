@@ -20,24 +20,40 @@ public class PagoController : Controller
         this.repoContratos = repocontratos;
     }
 
+    [HttpGet]
     public IActionResult Index () {
         var lista = repo.ObtenerTodos ();
 
         return View (lista);
     }
 
+    [HttpGet]
     public IActionResult Nuevo() {
-        ViewBag.Inmuebles = repoInmuebles.ObtenerTodos ();
-        ViewBag.Contratos = repoContratos.ObtenerTodos ();
-        return View (repo.ObtenerTodos ());
+        var resultados = new ConjuntoResultados {
+            Inmuebles = repoInmuebles.ObtenerTodos (),
+            Contratos = repoContratos.ObtenerTodos ()
+        };
+        return View (resultados);
     }
 
+    [HttpGet]
     public IActionResult Editar (int id) {
-        return View (repo.BuscarPorID (id));
+        var resultado = repo.BuscarPorID (id);
+        if (resultado == null) {
+            return StatusCode (404);
+        } else {
+            return View (resultado);
+        }
     }
 
+    [HttpGet]
     public IActionResult Detalles (int id) {
-        return View (repo.BuscarPorID (id));
+        var resultado = repo.BuscarPorID (id);
+        if (resultado == null) {
+            return StatusCode (404);
+        } else {
+            return View (resultado);
+        }
     }
 
     [HttpPost]
@@ -55,6 +71,7 @@ public class PagoController : Controller
     }
 
     [Authorize (policy:"Admin")]
+    [HttpGet]
     public IActionResult Borrar (int id, Pago pago) {
         if (repo.Borrar (id, pago) != -1) {
             TempData ["Mensaje"] = "Pago borrado.";
@@ -83,8 +100,10 @@ public class PagoController : Controller
     }
 
     [ResponseCache(Duration = 0, Location = ResponseCacheLocation.None, NoStore = true)]
-    public IActionResult Error()
+    public IActionResult Error(string excepcion)
     {
-        return View(new ErrorViewModel { RequestId = Activity.Current?.Id ?? HttpContext.TraceIdentifier });
+        ErrorViewModel ErrorVM =new ErrorViewModel (excepcion);
+        ErrorVM.RequestId = Activity.Current?.Id ?? HttpContext.TraceIdentifier;
+        return View(ErrorVM);
     }
 }

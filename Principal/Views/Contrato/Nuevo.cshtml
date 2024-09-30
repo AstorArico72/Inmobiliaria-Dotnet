@@ -1,11 +1,8 @@
-@model List<Contrato>;
+@model ConjuntoResultados;
 @{
     ViewData["Title"] = "Nuevo Contrato";
-    List <Inmueble> ListaInmuebles = ViewBag.Inmuebles;
-    List <Inquilino> ListaInquilinos = ViewBag.Inquilinos;
-    List <Contrato> ListaContratos = ViewBag.Contratos;
     int? ContratoARenovar = Convert.ToInt32 (Context.Request.Query ["RenovarContrato"].FirstOrDefault ());
-    Contrato? ContratoSeleccionado = ListaContratos.Where (item => item.ID == ContratoARenovar).FirstOrDefault ();
+    Contrato? ContratoSeleccionado = Model.Contratos.Where (item => item.ID == ContratoARenovar).FirstOrDefault ();
     string FechaNueva = "";
     if (ContratoSeleccionado != null) {
         FechaNueva = ContratoSeleccionado.FechaLímite.ToString ("yyyy-MM-dd");
@@ -18,7 +15,7 @@
     <form asp-action="Nuevo" method="post">
         <label class="display-6" for="CampoInmueble">Inmueble:</label>
         <select class="form-select" id="CampoInmueble" name="Propiedad" class="form-select">
-            @foreach (var item in ListaInmuebles) {
+            @foreach (var item in Model.Inmuebles) {
                 if (ContratoSeleccionado != null && item.ID == ContratoSeleccionado.Propiedad) {
                     <option value="@ContratoSeleccionado.Propiedad" selected>@item.Dirección &#40;#@item.ID&#41;, propiedad de @item.Dueño.Nombre</option>
                 } else {
@@ -29,7 +26,7 @@
         <br>
         <label class="display-6" for="CampoLocatario">Locatario:</label>
         <select class="form-select" id="CampoLocatario" name="Locatario" class="form-select">
-            @foreach (var item in ListaInquilinos) {
+            @foreach (var item in Model.Inquilinos) {
                 <option value="@item.ID">@item.Nombre &#40;#@item.ID&#41;</option>
                 if (ContratoSeleccionado != null && item.ID == ContratoSeleccionado.Locatario) {
                     <option value="@ContratoSeleccionado.Locatario" selected>@item.Nombre &#40;#@item.ID&#41;</option>

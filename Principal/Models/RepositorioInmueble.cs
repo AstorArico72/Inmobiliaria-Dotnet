@@ -58,7 +58,7 @@ public class RepositorioInmueble : IRepo <Inmueble> {
         int resultado = -1;
         try {
             using (var con = new MySqlConnection (ConnectionString)) {
-                string SQLQuery = @"INSERT INTO Inmuebles (Dirección, Superficie, Precio, Propietario, Tipo, Uso, Ambientes, Disponible) VALUES (@Dirección, @Superficie, @Precio, @Propietario, @Tipo, @Uso, @Ambientes, 1, @X, @Y); SELECT LAST_INSERT_ID ()";
+                string SQLQuery = @"INSERT INTO Inmuebles (Dirección, Superficie, Precio, Propietario, Tipo, Uso, Ambientes, Disponible, CoordenadasX, CoordenadasY) VALUES (@Dirección, @Superficie, @Precio, @Propietario, @Tipo, @Uso, @Ambientes, 1, @X, @Y); SELECT LAST_INSERT_ID ()";
                 using (var comm = new MySqlCommand (SQLQuery, con)) {
                     comm.Parameters.AddWithValue ("@Dirección", im.Dirección);
                     comm.Parameters.AddWithValue ("@Superficie", im.Superficie);

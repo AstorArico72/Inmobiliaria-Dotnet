@@ -16,18 +16,22 @@ public class HomeController : Controller
         _logger = logger;
     }
 
+    [HttpGet]
     public IActionResult Index()
     {
         return View();
     }
 
+    [HttpGet]
     public IActionResult AccesoDenegado () {
         return View ();
     }
 
     [ResponseCache(Duration = 0, Location = ResponseCacheLocation.None, NoStore = true)]
-    public IActionResult Error()
+    public IActionResult Error(string? excepcion)
     {
-        return View(new ErrorViewModel { RequestId = Activity.Current?.Id ?? HttpContext.TraceIdentifier });
+        ErrorViewModel ErrorVM =new ErrorViewModel (excepcion);
+        ErrorVM.RequestId = Activity.Current?.Id ?? HttpContext.TraceIdentifier;
+        return View(ErrorVM);
     }
 }

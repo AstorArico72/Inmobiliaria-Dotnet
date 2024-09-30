@@ -10,32 +10,44 @@ public class InquilinoController : Controller
 {
     private readonly ILogger<InquilinoController> _logger;
     private IRepo <Inquilino> repo;
+    private RepositorioContrato repoContratos;
+    private RepositorioInmueble repoInmuebles;
 
-    public InquilinoController(ILogger<InquilinoController> logger, IRepo <Inquilino> repo) {
+    public InquilinoController(ILogger<InquilinoController> logger, IRepo <Inquilino> repo, RepositorioContrato repoContratos, RepositorioInmueble repoInmuebles) {
         _logger = logger;
         this.repo = repo;
+        this.repoContratos = repoContratos;
+        this.repoInmuebles = repoInmuebles;
     }
 
+    [HttpGet]
     public IActionResult Index () {
-        var lista = repo.ObtenerTodos ();
-
-        return View (lista);
+        return View (repo.ObtenerTodos ());
     }
 
+    [HttpGet]
     public IActionResult Nuevo() {
         return View ();
     }
 
+    [HttpGet]
     public IActionResult Editar (int id) {
         return View (repo.BuscarPorID (id));
     }
 
+    [HttpGet]
     public IActionResult Detalles (int id) {
-        var RepoContratos = new RepositorioContrato ();
-        ViewBag.Contratos = RepoContratos.ObtenerTodos ();
-        var RepoInmuebles = new RepositorioInmueble ();
-        ViewBag.Inmuebles = RepoInmuebles.ObtenerTodos ();
-        return View (repo.BuscarPorID (id));
+        var InquilinoSeleccionado = repo.BuscarPorID (id);
+        if (InquilinoSeleccionado == null) {
+            return StatusCode (404);
+        } else {
+            var resultados = new ConjuntoResultados {
+                Inquilino = InquilinoSeleccionado,
+                Contratos = repoContratos.ObtenerTodos ().Where (item => item.Locatario == InquilinoSeleccionado.ID).ToList (),
+                Inmuebles = repoInmuebles.ObtenerTodos (),
+            };
+            return View (resultados);
+        }
     }
 
     [HttpPost]
@@ -68,6 +80,7 @@ public class InquilinoController : Controller
     }
 
     [Authorize (policy:"Admin")]
+    [HttpGet]
     public IActionResult Borrar (int id, Inquilino inquilino) {
         if (repo.Borrar (id, inquilino) != -1) {
             TempData ["Mensaje"] = "Inquilino borrado";
@@ -82,8 +95,10 @@ public class InquilinoController : Controller
     }
 
     [ResponseCache(Duration = 0, Location = ResponseCacheLocation.None, NoStore = true)]
-    public IActionResult Error()
+    public IActionResult Error(string? excepcion)
     {
-        return View(new ErrorViewModel { RequestId = Activity.Current?.Id ?? HttpContext.TraceIdentifier });
+        ErrorViewModel ErrorVM =new ErrorViewModel (excepcion);
+        ErrorVM.RequestId = Activity.Current?.Id ?? HttpContext.TraceIdentifier;
+        return View(ErrorVM);
     }
 }
