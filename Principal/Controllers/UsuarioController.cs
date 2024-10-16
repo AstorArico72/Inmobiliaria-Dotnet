@@ -10,6 +10,7 @@ using Microsoft.AspNetCore.Authentication;
 
 namespace Principal.Controllers;
 
+[Obsolete("Controlador deprecado en función de la unión de las tablas Usuarios y Propietarios.")]
 [Authorize (policy:"Admin")]
 public class UsuarioController : Controller
 {

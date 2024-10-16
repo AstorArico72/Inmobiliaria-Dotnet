@@ -8,26 +8,29 @@ namespace Principal.Controllers;
 [Authorize]
 public class ContratoController : Controller {
     private readonly ILogger<ContratoController> _logger;
+    private readonly ContextoDb DataBase;
+    [Obsolete("Deprecado en función de la migración a Entity Framework.")]
     private RepositorioContrato repo;
-    private IRepo <Propietario> repoPropietarios;
-    private RepositorioInmueble repoInmuebles;
-    private IRepo <Inquilino> repoInquilinos;
-    private IRepo <Pago> repoPagos;
+    [Obsolete("Deprecado en función de la migración a Entity Framework.")]
+    private IRepo<Inmueble> repoInmuebles;
 
-    public ContratoController(ILogger<ContratoController> logger, RepositorioContrato repo, RepositorioInmueble repoInmueble, IRepo <Propietario> repoPropietario, IRepo <Inquilino> repoInquilino, IRepo<Pago> repoPago) {
+    public ContratoController (ILogger<ContratoController> logger, ContextoDb contexto) {
+        _logger = logger;
+        this.DataBase = contexto;
+    }
+
+    [Obsolete ("Constructor con repositorios deprecado en función de la migración a Entity Framework.")]
+    public ContratoController(ILogger<ContratoController> logger, RepositorioContrato repo, IRepo<Inmueble> repoInmueble) {
         _logger = logger;
         this.repo = repo;
-        this.repoPropietarios = repoPropietario;
         this.repoInmuebles = repoInmueble;
-        this.repoInquilinos = repoInquilino;
-        this.repoPagos = repoPago;
     }
 
     [HttpGet]
     public IActionResult Index () {
         var resultados = new ConjuntoResultados {
-            Contratos = repo.ObtenerTodos (),
-            Inmuebles = repoInmuebles.ObtenerTodos ()
+            Contratos = DataBase.Contratos.ToList (),
+            Inmuebles = DataBase.Inmuebles.ToList ()
         };
         return View (resultados);
     }
@@ -38,6 +41,7 @@ public class ContratoController : Controller {
     }
 
     [HttpGet]
+    [Obsolete ("Deprecado en función de la migración a Entity Framework.")]
     public IActionResult Busqueda (DateTime FechaInicio, DateTime FechaFin) {
         var resultados = new ConjuntoResultados {
             Contratos = repo.BuscarPorFecha (FechaInicio, FechaFin),
@@ -49,9 +53,9 @@ public class ContratoController : Controller {
     [HttpGet]
     public IActionResult Nuevo() {
         var resultados = new ConjuntoResultados {
-            Contratos = repo.ObtenerTodos (),
-            Inmuebles = repoInmuebles.ObtenerTodos (),
-            Inquilinos = repoInquilinos.ObtenerTodos ()
+            Contratos = DataBase.Contratos.ToList (),
+            Inmuebles = DataBase.Inmuebles.ToList (),
+            Inquilinos = DataBase.Inquilinos.ToList ()
         };
         return View (resultados);
     }
@@ -59,11 +63,11 @@ public class ContratoController : Controller {
     [HttpGet]
     public IActionResult Editar (int id) {
         var resultados = new ConjuntoResultados {
-            Propietarios = repoPropietarios.ObtenerTodos (),
-            Inmuebles = repoInmuebles.ObtenerTodos (),
-            Inquilinos = repoInquilinos.ObtenerTodos (),
-            Contrato = repo.BuscarPorID (id),
-            Inmueble = repoInmuebles.BuscarPorID (id)
+            Propietarios = DataBase.Propietarios.ToList (),
+            Inmuebles = DataBase.Inmuebles.ToList (),
+            Inquilinos = DataBase.Inquilinos.ToList (),
+            Contrato = DataBase.Contratos.Find (id),
+            Inmueble = DataBase.Inmuebles.Find (id)
         };
         if (resultados.Contrato == null) {
             return StatusCode (404);
@@ -74,26 +78,27 @@ public class ContratoController : Controller {
 
     [HttpGet]
     public IActionResult Detalles (int id) {
-        var ContratoSeleccionado = repo.BuscarPorID (id);
-        var InmuebleSeleccionado = repoInmuebles.ObtenerTodos ().Where (item => item.ID == ContratoSeleccionado.Propiedad).First ();
-        
-        var resultados = new ConjuntoResultados {
-            Propietario = repoPropietarios.ObtenerTodos ().Where(item => item.ID == InmuebleSeleccionado.IDPropietario).First (),
-            Inmueble = InmuebleSeleccionado,
-            Inquilino = repoInquilinos.ObtenerTodos ().Where (item => item.ID == ContratoSeleccionado.Locatario).First (),
-            Pagos = repoPagos.ObtenerTodos ().FindAll (item => item.IdContrato == id),
-            Contrato = ContratoSeleccionado
-        };
-        if (resultados.Contrato == null) {
+        Contrato? ContratoSeleccionado = DataBase.Contratos.Find (id);
+        if (ContratoSeleccionado == null) {
             return StatusCode (404);
         } else {
+            var InmuebleSeleccionado = DataBase.Inmuebles.Find (ContratoSeleccionado.ID);
+            var resultados = new ConjuntoResultados {
+                Propietario = DataBase.Propietarios.Find (InmuebleSeleccionado.IDPropietario),
+                Inmueble = InmuebleSeleccionado,
+                Inquilino = DataBase.Inquilinos.Find (ContratoSeleccionado.Locatario),
+                Pagos = DataBase.Pagos.Where (item => item.IdContrato == id).ToList (),
+                Contrato = ContratoSeleccionado
+            };
             return View (resultados);
         }
     }
 
     [HttpPost]
+    [Obsolete("Deprecado en función de la migración a Entity Framework. Usa el API en su lugar.")]
     public IActionResult Editar (int id, Contrato contrato) {
         int resultado = repo.Editar (id, contrato);
+        
         switch (resultado) {
             case > 0:
                 TempData ["Mensaje"] = "Contrato terminado. Multa a pagar: $" + resultado;
@@ -128,6 +133,7 @@ public class ContratoController : Controller {
         }
     }
 
+    [Obsolete("Deprecado en función de la migración a Entity Framework. Usa el API en su lugar.")]
     [Authorize (policy:"Admin")]
     [HttpGet]
     public IActionResult Borrar (int id, Contrato contrato) {
@@ -142,6 +148,7 @@ public class ContratoController : Controller {
     }
 
     [HttpPost]
+    [Obsolete ("Deprecado en función de la migración a Entity Framework. Usa el API en su lugar.")]
     public IActionResult Nuevo (Contrato contrato) {
         int resultado = repo.Nuevo (contrato);
         switch (resultado) {

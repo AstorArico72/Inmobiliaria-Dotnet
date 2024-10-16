@@ -1,5 +1,6 @@
 namespace Principal.Models;
 
+[Obsolete("Repositorios ADO.NET deprecados en función de la migración a Entity Framework. Usa la API en su lugar.")]
 public interface IRepo <T> {
     List <T> ObtenerTodos ();
     int Nuevo (T parametro);

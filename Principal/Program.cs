@@ -13,10 +13,8 @@ builder.Services.AddTransient <IRepo <Inquilino>, RepositorioInquilino> ();
 builder.Services.AddTransient <IRepo <Contrato>, RepositorioContrato> ();
 builder.Services.AddTransient <IRepo <Pago>, RepositorioPago> ();
 builder.Services.AddTransient <RepositorioUsuario, RepositorioUsuario> ();
+builder.Services.AddSingleton <ContextoDb, ContextoDb> ();
 
-/*
-Pendiente: Refactorizar los repositorios a Entity Framework.
-*/
 builder.Services.AddDbContext<ContextoDb> (
     options => options.UseMySql (
             builder.Configuration ["ConnectionStrings:DefaultConnection"], new MariaDbServerVersion (new Version (10, 4, 21))

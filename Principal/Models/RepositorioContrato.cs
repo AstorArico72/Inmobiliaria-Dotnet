@@ -1,6 +1,7 @@
 namespace Principal.Models;
 using MySql.Data.MySqlClient;
 
+[Obsolete("Repositorios ADO.NET deprecados en función de la migración a Entity Framework. Usa la API en su lugar.")]
 public class RepositorioContrato : IRepo <Contrato> {
     protected readonly string ConnectionString;
 
@@ -10,6 +11,7 @@ public class RepositorioContrato : IRepo <Contrato> {
         this.ConnectionString = "Server=127.0.0.1; Database=Inmobiliaria_NET; Uid=root; Pwd=;";
     }
 
+    [Obsolete("Reemplazado por \"TodosLosContratos ()\" en \"API/ContratosController.cs\"")]
     public List<Contrato> ObtenerTodos () {
         var resultado = new List<Contrato> ();
         string SQLQuery = @"SELECT * FROM Contratos";
@@ -33,6 +35,7 @@ public class RepositorioContrato : IRepo <Contrato> {
         return resultado;
     }
 
+    [Obsolete("Repositorios ADO.NET deprecados en función de la migración a Entity Framework. Está pendiente hacer una función que reemplace ésta.")]
     public List<Contrato>? BuscarPorFecha (DateTime FechaInicio, DateTime FechaFin) {
         var resultado = new List<Contrato> ();
         string limite = FechaFin.ToString ("yyyy-MM-dd");
@@ -63,6 +66,7 @@ public class RepositorioContrato : IRepo <Contrato> {
         return resultado;
     }
 
+    [Obsolete("Reemplazado por \"NuevoContrato (Contrato)\" en \"API/ContratosController.cs\"")]
     public int Nuevo (Contrato co) {
         int resultado = -1;
         try {
@@ -102,6 +106,7 @@ public class RepositorioContrato : IRepo <Contrato> {
         return resultado;
     }
 
+    [Obsolete("Reemplazado por \"EditarContrato (Contrato)\" en\"API/ContratosController.cs\"")]
     public int Editar (int id, Contrato co) {
         RepositorioPago pagos = new RepositorioPago ();
         List <Pago> ListaPagos = pagos.ObtenerTodos ().Where (item => item.IdContrato == id).ToList ();
@@ -163,6 +168,7 @@ public class RepositorioContrato : IRepo <Contrato> {
         return resultado;
     }
 
+    [Obsolete("Reemplazado por \"BorrarContrato (int)\" en \"API/ContratosController.cs\"")]
     public int Borrar (int id, Contrato co) {
         int resultado = -1;
         try {
@@ -180,6 +186,7 @@ public class RepositorioContrato : IRepo <Contrato> {
         return resultado;
     }
 
+    [Obsolete("Reemplazado por \"ConseguirContrato (int)\" en \"API/ContratosController.cs\"")]
     public Contrato? BuscarPorID (int id) {
         var resultado = new Contrato ();
         string SQLQuery = @"SELECT * FROM Contratos WHERE ID = " + id;

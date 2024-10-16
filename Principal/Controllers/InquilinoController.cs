@@ -9,20 +9,28 @@ namespace Principal.Controllers;
 public class InquilinoController : Controller
 {
     private readonly ILogger<InquilinoController> _logger;
+    private readonly ContextoDb Database;
     private IRepo <Inquilino> repo;
+    [Obsolete("Deprecado en función de la migración a Entity Framework.")]
     private RepositorioContrato repoContratos;
+    [Obsolete("Deprecado en función de la migración a Entity Framework.")]
     private RepositorioInmueble repoInmuebles;
 
+    [Obsolete("Constructor con repositorios deprecado en función de la migración a Entity Framework.")]
     public InquilinoController(ILogger<InquilinoController> logger, IRepo <Inquilino> repo, RepositorioContrato repoContratos, RepositorioInmueble repoInmuebles) {
         _logger = logger;
         this.repo = repo;
         this.repoContratos = repoContratos;
         this.repoInmuebles = repoInmuebles;
     }
+    public InquilinoController (ILogger<InquilinoController> logger, ContextoDb contextoDb) {
+        this._logger = logger;
+        this.Database = contextoDb;
+    }
 
     [HttpGet]
     public IActionResult Index () {
-        return View (repo.ObtenerTodos ());
+        return View (Database.Inquilinos.ToList ());
     }
 
     [HttpGet]
@@ -32,7 +40,7 @@ public class InquilinoController : Controller
 
     [HttpGet]
     public IActionResult Editar (int id) {
-        return View (repo.BuscarPorID (id));
+        return View (Database.Inmuebles.Find (id));
     }
 
     [HttpGet]
@@ -43,14 +51,15 @@ public class InquilinoController : Controller
         } else {
             var resultados = new ConjuntoResultados {
                 Inquilino = InquilinoSeleccionado,
-                Contratos = repoContratos.ObtenerTodos ().Where (item => item.Locatario == InquilinoSeleccionado.ID).ToList (),
-                Inmuebles = repoInmuebles.ObtenerTodos (),
+                Contratos = Database.Contratos.Where (item => item.Locatario == InquilinoSeleccionado.ID).ToList (),
+                Inmuebles = Database.Inmuebles.ToList (),
             };
             return View (resultados);
         }
     }
 
     [HttpPost]
+    [Obsolete ("Deprecado en función de la migración a Entity Framework. Usa el API en su lugar.")]
     public IActionResult Editar (int id, Inquilino inquilino) {
         if (repo.Editar (id, inquilino) != -1) {
             TempData ["Mensaje"] = "Inquilino editado con éxito.";
@@ -65,6 +74,7 @@ public class InquilinoController : Controller
     }
 
     [HttpPost]
+    [Obsolete ("Deprecado en función de la migración a Entity Framework. Usa el API en su lugar.")]
     public IActionResult Nuevo (Inquilino inquilino) {
         var repo = new RepositorioInquilino ();
         if (repo.Nuevo (inquilino) != -1) {
@@ -79,6 +89,7 @@ public class InquilinoController : Controller
         }
     }
 
+    [Obsolete ("Deprecado en función de la migración a Entity Framework. Usa el API en su lugar.")]
     [Authorize (policy:"Admin")]
     [HttpGet]
     public IActionResult Borrar (int id, Inquilino inquilino) {

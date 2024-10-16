@@ -1,6 +1,7 @@
 namespace Principal.Models;
 using MySql.Data.MySqlClient;
 
+[Obsolete("Repositorios ADO.NET deprecados en función de la migración a Entity Framework. Usa la API en su lugar.")]
 public class RepositorioPago : IRepo <Pago> {
     protected readonly string ConnectionString;
 
@@ -10,6 +11,7 @@ public class RepositorioPago : IRepo <Pago> {
         this.ConnectionString = "Server=127.0.0.1; Database=Inmobiliaria_NET; Uid=root; Pwd=;";
     }
 
+    [Obsolete("Reemplazado por \"TodosLosPagos ()\" en \"API/PagosController.cs\"")]
     public List<Pago> ObtenerTodos () {
         var resultado = new List<Pago> ();
         string SQLQuery = @"SELECT * FROM Pagos";
@@ -34,6 +36,7 @@ public class RepositorioPago : IRepo <Pago> {
         }
     }
 
+    [Obsolete("Reemplazado por \"NuevoPago (Pago)\" en \"API/PagosController.cs\"")]
     public int Nuevo (Pago pa) {
         int resultado = -1;
         try {
@@ -55,6 +58,7 @@ public class RepositorioPago : IRepo <Pago> {
         return resultado;
     }
 
+    [Obsolete("Reemplazado por \"EditarPago (Pago)\" en \"API/PagosController.cs\"")]
     public int Editar (int id, Pago pa) {
         int resultado = -1;
         try {
@@ -77,6 +81,7 @@ public class RepositorioPago : IRepo <Pago> {
         return resultado;
     }
 
+    [Obsolete("Reemplazado por \"BorrarPago (int)\" en \"API/PagosController.cs\"")]
     public int Borrar (int id, Pago pa) {
         int resultado = -1;
         try {
@@ -94,6 +99,7 @@ public class RepositorioPago : IRepo <Pago> {
         return resultado;
     }
 
+    [Obsolete("Reemplazado por \"ConseguirPago (int)\" en \"API/PagosController.cs\"")]
     public Pago? BuscarPorID (int id) {
         var NuevoItem = new Pago ();
         string SQLQuery = @"SELECT * FROM Pagos WHERE ID = " + id;

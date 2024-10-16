@@ -2,6 +2,7 @@ using System.ComponentModel.DataAnnotations;
 
 namespace Principal.Models;
 
+[Obsolete("Ésta clase es inútil después de la unión con la tabla Propietario.")]
 public class Usuario {
     [Key]
     public int ID {get; set;}

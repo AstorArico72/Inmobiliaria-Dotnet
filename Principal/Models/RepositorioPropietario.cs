@@ -1,6 +1,7 @@
 namespace Principal.Models;
 using MySql.Data.MySqlClient;
 
+[Obsolete("Repositorios ADO.NET deprecados en función de la migración a Entity Framework. Usa la API en su lugar.")]
 public class RepositorioPropietario : IRepo <Propietario> {
     protected readonly string ConnectionString;
 
@@ -10,6 +11,7 @@ public class RepositorioPropietario : IRepo <Propietario> {
         this.ConnectionString = "Server=127.0.0.1; Database=Inmobiliaria_NET; Uid=root; Pwd=;";
     }
 
+    [Obsolete("Reemplazado por \"TodosLosPropietarios ()\" en \"API/PropietariosController.cs\"")]
     public List<Propietario> ObtenerTodos () {
         var resultado = new List<Propietario> ();
         string SQLQuery = @"SELECT * FROM Propietarios";
@@ -32,6 +34,7 @@ public class RepositorioPropietario : IRepo <Propietario> {
         return resultado;
     }
 
+    [Obsolete("Reemplazado por \"NuevoPropietario (Propietario)\" en \"API/PropietariosController.cs\"")]
     public int Nuevo (Propietario pr) {
         int resultado = -1;
         try {
@@ -52,6 +55,7 @@ public class RepositorioPropietario : IRepo <Propietario> {
         return resultado;
     }
 
+    [Obsolete("Reemplazado por \"EditarPropietario (Propietario)\" en \"API/PropietariosController.cs\"")]
     public int Editar (int id, Propietario pr) {
         int resultado = -1;
         try {
@@ -72,6 +76,7 @@ public class RepositorioPropietario : IRepo <Propietario> {
         return resultado;
     }
 
+    [Obsolete("Reemplazado por \"BorrarPropietario (int)\" en \"API/PropietariosController.cs\"")]
     public int Borrar (int id, Propietario pr) {
         int resultado = -1;
         try {
@@ -89,6 +94,7 @@ public class RepositorioPropietario : IRepo <Propietario> {
         return resultado;
     }
 
+    [Obsolete("Reemplazado por \"ConseguirPropietario (int)\" en \"API/PropietariosController.cs\"")]
     public Propietario? BuscarPorID (int id) {
         var resultado = new Propietario ();
         string SQLQuery = @"SELECT * FROM Propietarios WHERE ID = " + id;

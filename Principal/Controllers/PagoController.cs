@@ -9,10 +9,15 @@ namespace Principal.Controllers;
 public class PagoController : Controller
 {
     private readonly ILogger<PagoController> _logger;
+    private readonly ContextoDb Database;
+    [Obsolete("Deprecado en función de la migración a Entity Framework.")]
     private IRepo <Pago> repo;
+    [Obsolete("Deprecado en función de la migración a Entity Framework.")]
     private IRepo <Inmueble> repoInmuebles;
+    [Obsolete("Deprecado en función de la migración a Entity Framework.")]
     private IRepo <Contrato> repoContratos;
 
+    [Obsolete("Constructor con repositorios deprecado en función de la migración a Entity Framework.")]
     public PagoController(ILogger<PagoController> logger, IRepo <Pago> repo, RepositorioInmueble repoinmuebles, IRepo <Contrato> repocontratos) {
         _logger = logger;
         this.repo = repo;
@@ -20,9 +25,14 @@ public class PagoController : Controller
         this.repoContratos = repocontratos;
     }
 
+    public PagoController (ILogger <PagoController> logger, ContextoDb contextoDb) {
+        this._logger = logger;
+        this.Database = contextoDb;
+    }
+
     [HttpGet]
     public IActionResult Index () {
-        var lista = repo.ObtenerTodos ();
+        var lista = Database.Pagos.ToList ();
 
         return View (lista);
     }
@@ -30,15 +40,15 @@ public class PagoController : Controller
     [HttpGet]
     public IActionResult Nuevo() {
         var resultados = new ConjuntoResultados {
-            Inmuebles = repoInmuebles.ObtenerTodos (),
-            Contratos = repoContratos.ObtenerTodos ()
+            Inmuebles = Database.Inmuebles.ToList (),
+            Contratos = Database.Contratos.ToList ()
         };
         return View (resultados);
     }
 
     [HttpGet]
     public IActionResult Editar (int id) {
-        var resultado = repo.BuscarPorID (id);
+        var resultado = Database.Inmuebles.Find (id);
         if (resultado == null) {
             return StatusCode (404);
         } else {
@@ -48,7 +58,7 @@ public class PagoController : Controller
 
     [HttpGet]
     public IActionResult Detalles (int id) {
-        var resultado = repo.BuscarPorID (id);
+        var resultado = Database.Inmuebles.Find (id);
         if (resultado == null) {
             return StatusCode (404);
         } else {
@@ -57,6 +67,7 @@ public class PagoController : Controller
     }
 
     [HttpPost]
+    [Obsolete ("Deprecado en función de la migración a Entity Framework. Usa el API en su lugar.")]
     public IActionResult Editar (int id, Pago pago) {
         if (repo.Editar (id, pago) != -1) {
             TempData ["Mensaje"] = "Pago editado con éxito.";
@@ -70,6 +81,7 @@ public class PagoController : Controller
         }
     }
 
+    [Obsolete ("Deprecado en función de la migración a Entity Framework. Usa el API en su lugar.")]
     [Authorize (policy:"Admin")]
     [HttpGet]
     public IActionResult Borrar (int id, Pago pago) {
@@ -86,6 +98,7 @@ public class PagoController : Controller
     }
 
     [HttpPost]
+    [Obsolete ("Deprecado en función de la migración a Entity Framework. Usa el API en su lugar.")]
     public IActionResult Nuevo (Pago pago) {
         if (repo.Nuevo (pago) != -1) {
             TempData ["Mensaje"] = "Pago añadido con éxito";

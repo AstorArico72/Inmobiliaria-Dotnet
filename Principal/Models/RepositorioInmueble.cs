@@ -1,6 +1,7 @@
 namespace Principal.Models;
 using MySql.Data.MySqlClient;
 
+[Obsolete("Repositorios ADO.NET deprecados en función de la migración a Entity Framework. Usa la API en su lugar.")]
 public class RepositorioInmueble : IRepo <Inmueble> {
     protected readonly string ConnectionString;
 
@@ -10,6 +11,7 @@ public class RepositorioInmueble : IRepo <Inmueble> {
         this.ConnectionString = "Server=127.0.0.1; Database=Inmobiliaria_NET; Uid=root; Pwd=;";
     }
 
+    [Obsolete("Reemplazado por \"TodosLosInmuebles ()\" en \"API/InmueblesController.cs\"")]
     public List<Inmueble> ObtenerTodos () {
         var resultado = new List<Inmueble> ();
         string SQLQuery = @"SELECT DISTINCT i.ID, i.Dirección, i.Superficie, i.Precio, i.Propietario, p.Nombre, p.ID, i.Tipo, i.Uso, p.Contacto, i.Ambientes, i.Disponible, p.DNI, i.CoordenadasX, i.CoordenadasY FROM Inmuebles i " +
@@ -54,6 +56,7 @@ public class RepositorioInmueble : IRepo <Inmueble> {
         }
     }
 
+    [Obsolete("Reemplazado por \"NuevoInmueble (Inmueble)\" en \"API/InmueblesController.cs\"")]
     public int Nuevo (Inmueble im) {
         int resultado = -1;
         try {
@@ -84,6 +87,7 @@ public class RepositorioInmueble : IRepo <Inmueble> {
         return resultado;
     }
 
+    [Obsolete("Reemplazado por \"EditarInmueble (Inmueble)\" en \"API/InmueblesController.cs\"")]
     public int Editar (int id, Inmueble im) {
         int resultado = -1;
         try {
@@ -111,6 +115,7 @@ public class RepositorioInmueble : IRepo <Inmueble> {
         return resultado;
     }
 
+    [Obsolete("Reemplazado por \"BorrarInmueble (int)\" en \"API/InmueblesController.cs\"")]
     public int Borrar (int id, Inmueble im) {
         int resultado = -1;
         try {
@@ -128,6 +133,7 @@ public class RepositorioInmueble : IRepo <Inmueble> {
         return resultado;
     }
 
+    [Obsolete("Reemplazado por \"ConseguirInmueble (int)\" en \"API/InmueblesController.cs\"")]
     public Inmueble? BuscarPorID (int id) {
         var NuevoItem = new Inmueble ();
         string SQLQuery = @"SELECT ID, Dirección, Superficie, Precio, Propietario, Tipo, Uso, Ambientes, Disponible, CoordenadasX, CoordenadasY FROM Inmuebles WHERE ID = " + id;
@@ -166,6 +172,7 @@ public class RepositorioInmueble : IRepo <Inmueble> {
         return NuevoItem;
     }
 
+    [Obsolete("Deprecado en función de la migración a Entity Framework.")]
     public List <Inmueble> BuscarPorFecha (DateTime FechaInicio, DateTime FechaFin) {
         RepositorioContrato repo = new RepositorioContrato ();
         List <Inmueble> Resultado = new List<Inmueble> ();

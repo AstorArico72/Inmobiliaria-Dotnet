@@ -3,6 +3,7 @@ namespace Principal.Models;
 using Microsoft.AspNetCore.Cryptography.KeyDerivation;
 using MySql.Data.MySqlClient;
 
+[Obsolete("Repositorio deprecado en función de la unión de las tablas Usuarios y Propietarios.")]
 public class RepositorioUsuario : IRepo <Usuario> {
     protected readonly string ConnectionString;
 

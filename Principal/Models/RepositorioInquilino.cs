@@ -3,6 +3,7 @@ namespace Principal.Models;
 using System.Data;
 using MySql.Data.MySqlClient;
 
+[Obsolete("Repositorios ADO.NET deprecados en función de la migración a Entity Framework. Usa la API en su lugar.")]
 public class RepositorioInquilino : IRepo <Inquilino> {
     protected readonly string ConnectionString;
 
@@ -12,6 +13,7 @@ public class RepositorioInquilino : IRepo <Inquilino> {
         this.ConnectionString = "Server=127.0.0.1; Database=Inmobiliaria_NET; Uid=root; Pwd=;";
     }
 
+    [Obsolete("Reemplazado por \"ConseguirInquilino (int)\" en \"API/InquilinosController.cs\"")]
     public List<Inquilino> ObtenerTodos () {
         var resultado = new List<Inquilino> ();
         string SQLQuery = @"SELECT * FROM Inquilinos";
@@ -34,6 +36,7 @@ public class RepositorioInquilino : IRepo <Inquilino> {
         return resultado;
     }
 
+    [Obsolete("Reemplazado por \"NuevoInquilino (int)\" en \"API/InquilinosController.cs\"")]
     public int Nuevo (Inquilino iq) {
         int resultado = -1;
         try {
@@ -54,6 +57,7 @@ public class RepositorioInquilino : IRepo <Inquilino> {
         return resultado;
     }
 
+    [Obsolete("Reemplazado por \"EditarInquilino (int)\" en \"API/InquilinosController.cs\"")]
     public int Editar (int id, Inquilino iq) {
         int resultado = -1;
         try {
@@ -74,6 +78,7 @@ public class RepositorioInquilino : IRepo <Inquilino> {
         return resultado;
     }
 
+    [Obsolete("Reemplazado por \"BorrarInquilino (int)\" en \"API/InquilinosController.cs\"")]
     public int Borrar (int id, Inquilino iq) {
         int resultado = -1;
         try {
@@ -91,6 +96,7 @@ public class RepositorioInquilino : IRepo <Inquilino> {
         return resultado;
     }
 
+    [Obsolete("Reemplazado por \"ConseguirInquilino (int)\" en \"API/InquilinosController.cs\"")]
     public Inquilino? BuscarPorID (int id) {
         var resultado = new Inquilino ();
         string SQLQuery = @"SELECT * FROM Inquilinos WHERE ID = " + id;
