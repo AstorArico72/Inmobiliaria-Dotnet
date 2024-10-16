@@ -4,11 +4,11 @@ using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Authentication.Cookies;
 using System.Net.Http;
 using System.Security.Claims;
-using TP1_ASP.Models;
+using Principal.Models;
 using Microsoft.AspNetCore.Cryptography.KeyDerivation;
 using Microsoft.AspNetCore.Authentication;
 
-namespace TP1_ASP.Controllers;
+namespace Principal.Controllers;
 
 [Authorize (policy:"Admin")]
 public class UsuarioController : Controller

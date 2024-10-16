@@ -1,6 +1,6 @@
 using System.Diagnostics.CodeAnalysis;
 
-namespace TP1_ASP.Models;
+namespace Principal.Models;
 
 public class ErrorViewModel
 {

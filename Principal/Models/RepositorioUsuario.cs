@@ -1,4 +1,4 @@
-namespace TP1_ASP.Models;
+namespace Principal.Models;
 
 using Microsoft.AspNetCore.Cryptography.KeyDerivation;
 using MySql.Data.MySqlClient;

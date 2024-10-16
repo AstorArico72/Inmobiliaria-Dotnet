@@ -1,6 +1,9 @@
-namespace TP1_ASP.Models;
+using System.ComponentModel.DataAnnotations;
+
+namespace Principal.Models;
 
 public class Inquilino {
+    [Key]
     public int ID {get; set;}
     public string? Nombre {get; set;}
     public string DNI {get; set;}

@@ -2,9 +2,9 @@
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Authorization;
 using System.Security.Claims;
-using TP1_ASP.Models;
+using Principal.Models;
 
-namespace TP1_ASP.Controllers;
+namespace Principal.Controllers;
 
 [AllowAnonymous]
 public class HomeController : Controller

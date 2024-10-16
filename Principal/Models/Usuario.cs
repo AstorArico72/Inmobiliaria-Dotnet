@@ -1,8 +1,9 @@
-using Microsoft.AspNetCore.Cryptography.KeyDerivation;
+using System.ComponentModel.DataAnnotations;
 
-namespace TP1_ASP.Models;
+namespace Principal.Models;
 
 public class Usuario {
+    [Key]
     public int ID {get; set;}
     public string NombreUsuario {get; set;}
     public string Clave {get; set;}

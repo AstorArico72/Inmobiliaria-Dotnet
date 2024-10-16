@@ -1,4 +1,4 @@
-namespace TP1_ASP.Models;
+namespace Principal.Models;
 
 public class ConjuntoResultados {
     public List <Contrato>? Contratos {get; set;}

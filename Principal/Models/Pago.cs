@@ -1,10 +1,13 @@
 using System.ComponentModel.DataAnnotations;
+using System.ComponentModel.DataAnnotations.Schema;
 
-namespace TP1_ASP.Models;
+namespace Principal.Models;
 
 public class Pago {
+    [Key]
     public int ID {get; set;}
     public int NumeroPago {get; set;}
+    [ForeignKey("IdContrato")]
     public int IdContrato {get; set;}
     public int Monto {get; set;}
     public DateTime FechaPago {get; set;}

@@ -1,8 +1,14 @@
-namespace TP1_ASP.Models;
+using System.ComponentModel.DataAnnotations;
+using System.ComponentModel.DataAnnotations.Schema;
+
+namespace Principal.Models;
 
 public class Contrato {
+    [Key]
     public int ID {get; set;}
+    [ForeignKey("Locatario")]
     public int Locatario {get; set;}
+    [ForeignKey("Propiedad")]
     public int Propiedad {get; set;}
     public DateTime FechaLímite {get; set;}
     public DateTime FechaContrato {get; set;}

@@ -1,8 +1,11 @@
-using TP1_ASP.Models;
+using Principal.Models;
 using Microsoft.AspNetCore.Authentication.Cookies;
-using Microsoft.IdentityModel.Tokens;
+using Microsoft.IdentityModel.Tokens; //Pendiente: Abandonar Microsoft.IdentityModel - está deprecado.
+using Microsoft.EntityFrameworkCore;
+using Pomelo.EntityFrameworkCore.MySql;
 
 var builder = WebApplication.CreateBuilder(args);
+builder.Services.AddMvc ();
 builder.Services.AddTransient <RepositorioInmueble, RepositorioInmueble> ();
 builder.Services.AddTransient <RepositorioContrato, RepositorioContrato> ();
 builder.Services.AddTransient <IRepo <Propietario>, RepositorioPropietario> ();
@@ -11,7 +14,15 @@ builder.Services.AddTransient <IRepo <Contrato>, RepositorioContrato> ();
 builder.Services.AddTransient <IRepo <Pago>, RepositorioPago> ();
 builder.Services.AddTransient <RepositorioUsuario, RepositorioUsuario> ();
 
-// Add services to the container.
+/*
+Pendiente: Refactorizar los repositorios a Entity Framework.
+*/
+builder.Services.AddDbContext<ContextoDb> (
+    options => options.UseMySql (
+            builder.Configuration ["ConnectionStrings:DefaultConnection"], new MariaDbServerVersion (new Version (10, 4, 21))
+        )
+    );
+
 builder.Services.AddControllersWithViews();
 
 builder.Services.AddAuthentication (CookieAuthenticationDefaults.AuthenticationScheme).AddCookie (options => {
@@ -38,10 +49,8 @@ builder.Services.AddAuthorization (options => {
 
 var app = builder.Build();
 
-// Configure the HTTP request pipeline.
 if (!app.Environment.IsDevelopment())
 {
-    // The default HSTS value is 30 days. You may want to change this for production scenarios, see https://aka.ms/aspnetcore-hsts.
     app.UseHsts();
 }
 
@@ -50,6 +59,8 @@ app.UseStatusCodePagesWithReExecute ("/Home/Error", "?StatusCode={0}");
 app.UseHttpsRedirection();
 app.UseStaticFiles();
 app.UseRouting ();
+
+//Hay que borrar una de las dos.
 app.UseAuthentication ();
 app.UseAuthorization ();
 

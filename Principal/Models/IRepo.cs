@@ -1,4 +1,4 @@
-namespace TP1_ASP.Models;
+namespace Principal.Models;
 
 public interface IRepo <T> {
     List <T> ObtenerTodos ();

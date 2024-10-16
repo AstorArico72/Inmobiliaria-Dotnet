@@ -3,7 +3,7 @@ using System.Collections.Generic;
 using System.ComponentModel.DataAnnotations;
 using System.Linq;
 using System.Threading.Tasks;
-namespace TP1_ASP.Models;
+namespace Principal.Models;
 
 public class LoginView {
 	[Required (ErrorMessage = "Es necesario el nombre de usuario")]

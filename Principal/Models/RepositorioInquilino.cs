@@ -1,4 +1,4 @@
-namespace TP1_ASP.Models;
+namespace Principal.Models;
 
 using System.Data;
 using MySql.Data.MySqlClient;

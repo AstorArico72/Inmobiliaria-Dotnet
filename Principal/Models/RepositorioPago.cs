@@ -1,4 +1,4 @@
-namespace TP1_ASP.Models;
+namespace Principal.Models;
 using MySql.Data.MySqlClient;
 
 public class RepositorioPago : IRepo <Pago> {
