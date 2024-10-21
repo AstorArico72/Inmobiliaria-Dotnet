@@ -4,6 +4,11 @@ using Principal.Models;
 using Principal.Controllers;
 using System.Diagnostics.CodeAnalysis;
 using MySql.Data.MySqlClient;
+using Microsoft.AspNetCore.Cryptography.KeyDerivation;
+using System.Security.Claims;
+using System.IdentityModel.Tokens.Jwt;
+using Microsoft.IdentityModel.Tokens;
+using Microsoft.AspNetCore.Authorization;
 
 namespace Principal.API;
 
@@ -11,9 +16,11 @@ namespace Principal.API;
 [Route("Api/Propietarios")]
 public class PropietariosController : ControllerBase {
     private readonly ContextoDb Contexto;
+    private readonly IConfiguration Config;
 
-    public PropietariosController (ContextoDb contexto) {
+    public PropietariosController (ContextoDb contexto, IConfiguration config) {
         this.Contexto = contexto;
+        this.Config = config;
     }
 
     [HttpGet("{id}")]
@@ -34,6 +41,13 @@ public class PropietariosController : ControllerBase {
     public async Task<IActionResult> NuevoPropietario ([FromForm] Propietario propietario) {
         try {
             if (ModelState.IsValid) {
+                propietario.Clave = Convert.ToBase64String(KeyDerivation.Pbkdf2(
+			        password: propietario.Clave,
+			        salt: System.Text.Encoding.ASCII.GetBytes(Config["Salt"]),
+			        prf: KeyDerivationPrf.HMACSHA256,
+			        iterationCount: 1000,
+			        numBytesRequested: 256 / 8
+                ));
                 await Contexto.Propietarios.AddAsync (propietario);
                 await Contexto.SaveChangesAsync ();
                 return Created ();
@@ -83,5 +97,38 @@ public class PropietariosController : ControllerBase {
         }
     }
 
-    //Después implementar un método para cambiar la clave.
+    [AllowAnonymous]
+    [HttpPost("Ingresar")]
+    public async Task <IActionResult> Ingresar ([FromForm] LoginView LoginData) {
+        string ContraseñaConHash = Convert.ToBase64String(KeyDerivation.Pbkdf2(
+			password: LoginData.Clave,
+			salt: System.Text.Encoding.ASCII.GetBytes(Config["Salt"]),
+			prf: KeyDerivationPrf.HMACSHA256,
+			iterationCount: 1000,
+			numBytesRequested: 256 / 8
+        ));
+        Console.WriteLine ("Hash: " + ContraseñaConHash);
+        var Llave = new SymmetricSecurityKey (System.Text.Encoding.ASCII.GetBytes(Config["TokenAuthentication:SecretKey"]));
+        var Credenciales = new SigningCredentials (Llave, SecurityAlgorithms.HmacSha256);
+        Propietario UsuarioSeleccionado = await Contexto.Propietarios.FirstOrDefaultAsync (item => item.Nombre == LoginData.NombreUsuario);
+
+        if (UsuarioSeleccionado == null || ContraseñaConHash != UsuarioSeleccionado.Clave) {
+            return BadRequest ("Usuario o clave incorrectos.");
+        } else {
+            var ClaimList = new List<Claim> {
+                new Claim (ClaimTypes.Name, UsuarioSeleccionado.Nombre),
+                new Claim (ClaimTypes.Role, UsuarioSeleccionado.Rol),
+                new Claim ("IdUsuario", UsuarioSeleccionado.ID.ToString ())
+            };
+            
+            var Token = new JwtSecurityToken (
+                issuer: Config["TokenAuthentication:Issuer"],
+                audience: Config["TokenAuthentication:Audience"],
+                claims: ClaimList,
+                expires: DateTime.Now.AddHours (24),
+                signingCredentials: Credenciales
+            );
+            return Ok (new JwtSecurityTokenHandler ().WriteToken (Token));
+        }
+    }
 }

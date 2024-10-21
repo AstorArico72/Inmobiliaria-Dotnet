@@ -13,7 +13,8 @@ builder.Services.AddTransient <IRepo <Inquilino>, RepositorioInquilino> ();
 builder.Services.AddTransient <IRepo <Contrato>, RepositorioContrato> ();
 builder.Services.AddTransient <IRepo <Pago>, RepositorioPago> ();
 builder.Services.AddTransient <RepositorioUsuario, RepositorioUsuario> ();
-builder.Services.AddSingleton <ContextoDb, ContextoDb> ();
+
+builder.WebHost.UseUrls("http://127.0.0.1:8011", "http://192.168.1.150:8011");
 
 builder.Services.AddDbContext<ContextoDb> (
     options => options.UseMySql (
@@ -56,7 +57,6 @@ app.UseExceptionHandler("/Home/Error");
 app.UseStatusCodePagesWithReExecute ("/Home/Error", "?StatusCode={0}");
 app.UseHttpsRedirection();
 app.UseStaticFiles();
-app.UseRouting ();
 
 //Hay que borrar una de las dos.
 app.UseAuthentication ();
