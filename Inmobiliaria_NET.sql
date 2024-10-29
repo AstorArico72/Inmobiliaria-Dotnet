@@ -3,7 +3,7 @@
 -- https://www.phpmyadmin.net/
 --
 -- Servidor: localhost
--- Tiempo de generación: 22-06-2024 a las 16:44:59
+-- Tiempo de generación: 29-10-2024 a las 19:43:20
 -- Versión del servidor: 10.4.21-MariaDB
 -- Versión de PHP: 8.0.10
 
@@ -69,7 +69,8 @@ INSERT INTO `Contratos` (`ID`, `Locatario`, `Propiedad`, `FechaLímite`, `FechaC
 (41, 7, 14, '2024-05-05 19:58:08', '2024-01-01 00:00:00', 0, 0),
 (42, 6, 20, '2024-09-10 00:00:00', '2024-05-10 00:00:00', 1, 0),
 (43, 6, 14, '2024-11-11 00:00:00', '2024-05-11 00:00:00', 1, 0),
-(44, 1, 3, '2024-09-10 00:00:00', '2024-06-10 00:00:00', 1, 165000);
+(44, 1, 3, '2024-09-10 00:00:00', '2024-06-10 00:00:00', 1, 165000),
+(45, 6, 21, '2024-08-01 00:00:00', '2024-07-01 00:00:00', 1, 4500000);
 
 -- --------------------------------------------------------
 
@@ -105,7 +106,9 @@ INSERT INTO `Inmuebles` (`ID`, `Dirección`, `Superficie`, `Precio`, `Propietari
 (17, '10091 Calle 94', 249, 244000, 5, 'Galpón', 'Personal', 2, 1, -64.1752, -32.6911),
 (18, 'Km 1039 Ruta Nacional 7', 4000, 1200000, 5, 'Terreno', 'Personal', 0, 1, -63.7501, -32.5776),
 (19, '284 Calle 10', 60, 350000, 4, 'Local', 'Comercial', 1, 0, -64.1303, -32.7894),
-(20, '3028 Calle 15', 84, 600000, 5, 'Local', 'Comercial', 3, 1, -64.1279, -32.7642);
+(20, '3028 Calle 15', 84, 600000, 5, 'Local', 'Comercial', 3, 1, -64.1279, -32.7642),
+(21, '999 Calle 12', 1094, 740000, 9, 'Galpón', 'Comercial', 1, 1, -65.771, -33.298),
+(22, '16777 Ruta 216', 4095, 850000, 10, 'Terreno', 'Personal', 1, 1, -65.788, -33.899);
 
 -- --------------------------------------------------------
 
@@ -298,7 +301,9 @@ INSERT INTO `Pagos` (`ID`, `NumeroPago`, `IdContrato`, `Monto`, `FechaPago`, `Pa
 (146, 6, 43, 119000, '2024-10-11 00:00:00', 0),
 (147, 1, 44, 165000, '2024-06-10 00:00:00', 0),
 (148, 2, 44, 165000, '2024-07-10 00:00:00', 0),
-(149, 3, 44, 165000, '2024-08-10 00:00:00', 0);
+(149, 3, 44, 165000, '2024-08-10 00:00:00', 0),
+(150, 1, 45, 4500000, '2024-07-01 00:00:00', 0),
+(151, 1, 45, 3000000, '2024-07-01 00:00:00', 0);
 
 -- --------------------------------------------------------
 
@@ -310,42 +315,24 @@ CREATE TABLE `Propietarios` (
   `ID` int(11) NOT NULL,
   `Nombre` varchar(128) COLLATE utf8_bin NOT NULL,
   `Contacto` varchar(1000) COLLATE utf8_bin DEFAULT '"Sin especificar"',
-  `DNI` varchar(10) COLLATE utf8_bin NOT NULL
+  `DNI` varchar(10) COLLATE utf8_bin NOT NULL,
+  `Clave` varchar(255) COLLATE utf8_bin NOT NULL,
+  `Rol` varchar(16) COLLATE utf8_bin NOT NULL DEFAULT 'Empleado'
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8 COLLATE=utf8_bin;
 
 --
 -- Volcado de datos para la tabla `Propietarios`
 --
 
-INSERT INTO `Propietarios` (`ID`, `Nombre`, `Contacto`, `DNI`) VALUES
-(1, 'Nombre editado', '\"Sin especificar\"', ''),
-(4, 'Juan Pérez', '  Teléfono: 839-992-5507. Correo: j-perez@example.net ', '3F0912E4'),
-(5, 'John Doe', '839-387-2201', ''),
-(6, 'Joao da Silva', '  jdasilva@dotnet-realtors.com ', '3E9A8DE1'),
-(7, 'Joaquim Ribera', ' jribera@dotnet-realtors.com', '');
-
--- --------------------------------------------------------
-
---
--- Estructura de tabla para la tabla `Usuarios`
---
-
-CREATE TABLE `Usuarios` (
-  `ID` int(11) NOT NULL,
-  `Nombre` varchar(255) COLLATE utf8_bin NOT NULL,
-  `Clave` varchar(255) COLLATE utf8_bin NOT NULL,
-  `Rol` varchar(32) COLLATE utf8_bin NOT NULL,
-  `UrlImagen` varchar(255) COLLATE utf8_bin DEFAULT '/medios/Nulo.png'
-) ENGINE=InnoDB DEFAULT CHARSET=utf8 COLLATE=utf8_bin;
-
---
--- Volcado de datos para la tabla `Usuarios`
---
-
-INSERT INTO `Usuarios` (`ID`, `Nombre`, `Clave`, `Rol`, `UrlImagen`) VALUES
-(12, 'Admin-3', 'ykxZ4qarZsJX8Y9kbVV+YlD3JQQkwGnzBpKZguYzEjU=', 'Admin', '/medios/Foto_03a030dd-a014-4dfc-9067-4fe476317fbd.png'),
-(15, 'Admin-4', '2YtoOzjBzRID0/h24nW8UQ0YP+mcHjRhK+leNyh1Eak=', 'Admin', '/medios/Foto_0ce699f4-38ad-4a99-8d5c-89d329054116.png'),
-(17, 'Empleado', 'ERQ6vgodXI/l151Z8cJCeevlvisZ+gv+Enuf2UZ330U=', 'Empleado', '/medios/Nulo.png');
+INSERT INTO `Propietarios` (`ID`, `Nombre`, `Contacto`, `DNI`, `Clave`, `Rol`) VALUES
+(1, 'Nombre editado', '\"Sin especificar\"', '', '', 'Empleado'),
+(4, 'Juan Pérez', '  Teléfono: 839-992-5507. Correo: j-perez@example.net ', '3F0912E4', '', 'Empleado'),
+(5, 'John Doe', '839-387-2201', '', '2YtoOzjBzRID0/h24nW8UQ0YP+mcHjRhK+leNyh1Eak=', 'Empleado'),
+(6, 'Joao da Silva', '  jdasilva@dotnet-realtors.com ', '3E9A8DE1', '', 'Empleado'),
+(7, 'Joaquim Ribera', ' jribera@dotnet-realtors.com', '', '', 'Empleado'),
+(9, 'Mariano Luzza', ' mluzza@ulp.edu.ar - Universidad de La Punta ', '30998f123a', '', 'Empleado'),
+(10, 'Dotnet Realtors', 'astorarico72@gmail.com; 54 9 2664 685713', '1E8A90BD', '', 'Empleado'),
+(15, 'Aricó', 'webmaster@dotnet-realtors.com', '8888 7777', 'TEfv4DN5dsvW0Zkx0nihTTf8fCvARjQAcf18AWHmfhQ=', 'Admin');
 
 --
 -- Índices para tablas volcadas
@@ -386,12 +373,6 @@ ALTER TABLE `Propietarios`
   ADD PRIMARY KEY (`ID`);
 
 --
--- Indices de la tabla `Usuarios`
---
-ALTER TABLE `Usuarios`
-  ADD PRIMARY KEY (`ID`);
-
---
 -- AUTO_INCREMENT de las tablas volcadas
 --
 
@@ -399,13 +380,13 @@ ALTER TABLE `Usuarios`
 -- AUTO_INCREMENT de la tabla `Contratos`
 --
 ALTER TABLE `Contratos`
-  MODIFY `ID` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=45;
+  MODIFY `ID` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=46;
 
 --
 -- AUTO_INCREMENT de la tabla `Inmuebles`
 --
 ALTER TABLE `Inmuebles`
-  MODIFY `ID` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=21;
+  MODIFY `ID` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=23;
 
 --
 -- AUTO_INCREMENT de la tabla `Inquilinos`
@@ -417,19 +398,13 @@ ALTER TABLE `Inquilinos`
 -- AUTO_INCREMENT de la tabla `Pagos`
 --
 ALTER TABLE `Pagos`
-  MODIFY `ID` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=150;
+  MODIFY `ID` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=152;
 
 --
 -- AUTO_INCREMENT de la tabla `Propietarios`
 --
 ALTER TABLE `Propietarios`
-  MODIFY `ID` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=9;
-
---
--- AUTO_INCREMENT de la tabla `Usuarios`
---
-ALTER TABLE `Usuarios`
-  MODIFY `ID` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=18;
+  MODIFY `ID` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=16;
 
 --
 -- Restricciones para tablas volcadas
