@@ -53,7 +53,7 @@ public class InmuebleController : Controller
         } else {
             var resultados = new ConjuntoResultados {
                 Propietarios = Database.Propietarios.ToList (),
-                Propietario = Database.Propietarios.Find (InmuebleSeleccionado.IDPropietario),
+                Propietario = Database.Propietarios.Find (InmuebleSeleccionado.Propietario),
                 Inmueble = InmuebleSeleccionado
             };
             return View (resultados);
@@ -68,7 +68,7 @@ public class InmuebleController : Controller
             return StatusCode (404);
         } else {
             var resultados = new ConjuntoResultados {
-                Propietario = Database.Propietarios.Find (InmuebleSeleccionado.IDPropietario),
+                Propietario = Database.Propietarios.Find (InmuebleSeleccionado.Propietario),
                 Contratos = Database.Contratos.Where (item => item.Propiedad == InmuebleSeleccionado.ID).ToList (),
                 Inquilinos = Database.Inquilinos.ToList (),
                 Inmueble = InmuebleSeleccionado

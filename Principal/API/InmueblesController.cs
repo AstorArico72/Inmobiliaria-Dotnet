@@ -4,6 +4,7 @@ using Principal.Models;
 using Principal.Controllers;
 using System.Diagnostics.CodeAnalysis;
 using MySql.Data.MySqlClient;
+using Microsoft.AspNetCore.Authorization;
 
 namespace Principal.API;
 
@@ -25,6 +26,7 @@ public class InmueblesController : ControllerBase {
             return Ok (inmueble);
         }
     }
+    [Authorize]
     [HttpGet("Todos")]
     public IActionResult TodosLosInmuebles () {
         List <Inmueble> inmuebles = Contexto.Inmuebles.ToList ();

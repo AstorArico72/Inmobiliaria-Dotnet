@@ -72,7 +72,7 @@ public class UsuarioController : Controller
         ));
         string? ReturnURL = String.IsNullOrEmpty(TempData ["ReturnUrl"] as string) ? "/Home" : TempData ["ReturnUrl"].ToString();
 
-        Usuario UsuarioSeleccionado = repo.BuscarPorNombre (data.NombreUsuario);
+        Usuario UsuarioSeleccionado = repo.BuscarPorNombre (data.Nombre);
 
         if (UsuarioSeleccionado == null || ContraseñaConHash != UsuarioSeleccionado.Clave) {
             TempData ["Mensaje"] = "Usuario o clave incorrectas";

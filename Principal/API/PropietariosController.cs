@@ -9,9 +9,11 @@ using System.Security.Claims;
 using System.IdentityModel.Tokens.Jwt;
 using Microsoft.IdentityModel.Tokens;
 using Microsoft.AspNetCore.Authorization;
+using Microsoft.AspNetCore.Authentication.JwtBearer;
 
 namespace Principal.API;
 
+[Authorize(AuthenticationSchemes = JwtBearerDefaults.AuthenticationScheme)]
 [ApiController]
 [Route("Api/Propietarios")]
 public class PropietariosController : ControllerBase {
@@ -43,14 +45,14 @@ public class PropietariosController : ControllerBase {
             if (ModelState.IsValid) {
                 propietario.Clave = Convert.ToBase64String(KeyDerivation.Pbkdf2(
 			        password: propietario.Clave,
-			        salt: System.Text.Encoding.ASCII.GetBytes(Config["Salt"]),
+			        salt: System.Text.Encoding.UTF8.GetBytes(Config["Salt"]),
 			        prf: KeyDerivationPrf.HMACSHA256,
 			        iterationCount: 1000,
 			        numBytesRequested: 256 / 8
                 ));
                 await Contexto.Propietarios.AddAsync (propietario);
                 await Contexto.SaveChangesAsync ();
-                return Created ();
+                return CreatedAtAction ("/Api/ConseguirPropietario", new {id = propietario.ID}, propietario);
             } else {
                 return BadRequest ("Un campo es inválido.");
             }
@@ -102,15 +104,14 @@ public class PropietariosController : ControllerBase {
     public async Task <IActionResult> Ingresar ([FromForm] LoginView LoginData) {
         string ContraseñaConHash = Convert.ToBase64String(KeyDerivation.Pbkdf2(
 			password: LoginData.Clave,
-			salt: System.Text.Encoding.ASCII.GetBytes(Config["Salt"]),
+			salt: System.Text.Encoding.UTF8.GetBytes(Config["Salt"]),
 			prf: KeyDerivationPrf.HMACSHA256,
 			iterationCount: 1000,
 			numBytesRequested: 256 / 8
         ));
-        Console.WriteLine ("Hash: " + ContraseñaConHash);
-        var Llave = new SymmetricSecurityKey (System.Text.Encoding.ASCII.GetBytes(Config["TokenAuthentication:SecretKey"]));
+        var Llave = new SymmetricSecurityKey (System.Text.Encoding.UTF8.GetBytes(Config["TokenAuthentication:SecretKey"]));
         var Credenciales = new SigningCredentials (Llave, SecurityAlgorithms.HmacSha256);
-        Propietario UsuarioSeleccionado = await Contexto.Propietarios.FirstOrDefaultAsync (item => item.Nombre == LoginData.NombreUsuario);
+        Propietario UsuarioSeleccionado = await Contexto.Propietarios.FirstOrDefaultAsync (item => item.Nombre == LoginData.Nombre);
 
         if (UsuarioSeleccionado == null || ContraseñaConHash != UsuarioSeleccionado.Clave) {
             return BadRequest ("Usuario o clave incorrectos.");
@@ -129,6 +130,18 @@ public class PropietariosController : ControllerBase {
                 signingCredentials: Credenciales
             );
             return Ok (new JwtSecurityTokenHandler ().WriteToken (Token));
+        }
+    }
+
+    [HttpGet("Perfil")]
+    public async Task <IActionResult> Perfil () {
+        string usuario = User.Claims.FirstOrDefault (claim => claim.Type == "IdUsuario").Value;
+        int IdUsuario = int.Parse (usuario);
+        Propietario perfil = await Contexto.Propietarios.FindAsync (IdUsuario);
+        if (perfil != null) {
+            return Ok (perfil);
+        } else {
+            return Unauthorized ("No autenticado.");
         }
     }
 }

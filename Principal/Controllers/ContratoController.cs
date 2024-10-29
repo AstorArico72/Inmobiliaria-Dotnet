@@ -55,7 +55,8 @@ public class ContratoController : Controller {
         var resultados = new ConjuntoResultados {
             Contratos = DataBase.Contratos.ToList (),
             Inmuebles = DataBase.Inmuebles.ToList (),
-            Inquilinos = DataBase.Inquilinos.ToList ()
+            Inquilinos = DataBase.Inquilinos.ToList (),
+            Propietarios = DataBase.Propietarios.ToList ()
         };
         return View (resultados);
     }
@@ -84,7 +85,7 @@ public class ContratoController : Controller {
         } else {
             var InmuebleSeleccionado = DataBase.Inmuebles.Find (ContratoSeleccionado.ID);
             var resultados = new ConjuntoResultados {
-                Propietario = DataBase.Propietarios.Find (InmuebleSeleccionado.IDPropietario),
+                Propietario = DataBase.Propietarios.Find (InmuebleSeleccionado.Propietario),
                 Inmueble = InmuebleSeleccionado,
                 Inquilino = DataBase.Inquilinos.Find (ContratoSeleccionado.Locatario),
                 Pagos = DataBase.Pagos.Where (item => item.IdContrato == id).ToList (),

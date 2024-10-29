@@ -7,7 +7,7 @@ namespace Principal.Models;
 
 public class LoginView {
 	[Required (ErrorMessage = "Es necesario el nombre de usuario")]
-	public string NombreUsuario {get; set;}
+	public string Nombre {get; set;}
 
 	[DataType(DataType.Password)]
 	[Required (ErrorMessage = "Es necesaria la contraseña")]

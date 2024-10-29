@@ -20,8 +20,8 @@
         }
         <p>
             Superficie: @Model.Inmueble.Superficie m&#178; <br>
-            @if (Model.Inmueble.IDPropietario != null) {
-                <span>Dueño: <a asp-action="Detalles" asp-controller="Propietario" asp-route-id="@Model.Inmueble.IDPropietario"> @NombreDueño </a> <br></span>
+            @if (Model.Inmueble.Propietario != null) {
+                <span>Dueño: <a asp-action="Detalles" asp-controller="Propietario" asp-route-id="@Model.Inmueble.Propietario"> @NombreDueño </a> <br></span>
             } else {
                 <span>@NombreDueño<br></span>
             }

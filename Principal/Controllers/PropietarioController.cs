@@ -41,7 +41,7 @@ public class PropietarioController : Controller
         } else {
             var resultados = new ConjuntoResultados {
                 //Ése predicado debajo debería devolver todos los inmuebles del propietario seleccionado, pero por alguna razón no lo hace.
-                Inmuebles = repoInmuebles.ObtenerTodos ().FindAll (item => item.IDPropietario == PropietarioSeleccionado.ID),
+                Inmuebles = repoInmuebles.ObtenerTodos ().FindAll (item => item.Propietario == PropietarioSeleccionado.ID),
                 Propietario = repo.BuscarPorID (id)
             };
             //Añadí ésto como control, pero "resultados.Inmuebles.Count" es 0.
@@ -78,7 +78,7 @@ public class PropietarioController : Controller
             return RedirectToAction ("Login");
         }
     }
-
+/*
     [HttpPost]
     [Authorize (policy:"Admin")]
     public IActionResult Editar (int id, Propietario usuario) {
@@ -95,8 +95,8 @@ public class PropietarioController : Controller
             TempData ["ColorMensaje"] = "#FF0000";
             return RedirectToAction ("Login");
         }
-    }
-
+    }*/
+/*
     [HttpPost]
     [Authorize (policy:"Admin")]
     public IActionResult CambiarClave (int id, Propietario usuario) {
@@ -118,6 +118,7 @@ public class PropietarioController : Controller
         await HttpContext.SignOutAsync (CookieAuthenticationDefaults.AuthenticationScheme);
         return RedirectToAction("Index", "Home");
     }
+    */
 
     [ResponseCache(Duration = 0, Location = ResponseCacheLocation.None, NoStore = true)]
     public IActionResult Error(string? excepcion)

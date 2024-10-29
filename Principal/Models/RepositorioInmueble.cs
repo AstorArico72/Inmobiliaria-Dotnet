@@ -30,21 +30,9 @@ public class RepositorioInmueble : IRepo <Inmueble> {
                     NuevoItem.Disponible = lector.GetByte (11);
                     NuevoItem.CoordenadasX = lector.GetFloat (13);
                     NuevoItem.CoordenadasY = lector.GetFloat (14);
-                    NuevoItem.Dueño = new Propietario (
-                            lector.GetString (5),
-                            lector.GetInt32 (4),
-                            lector.GetString (9),
-                            lector.GetString (12)
-                        );
                     if (lector.IsDBNull (3)) {
                         NuevoItem.Precio = null;
-                        NuevoItem.IDPropietario = lector.GetInt32 (4);
-                        NuevoItem.Dueño = new Propietario (
-                            lector.GetString (5),
-                            lector.GetInt32 (4),
-                            lector.GetString (9),
-                            lector.GetString (12)
-                        );
+                        NuevoItem.Propietario = lector.GetInt32 (4);
                     }
                     NuevoItem.Dirección = lector.GetString (1);
                     NuevoItem.Superficie = lector.GetInt16 (2);
@@ -66,7 +54,7 @@ public class RepositorioInmueble : IRepo <Inmueble> {
                     comm.Parameters.AddWithValue ("@Dirección", im.Dirección);
                     comm.Parameters.AddWithValue ("@Superficie", im.Superficie);
                     comm.Parameters.AddWithValue ("@Precio", im.Precio);
-                    comm.Parameters.AddWithValue ("@Propietario", im.IDPropietario);
+                    comm.Parameters.AddWithValue ("@Propietario", im.Propietario);
                     comm.Parameters.AddWithValue ("@Tipo", im.Tipo);
                     comm.Parameters.AddWithValue ("@Uso", im.Uso);
                     comm.Parameters.AddWithValue ("@Ambientes", im.Ambientes);
@@ -97,7 +85,7 @@ public class RepositorioInmueble : IRepo <Inmueble> {
                     comm.Parameters.AddWithValue ("@Dirección", im.Dirección);
                     comm.Parameters.AddWithValue ("@Superficie", im.Superficie);
                     comm.Parameters.AddWithValue ("@Precio", im.Precio);
-                    comm.Parameters.AddWithValue ("@Propietario", im.IDPropietario);
+                    comm.Parameters.AddWithValue ("@Propietario", im.Propietario);
                     comm.Parameters.AddWithValue ("@Tipo", im.Tipo);
                     comm.Parameters.AddWithValue ("@Uso", im.Uso);
                     comm.Parameters.AddWithValue ("@Ambientes", im.Ambientes);
@@ -150,7 +138,7 @@ public class RepositorioInmueble : IRepo <Inmueble> {
                     NuevoItem.Disponible = lector.GetByte (8);
                     NuevoItem.CoordenadasX = lector.GetFloat (9);
                     NuevoItem.CoordenadasY = lector.GetFloat (10);
-                    NuevoItem.IDPropietario = lector.GetInt32 (4);
+                    NuevoItem.Propietario = lector.GetInt32 (4);
                     if (lector.IsDBNull (3)) {
                         NuevoItem.Precio = null;
                     } else {

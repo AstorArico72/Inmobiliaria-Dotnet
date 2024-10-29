@@ -16,10 +16,11 @@
         <label class="display-6" for="CampoInmueble">Inmueble:</label>
         <select class="form-select" id="CampoInmueble" name="Propiedad" class="form-select">
             @foreach (var item in Model.Inmuebles) {
+                Propietario PropietarioSeleccionado = Model.Propietarios.Find (dueño => dueño.ID == item.Propietario);
                 if (ContratoSeleccionado != null && item.ID == ContratoSeleccionado.Propiedad) {
-                    <option value="@ContratoSeleccionado.Propiedad" selected>@item.Dirección &#40;#@item.ID&#41;, propiedad de @item.Dueño.Nombre</option>
+                    <option value="@ContratoSeleccionado.Propiedad" selected>@item.Dirección &#40;#@item.ID&#41;, propiedad de @PropietarioSeleccionado.Nombre</option>
                 } else {
-                    <option value="@item.ID">@item.Dirección &#40;#@item.ID&#41;, propiedad de @item.Dueño.Nombre </option>
+                    <option value="@item.ID">@item.Dirección &#40;#@item.ID&#41;, propiedad de @PropietarioSeleccionado.Nombre </option>
                 }
             }
         </select>

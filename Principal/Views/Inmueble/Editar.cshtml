@@ -17,9 +17,9 @@
         <label for="CampoNombre">Precio del alquiler:</label>
         <input type="tel" name="Precio" id="CampoPrecio" max="2147483647" min="1" size="10" placeholder="@Model.Inmueble.Precio" value="@Model.Inmueble.Precio"/> <br>
         <label for="CampoPropietario">Dueño:</label>
-        <select id="CampoPropietario" name="IDPropietario">
+        <select id="CampoPropietario" name="Propietario">
             @if (DueñoInmueble != null) {
-                <option selected value="@Model.Inmueble.IDPropietario">Dueño original: @DueñoInmueble.Nombre</option>
+                <option selected value="@Model.Inmueble.Propietario">Dueño original: @DueñoInmueble.Nombre</option>
             }
             @foreach (var item in ListaPropietarios) {
                 <option value="@item.ID">@item.Nombre &#40;#@item.ID&#41;</option>
