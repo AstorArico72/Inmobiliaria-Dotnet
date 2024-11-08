@@ -1,45 +1,27 @@
--- phpMyAdmin SQL Dump
--- version 5.1.1
--- https://www.phpmyadmin.net/
---
--- Servidor: localhost
--- Tiempo de generación: 29-10-2024 a las 19:43:20
--- Versión del servidor: 10.4.21-MariaDB
--- Versión de PHP: 8.0.10
-
 SET SQL_MODE = "NO_AUTO_VALUE_ON_ZERO";
 START TRANSACTION;
 SET time_zone = "+00:00";
-
 
 /*!40101 SET @OLD_CHARACTER_SET_CLIENT=@@CHARACTER_SET_CLIENT */;
 /*!40101 SET @OLD_CHARACTER_SET_RESULTS=@@CHARACTER_SET_RESULTS */;
 /*!40101 SET @OLD_COLLATION_CONNECTION=@@COLLATION_CONNECTION */;
 /*!40101 SET NAMES utf8mb4 */;
 
---
--- Base de datos: `Inmobiliaria_NET`
---
+CREATE DATABASE IF NOT EXISTS `Inmobiliaria_NET` DEFAULT CHARACTER SET utf8 COLLATE utf8_bin;
+USE `Inmobiliaria_NET`;
 
--- --------------------------------------------------------
-
---
--- Estructura de tabla para la tabla `Contratos`
---
-
-CREATE TABLE `Contratos` (
-  `ID` int(11) NOT NULL,
+CREATE TABLE IF NOT EXISTS `Contratos` (
+  `ID` int(11) NOT NULL AUTO_INCREMENT,
   `Locatario` int(11) NOT NULL,
   `Propiedad` int(11) NOT NULL,
   `FechaLímite` datetime NOT NULL,
   `FechaContrato` datetime NOT NULL DEFAULT current_timestamp(),
   `Vigente` tinyint(1) NOT NULL DEFAULT 1,
-  `Monto` int(11) NOT NULL DEFAULT 0
-) ENGINE=InnoDB DEFAULT CHARSET=utf8 COLLATE=utf8_bin;
-
---
--- Volcado de datos para la tabla `Contratos`
---
+  `Monto` int(11) NOT NULL DEFAULT 0,
+  PRIMARY KEY (`ID`),
+  KEY `Locatario` (`Locatario`),
+  KEY `Propiedad` (`Propiedad`)
+) ENGINE=InnoDB AUTO_INCREMENT=52 DEFAULT CHARSET=utf8 COLLATE=utf8_bin;
 
 INSERT INTO `Contratos` (`ID`, `Locatario`, `Propiedad`, `FechaLímite`, `FechaContrato`, `Vigente`, `Monto`) VALUES
 (3, 1, 1, '0001-01-01 00:00:00', '2023-04-18 15:19:38', 0, 0),
@@ -70,17 +52,16 @@ INSERT INTO `Contratos` (`ID`, `Locatario`, `Propiedad`, `FechaLímite`, `FechaC
 (42, 6, 20, '2024-09-10 00:00:00', '2024-05-10 00:00:00', 1, 0),
 (43, 6, 14, '2024-11-11 00:00:00', '2024-05-11 00:00:00', 1, 0),
 (44, 1, 3, '2024-09-10 00:00:00', '2024-06-10 00:00:00', 1, 165000),
-(45, 6, 21, '2024-08-01 00:00:00', '2024-07-01 00:00:00', 1, 4500000);
+(45, 6, 21, '2024-08-01 00:00:00', '2024-07-01 00:00:00', 1, 4500000),
+(47, 12, 30, '2025-11-01 00:00:00', '2024-11-06 00:00:00', 1, 155000),
+(48, 7, 33, '2026-11-30 00:00:00', '2024-11-06 00:00:00', 1, 275000),
+(49, 9, 27, '2026-12-01 00:00:00', '2024-11-06 00:00:00', 1, 110000),
+(50, 13, 33, '2025-02-01 00:00:00', '2024-11-08 00:00:00', 0, 150000),
+(51, 11, 31, '2025-02-01 00:00:00', '2024-11-08 00:00:00', 0, 150000);
 
--- --------------------------------------------------------
-
---
--- Estructura de tabla para la tabla `Inmuebles`
---
-
-CREATE TABLE `Inmuebles` (
-  `ID` int(11) NOT NULL,
-  `Dirección` varchar(255) COLLATE utf8_bin DEFAULT NULL,
+CREATE TABLE IF NOT EXISTS `Inmuebles` (
+  `ID` int(11) NOT NULL AUTO_INCREMENT,
+  `Direccion` varchar(255) COLLATE utf8_bin DEFAULT NULL,
   `Superficie` smallint(6) NOT NULL,
   `Precio` int(11) DEFAULT NULL,
   `Propietario` int(11) NOT NULL,
@@ -89,43 +70,44 @@ CREATE TABLE `Inmuebles` (
   `Ambientes` tinyint(4) NOT NULL DEFAULT 0,
   `Disponible` tinyint(1) NOT NULL DEFAULT 1,
   `CoordenadasX` float NOT NULL DEFAULT 0,
-  `CoordenadasY` float NOT NULL DEFAULT 0
-) ENGINE=InnoDB DEFAULT CHARSET=utf8 COLLATE=utf8_bin;
+  `CoordenadasY` float NOT NULL DEFAULT 0,
+  `UrlFoto` varchar(255) COLLATE utf8_bin DEFAULT NULL,
+  PRIMARY KEY (`ID`),
+  KEY `Propietario` (`Propietario`)
+) ENGINE=InnoDB AUTO_INCREMENT=34 DEFAULT CHARSET=utf8 COLLATE=utf8_bin;
 
---
--- Volcado de datos para la tabla `Inmuebles`
---
+INSERT INTO `Inmuebles` (`ID`, `Direccion`, `Superficie`, `Precio`, `Propietario`, `Tipo`, `Uso`, `Ambientes`, `Disponible`, `CoordenadasX`, `CoordenadasY`, `UrlFoto`) VALUES
+(1, '1001 Calle 123', 200, 485000, 4, 'Casa', 'Personal', 10, 1, -64.0989, -32.7735, NULL),
+(2, '1301 Calle 123', 450, 165000, 4, 'Casa', 'Personal', 12, 1, -64.1083, -32.7699, NULL),
+(3, '3201 Calle 123', 250, 112000, 5, 'Galpón', 'Comercial', 1, 1, -64.1104, -32.768, NULL),
+(14, '835 Park Drive Dept. 1211', 103, 119000, 6, 'Departamento', 'Personal', 4, 1, -64.1195, -32.6839, NULL),
+(15, '10333 Park Drive', 58, 750000, 7, 'Local', 'Comercial', 3, 1, -63.9901, -32.6584, NULL),
+(16, '3972 Cerezo Ave. Dept. 1209', 75, 250000, 1, 'Departamento', 'Personal', 3, 1, -64.1873, -32.7239, NULL),
+(17, '10091 Calle 94', 249, 244000, 5, 'Galpón', 'Personal', 2, 1, -64.1752, -32.6911, NULL),
+(18, 'Km 1039 Ruta Nacional 7', 4000, 1200000, 5, 'Terreno', 'Personal', 0, 1, -63.7501, -32.5776, NULL),
+(19, '284 Calle 10', 60, 350000, 4, 'Local', 'Comercial', 1, 0, -64.1303, -32.7894, NULL),
+(20, '3028 Calle 15', 84, 600000, 5, 'Local', 'Comercial', 3, 1, -64.1279, -32.7642, NULL),
+(21, '999 Calle 12', 1094, 740000, 9, 'Galpón', 'Comercial', 1, 1, -65.771, -33.298, NULL),
+(22, '16777 Ruta 216', 4095, 850000, 10, 'Terreno', 'Personal', 1, 1, -65.788, -33.899, NULL),
+(23, '2024 Year Lane', 100, 245000, 15, 'Galpón', 'Galpón', 1, 0, -67.2295, -33.8591, NULL),
+(24, 'Embalse Cruz de Piedra', 5000, 3000000, 15, 'Terreno', 'Terreno', 0, 0, -66, -33, NULL),
+(25, '0 Dummy Lane', 1, 1, 16, 'Casa', 'Casa', 1, 0, -66, -33, NULL),
+(26, '0 Dummy Lane', 1, 1, 16, 'Casa', 'Casa', 1, 0, -66, -33, NULL),
+(27, 'Algún lado', 32767, 1001, 15, 'Galpón', 'Personal', 1, 1, -89.2442, 10.8665, NULL),
+(28, '100 Dummy Lane', 150, 450000, 15, 'Casa', 'Personal', 9, 0, -34.0095, -67.1228, NULL),
+(29, '100 Dummy Lane', 150, 450000, 15, 'Casa', 'Personal', 9, 0, -34.0095, -67.1228, '/Inmuebles/Inmueble_29.jpg'),
+(30, '300 Dummy Lane', 300, 640000, 15, 'Casa', 'Personal', 8, 0, -34.0775, -67.1099, '/Inmuebles/Inmueble_30.jpg'),
+(31, '300 Dummy Lane', 300, 640000, 15, 'Casa', 'Personal', 8, 0, -34.0775, -67.1099, '/Inmuebles/Inmueble_31.jpg'),
+(32, '300 Dummy Lane', 300, 640000, 15, 'Casa', 'Personal', 8, 1, -34.0775, -67.1099, '/Inmuebles/Inmueble_32.jpg'),
+(33, '400 Dummy Lane', 125, 175000, 15, 'Casa', 'Personal', 7, 0, -66, -33, '/Inmuebles/Inmueble_33.jpg');
 
-INSERT INTO `Inmuebles` (`ID`, `Dirección`, `Superficie`, `Precio`, `Propietario`, `Tipo`, `Uso`, `Ambientes`, `Disponible`, `CoordenadasX`, `CoordenadasY`) VALUES
-(1, '1001 Calle 123', 200, 485000, 4, 'Casa', 'Personal', 10, 1, -64.0989, -32.7735),
-(2, '1301 Calle 123', 450, 165000, 4, 'Casa', 'Personal', 12, 1, -64.1083, -32.7699),
-(3, '3201 Calle 123', 250, 112000, 5, 'Galpón', 'Comercial', 1, 1, -64.1104, -32.768),
-(14, '835 Park Drive Dept. 1211', 103, 119000, 6, 'Departamento', 'Personal', 4, 1, -64.1195, -32.6839),
-(15, '10333 Park Drive', 58, 750000, 7, 'Local', 'Comercial', 3, 1, -63.9901, -32.6584),
-(16, '3972 Cerezo Ave. Dept. 1209', 75, 250000, 1, 'Departamento', 'Personal', 3, 1, -64.1873, -32.7239),
-(17, '10091 Calle 94', 249, 244000, 5, 'Galpón', 'Personal', 2, 1, -64.1752, -32.6911),
-(18, 'Km 1039 Ruta Nacional 7', 4000, 1200000, 5, 'Terreno', 'Personal', 0, 1, -63.7501, -32.5776),
-(19, '284 Calle 10', 60, 350000, 4, 'Local', 'Comercial', 1, 0, -64.1303, -32.7894),
-(20, '3028 Calle 15', 84, 600000, 5, 'Local', 'Comercial', 3, 1, -64.1279, -32.7642),
-(21, '999 Calle 12', 1094, 740000, 9, 'Galpón', 'Comercial', 1, 1, -65.771, -33.298),
-(22, '16777 Ruta 216', 4095, 850000, 10, 'Terreno', 'Personal', 1, 1, -65.788, -33.899);
-
--- --------------------------------------------------------
-
---
--- Estructura de tabla para la tabla `Inquilinos`
---
-
-CREATE TABLE `Inquilinos` (
-  `ID` int(11) NOT NULL,
+CREATE TABLE IF NOT EXISTS `Inquilinos` (
+  `ID` int(11) NOT NULL AUTO_INCREMENT,
   `Nombre` varchar(128) COLLATE utf8_bin NOT NULL,
   `DNI` varchar(10) COLLATE utf8_bin NOT NULL,
-  `Contacto` varchar(1000) COLLATE utf8_bin DEFAULT 'Sin especificar'
-) ENGINE=InnoDB DEFAULT CHARSET=utf8 COLLATE=utf8_bin;
-
---
--- Volcado de datos para la tabla `Inquilinos`
---
+  `Contacto` varchar(1000) COLLATE utf8_bin DEFAULT 'Sin especificar',
+  PRIMARY KEY (`ID`)
+) ENGINE=InnoDB AUTO_INCREMENT=14 DEFAULT CHARSET=utf8 COLLATE=utf8_bin;
 
 INSERT INTO `Inquilinos` (`ID`, `Nombre`, `DNI`, `Contacto`) VALUES
 (1, 'Vivo aquí', '48D80BE1', 'dummy@example.net'),
@@ -140,24 +122,16 @@ INSERT INTO `Inquilinos` (`ID`, `Nombre`, `DNI`, `Contacto`) VALUES
 (12, 'Fang Liangxing', '54EB593A', 'fang@example.net'),
 (13, 'Astor F. Aricó', '54FF220E', 'astorarico72@gmail.com');
 
--- --------------------------------------------------------
-
---
--- Estructura de tabla para la tabla `Pagos`
---
-
-CREATE TABLE `Pagos` (
-  `ID` int(11) NOT NULL,
+CREATE TABLE IF NOT EXISTS `Pagos` (
+  `ID` int(11) NOT NULL AUTO_INCREMENT,
   `NumeroPago` int(11) NOT NULL,
   `IdContrato` int(11) NOT NULL,
   `Monto` int(11) NOT NULL,
   `FechaPago` datetime NOT NULL DEFAULT current_timestamp(),
-  `Pagado` tinyint(1) NOT NULL DEFAULT 0
-) ENGINE=InnoDB DEFAULT CHARSET=utf8 COLLATE=utf8_bin;
-
---
--- Volcado de datos para la tabla `Pagos`
---
+  `Pagado` tinyint(1) NOT NULL DEFAULT 0,
+  PRIMARY KEY (`ID`),
+  KEY `IdContrato` (`IdContrato`)
+) ENGINE=InnoDB AUTO_INCREMENT=158 DEFAULT CHARSET=utf8 COLLATE=utf8_bin;
 
 INSERT INTO `Pagos` (`ID`, `NumeroPago`, `IdContrato`, `Monto`, `FechaPago`, `Pagado`) VALUES
 (1, 1, 3, 44200, '2024-04-15 00:00:00', 1),
@@ -303,129 +277,45 @@ INSERT INTO `Pagos` (`ID`, `NumeroPago`, `IdContrato`, `Monto`, `FechaPago`, `Pa
 (148, 2, 44, 165000, '2024-07-10 00:00:00', 0),
 (149, 3, 44, 165000, '2024-08-10 00:00:00', 0),
 (150, 1, 45, 4500000, '2024-07-01 00:00:00', 0),
-(151, 1, 45, 3000000, '2024-07-01 00:00:00', 0);
+(151, 1, 45, 3000000, '2024-07-01 00:00:00', 0),
+(152, 1, 50, 150000, '2024-12-08 00:00:00', 0),
+(153, 2, 50, 150000, '2025-01-08 00:00:00', 0),
+(154, 3, 50, 150000, '2025-02-08 00:00:00', 0),
+(155, 1, 51, 150000, '2024-12-08 00:00:00', 0),
+(156, 2, 51, 150000, '2025-01-08 00:00:00', 0),
+(157, 3, 51, 150000, '2025-02-08 00:00:00', 0);
 
--- --------------------------------------------------------
-
---
--- Estructura de tabla para la tabla `Propietarios`
---
-
-CREATE TABLE `Propietarios` (
-  `ID` int(11) NOT NULL,
+CREATE TABLE IF NOT EXISTS `Propietarios` (
+  `ID` int(11) NOT NULL AUTO_INCREMENT,
+  `Correo` varchar(255) COLLATE utf8_bin NOT NULL,
   `Nombre` varchar(128) COLLATE utf8_bin NOT NULL,
   `Contacto` varchar(1000) COLLATE utf8_bin DEFAULT '"Sin especificar"',
   `DNI` varchar(10) COLLATE utf8_bin NOT NULL,
   `Clave` varchar(255) COLLATE utf8_bin NOT NULL,
-  `Rol` varchar(16) COLLATE utf8_bin NOT NULL DEFAULT 'Empleado'
-) ENGINE=InnoDB DEFAULT CHARSET=utf8 COLLATE=utf8_bin;
+  PRIMARY KEY (`ID`)
+) ENGINE=InnoDB AUTO_INCREMENT=20 DEFAULT CHARSET=utf8 COLLATE=utf8_bin;
 
---
--- Volcado de datos para la tabla `Propietarios`
---
+INSERT INTO `Propietarios` (`ID`, `Correo`, `Nombre`, `Contacto`, `DNI`, `Clave`) VALUES
+(1, '', 'Nombre editado', '\"Sin especificar\"', '', ''),
+(4, '', 'Juan Pérez', '  Teléfono: 839-992-5507. Correo: j-perez@example.net ', '3F0912E4', ''),
+(5, '', 'John Doe', '839-387-2201', '', '2YtoOzjBzRID0/h24nW8UQ0YP+mcHjRhK+leNyh1Eak='),
+(6, '', 'Joao da Silva', '  jdasilva@dotnet-realtors.com ', '3E9A8DE1', ''),
+(7, '', 'Joaquim Ribera', ' jribera@dotnet-realtors.com', '', ''),
+(9, '', 'Mariano Luzza', ' mluzza@ulp.edu.ar - Universidad de La Punta ', '30998f123a', ''),
+(10, '', 'Dotnet Realtors', 'astorarico72@gmail.com; 54 9 2664 685713', '1E8A90BD', ''),
+(15, 'webmaster@dotnet-realtors.com', 'Aricó', 'Correo: astorarico72@gmail.com', '8888 7777', 'TEfv4DN5dsvW0Zkx0nihTTf8fCvARjQAcf18AWHmfhQ='),
+(16, 'that-one-mobile-user@dotnet-realtors.com', 'Mobile Dummy', '', '7850 9992', 'mZ/8yCPJewC2ebruUDy8v8f2vuHiiOc9B3C2nOEUonc='),
+(17, 'astorarico72@gmail.com', 'Webmaster', 'Correo: 5efb599729e750@sandbox.smtp.mailtrap.io', '5570 8F1D', '254KesoSjCpm/GmF8IQCKE1rjqlpdriA2LB8yQ95KcA='),
+(18, 'jdoe@example.net', 'Jane Doe', '555-1101, 555 Nondescript Lane, Everytown, America', '4337 8009', 'HCPZOyEKzg/VJx35xQMKBaiG6hfFTNr6vdJft9wPSd0=');
 
-INSERT INTO `Propietarios` (`ID`, `Nombre`, `Contacto`, `DNI`, `Clave`, `Rol`) VALUES
-(1, 'Nombre editado', '\"Sin especificar\"', '', '', 'Empleado'),
-(4, 'Juan Pérez', '  Teléfono: 839-992-5507. Correo: j-perez@example.net ', '3F0912E4', '', 'Empleado'),
-(5, 'John Doe', '839-387-2201', '', '2YtoOzjBzRID0/h24nW8UQ0YP+mcHjRhK+leNyh1Eak=', 'Empleado'),
-(6, 'Joao da Silva', '  jdasilva@dotnet-realtors.com ', '3E9A8DE1', '', 'Empleado'),
-(7, 'Joaquim Ribera', ' jribera@dotnet-realtors.com', '', '', 'Empleado'),
-(9, 'Mariano Luzza', ' mluzza@ulp.edu.ar - Universidad de La Punta ', '30998f123a', '', 'Empleado'),
-(10, 'Dotnet Realtors', 'astorarico72@gmail.com; 54 9 2664 685713', '1E8A90BD', '', 'Empleado'),
-(15, 'Aricó', 'webmaster@dotnet-realtors.com', '8888 7777', 'TEfv4DN5dsvW0Zkx0nihTTf8fCvARjQAcf18AWHmfhQ=', 'Admin');
 
---
--- Índices para tablas volcadas
---
-
---
--- Indices de la tabla `Contratos`
---
-ALTER TABLE `Contratos`
-  ADD PRIMARY KEY (`ID`),
-  ADD KEY `Locatario` (`Locatario`),
-  ADD KEY `Propiedad` (`Propiedad`);
-
---
--- Indices de la tabla `Inmuebles`
---
-ALTER TABLE `Inmuebles`
-  ADD PRIMARY KEY (`ID`),
-  ADD KEY `Propietario` (`Propietario`);
-
---
--- Indices de la tabla `Inquilinos`
---
-ALTER TABLE `Inquilinos`
-  ADD PRIMARY KEY (`ID`);
-
---
--- Indices de la tabla `Pagos`
---
-ALTER TABLE `Pagos`
-  ADD PRIMARY KEY (`ID`),
-  ADD KEY `IdContrato` (`IdContrato`);
-
---
--- Indices de la tabla `Propietarios`
---
-ALTER TABLE `Propietarios`
-  ADD PRIMARY KEY (`ID`);
-
---
--- AUTO_INCREMENT de las tablas volcadas
---
-
---
--- AUTO_INCREMENT de la tabla `Contratos`
---
-ALTER TABLE `Contratos`
-  MODIFY `ID` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=46;
-
---
--- AUTO_INCREMENT de la tabla `Inmuebles`
---
-ALTER TABLE `Inmuebles`
-  MODIFY `ID` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=23;
-
---
--- AUTO_INCREMENT de la tabla `Inquilinos`
---
-ALTER TABLE `Inquilinos`
-  MODIFY `ID` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=14;
-
---
--- AUTO_INCREMENT de la tabla `Pagos`
---
-ALTER TABLE `Pagos`
-  MODIFY `ID` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=152;
-
---
--- AUTO_INCREMENT de la tabla `Propietarios`
---
-ALTER TABLE `Propietarios`
-  MODIFY `ID` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=16;
-
---
--- Restricciones para tablas volcadas
---
-
---
--- Filtros para la tabla `Contratos`
---
 ALTER TABLE `Contratos`
   ADD CONSTRAINT `Contratos_ibfk_2` FOREIGN KEY (`Locatario`) REFERENCES `Inquilinos` (`ID`) ON DELETE CASCADE,
   ADD CONSTRAINT `Contratos_ibfk_3` FOREIGN KEY (`Propiedad`) REFERENCES `Inmuebles` (`ID`) ON DELETE CASCADE;
 
---
--- Filtros para la tabla `Inmuebles`
---
 ALTER TABLE `Inmuebles`
   ADD CONSTRAINT `Inmuebles_ibfk_1` FOREIGN KEY (`Propietario`) REFERENCES `Propietarios` (`ID`);
 
---
--- Filtros para la tabla `Pagos`
---
 ALTER TABLE `Pagos`
   ADD CONSTRAINT `Pagos_ibfk_1` FOREIGN KEY (`IdContrato`) REFERENCES `Contratos` (`ID`) ON DELETE CASCADE;
 COMMIT;
