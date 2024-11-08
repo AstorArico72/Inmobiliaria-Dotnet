@@ -27,7 +27,7 @@
         <thead>
             <tr>
             <th>#</th>
-            <th>Dirección</th>
+            <th>Direccion</th>
             <th>Tipo</th>
             <th>Superficie en m&#178;</th>
             <th>Uso</th>
@@ -40,7 +40,7 @@
                     if (item.Disponible != 0) {
                         <tr>
                         <td>@item.ID</td>
-                        <td><a asp-action="Detalles" asp-route-id= "@item.ID">@item.Dirección</a></td>
+                        <td><a asp-action="Detalles" asp-route-id= "@item.ID">@item.Direccion</a></td>
                         <td>@item.Tipo</td>
                         <td>@item.Superficie</td>
                         <td>@item.Uso</td>
@@ -53,7 +53,7 @@
                     if (item.Disponible != 0) {
                         <tr>
                         <td>@item.ID</td>
-                        <td><a asp-action="Detalles" asp-route-id= "@item.ID">@item.Dirección</a></td>
+                        <td><a asp-action="Detalles" asp-route-id= "@item.ID">@item.Direccion</a></td>
                         <td>@item.Tipo</td>
                         <td>@item.Superficie</td>
                         <td>@item.Uso</td>
@@ -62,7 +62,7 @@
                     } else {
                         <tr class="bg-danger">
                         <td>@item.ID</td>
-                        <td><a asp-action="Detalles" asp-route-id= "@item.ID">@item.Dirección (No disponible)</a></td>
+                        <td><a asp-action="Detalles" asp-route-id= "@item.ID">@item.Direccion (No disponible)</a></td>
                         <td>@item.Tipo</td>
                         <td>@item.Superficie</td>
                         <td>@item.Uso</td>

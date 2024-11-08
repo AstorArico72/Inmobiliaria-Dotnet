@@ -18,9 +18,9 @@
             @foreach (var item in Model.Inmuebles) {
                 Propietario PropietarioSeleccionado = Model.Propietarios.Find (dueño => dueño.ID == item.Propietario);
                 if (ContratoSeleccionado != null && item.ID == ContratoSeleccionado.Propiedad) {
-                    <option value="@ContratoSeleccionado.Propiedad" selected>@item.Dirección &#40;#@item.ID&#41;, propiedad de @PropietarioSeleccionado.Nombre</option>
+                    <option value="@ContratoSeleccionado.Propiedad" selected>@item.Direccion &#40;#@item.ID&#41;, propiedad de @PropietarioSeleccionado.Nombre</option>
                 } else {
-                    <option value="@item.ID">@item.Dirección &#40;#@item.ID&#41;, propiedad de @PropietarioSeleccionado.Nombre </option>
+                    <option value="@item.ID">@item.Direccion &#40;#@item.ID&#41;, propiedad de @PropietarioSeleccionado.Nombre </option>
                 }
             }
         </select>

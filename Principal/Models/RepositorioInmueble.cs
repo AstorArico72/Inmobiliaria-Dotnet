@@ -14,7 +14,7 @@ public class RepositorioInmueble : IRepo <Inmueble> {
     [Obsolete("Reemplazado por \"TodosLosInmuebles ()\" en \"API/InmueblesController.cs\"")]
     public List<Inmueble> ObtenerTodos () {
         var resultado = new List<Inmueble> ();
-        string SQLQuery = @"SELECT DISTINCT i.ID, i.Dirección, i.Superficie, i.Precio, i.Propietario, p.Nombre, p.ID, i.Tipo, i.Uso, p.Contacto, i.Ambientes, i.Disponible, p.DNI, i.CoordenadasX, i.CoordenadasY FROM Inmuebles i " +
+        string SQLQuery = @"SELECT DISTINCT i.ID, i.Direccion, i.Superficie, i.Precio, i.Propietario, p.Nombre, p.ID, i.Tipo, i.Uso, p.Contacto, i.Ambientes, i.Disponible, p.DNI, i.CoordenadasX, i.CoordenadasY FROM Inmuebles i " +
         "LEFT JOIN Propietarios p ON p.ID = i.Propietario";
 
         using (var con = new MySqlConnection (ConnectionString)) {
@@ -34,7 +34,7 @@ public class RepositorioInmueble : IRepo <Inmueble> {
                         NuevoItem.Precio = null;
                         NuevoItem.Propietario = lector.GetInt32 (4);
                     }
-                    NuevoItem.Dirección = lector.GetString (1);
+                    NuevoItem.Direccion = lector.GetString (1);
                     NuevoItem.Superficie = lector.GetInt16 (2);
                     resultado.Add (NuevoItem);
                 }
@@ -49,9 +49,9 @@ public class RepositorioInmueble : IRepo <Inmueble> {
         int resultado = -1;
         try {
             using (var con = new MySqlConnection (ConnectionString)) {
-                string SQLQuery = @"INSERT INTO Inmuebles (Dirección, Superficie, Precio, Propietario, Tipo, Uso, Ambientes, Disponible, CoordenadasX, CoordenadasY) VALUES (@Dirección, @Superficie, @Precio, @Propietario, @Tipo, @Uso, @Ambientes, 1, @X, @Y); SELECT LAST_INSERT_ID ()";
+                string SQLQuery = @"INSERT INTO Inmuebles (Direccion, Superficie, Precio, Propietario, Tipo, Uso, Ambientes, Disponible, CoordenadasX, CoordenadasY) VALUES (@Direccion, @Superficie, @Precio, @Propietario, @Tipo, @Uso, @Ambientes, 1, @X, @Y); SELECT LAST_INSERT_ID ()";
                 using (var comm = new MySqlCommand (SQLQuery, con)) {
-                    comm.Parameters.AddWithValue ("@Dirección", im.Dirección);
+                    comm.Parameters.AddWithValue ("@Direccion", im.Direccion);
                     comm.Parameters.AddWithValue ("@Superficie", im.Superficie);
                     comm.Parameters.AddWithValue ("@Precio", im.Precio);
                     comm.Parameters.AddWithValue ("@Propietario", im.Propietario);
@@ -80,9 +80,9 @@ public class RepositorioInmueble : IRepo <Inmueble> {
         int resultado = -1;
         try {
             using (var con = new MySqlConnection (ConnectionString)) {
-                string SQLQuery = @"UPDATE Inmuebles SET Dirección = @Dirección, Superficie = @Superficie, Precio = @Precio, Propietario = @Propietario, Tipo = @Tipo, Uso = @Uso, Ambientes = @Ambientes, Disponible = @Disponible, CoordenadasX = @X, CoordenadasY = @Y WHERE ID = " + id;
+                string SQLQuery = @"UPDATE Inmuebles SET Direccion = @Direccion, Superficie = @Superficie, Precio = @Precio, Propietario = @Propietario, Tipo = @Tipo, Uso = @Uso, Ambientes = @Ambientes, Disponible = @Disponible, CoordenadasX = @X, CoordenadasY = @Y WHERE ID = " + id;
                 using (var comm = new MySqlCommand (SQLQuery, con)) {
-                    comm.Parameters.AddWithValue ("@Dirección", im.Dirección);
+                    comm.Parameters.AddWithValue ("@Direccion", im.Direccion);
                     comm.Parameters.AddWithValue ("@Superficie", im.Superficie);
                     comm.Parameters.AddWithValue ("@Precio", im.Precio);
                     comm.Parameters.AddWithValue ("@Propietario", im.Propietario);
@@ -124,7 +124,7 @@ public class RepositorioInmueble : IRepo <Inmueble> {
     [Obsolete("Reemplazado por \"ConseguirInmueble (int)\" en \"API/InmueblesController.cs\"")]
     public Inmueble? BuscarPorID (int id) {
         var NuevoItem = new Inmueble ();
-        string SQLQuery = @"SELECT ID, Dirección, Superficie, Precio, Propietario, Tipo, Uso, Ambientes, Disponible, CoordenadasX, CoordenadasY FROM Inmuebles WHERE ID = " + id;
+        string SQLQuery = @"SELECT ID, Direccion, Superficie, Precio, Propietario, Tipo, Uso, Ambientes, Disponible, CoordenadasX, CoordenadasY FROM Inmuebles WHERE ID = " + id;
         try {
             using (var con = new MySqlConnection (ConnectionString)) {
                 using (var comm = new MySqlCommand (SQLQuery, con)) {
@@ -144,7 +144,7 @@ public class RepositorioInmueble : IRepo <Inmueble> {
                     } else {
                         NuevoItem.Precio = lector.GetInt32 (3);
                     }
-                    NuevoItem.Dirección = lector.GetString (1);
+                    NuevoItem.Direccion = lector.GetString (1);
                     NuevoItem.Superficie = lector.GetInt16 (2);
                 }
                 if (!lector.HasRows) {

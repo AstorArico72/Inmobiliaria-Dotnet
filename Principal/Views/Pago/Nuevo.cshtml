@@ -14,7 +14,7 @@
         @foreach (var item in Model.Contratos) {
             Contrato ContratoSeleccionado = Model.Contratos.Where (i => i.ID == item.ID).First ();
             Inmueble InmuebleSeleccionado = Model.Inmuebles.Where (i => i.ID == ContratoSeleccionado.Propiedad).First ();
-            <option value="@ContratoSeleccionado.ID">#@ContratoSeleccionado.ID &#40;@InmuebleSeleccionado.Dirección&#41;</option>
+            <option value="@ContratoSeleccionado.ID">#@ContratoSeleccionado.ID &#40;@InmuebleSeleccionado.Direccion&#41;</option>
         }
         </select>
         <br>

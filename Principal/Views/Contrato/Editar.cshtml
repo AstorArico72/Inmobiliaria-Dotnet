@@ -10,7 +10,7 @@
     <h1 class="display-4">@ViewData["Title"] #@Model.Contrato.ID </h1>
 
     <form asp-action="Editar" method="post">
-        <p>Inmueble: @InmuebleSeleccionado.Dirección &#40;#@InmuebleSeleccionado.ID&#41;</p>
+        <p>Inmueble: @InmuebleSeleccionado.Direccion &#40;#@InmuebleSeleccionado.ID&#41;</p>
         <input type="hidden" name="Propiedad" value="@InmuebleSeleccionado.ID"/>
         <label for="CampoInmueble">Locatario:</label>
         <select id="CampoInmueble" name="Locatario" class="form-select">

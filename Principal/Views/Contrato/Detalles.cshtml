@@ -17,7 +17,7 @@
         <h1 class="display-4">@ViewData["Title"]</h1>
     }
     <p>Locatario: <a asp-action="Detalles" asp-controller="Inquilino" asp-route-id="@InquilinoSeleccionado.ID">@InquilinoSeleccionado.Nombre</a></p>
-    <p>Inmueble: <a asp-action="Detalles" asp-controller="Inmueble" asp-route-id="@InmuebleSeleccionado.ID">@InmuebleSeleccionado.Dirección</a></p>
+    <p>Inmueble: <a asp-action="Detalles" asp-controller="Inmueble" asp-route-id="@InmuebleSeleccionado.ID">@InmuebleSeleccionado.Direccion</a></p>
     <p>Dueño del inmueble: @DueñoAMostrar</p>
     <p>
         Fecha de inicio del contrato: @Model.Contrato.FechaContrato.Year - @Model.Contrato.FechaContrato.Month - @Model.Contrato.FechaContrato.Day <br>

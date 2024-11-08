@@ -20,13 +20,13 @@
             if (item.Vigente == 0) {
                 <tr>
                 <td>@item.ID</td>
-                <td><a asp-controller="Inmueble" asp-action="Detalles" asp-route-id="@InmuebleSeleccionado.ID"> @InmuebleSeleccionado.Dirección</a></td>
+                <td><a asp-controller="Inmueble" asp-action="Detalles" asp-route-id="@InmuebleSeleccionado.ID"> @InmuebleSeleccionado.Direccion</a></td>
                 <td>Expirado <a asp-action="Detalles" asp-route-id="@item.ID"> (Detalles) </a></td>
                 </tr>
             } else {
                 <tr class="bg-success">
                 <td>@item.ID</td>
-                <td><a asp-controller="Inmueble" asp-action="Detalles" asp-route-id="@InmuebleSeleccionado.ID"> @InmuebleSeleccionado.Dirección</a></td>
+                <td><a asp-controller="Inmueble" asp-action="Detalles" asp-route-id="@InmuebleSeleccionado.ID"> @InmuebleSeleccionado.Direccion</a></td>
                 <td>Vigente <a asp-action="Detalles" asp-route-id="@item.ID">(Detalles)</a></td>
                 </tr>
             }

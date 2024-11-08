@@ -4,9 +4,12 @@ using Principal.Models;
 using Principal.Controllers;
 using System.Diagnostics.CodeAnalysis;
 using MySql.Data.MySqlClient;
+using Microsoft.AspNetCore.Authentication.JwtBearer;
+using Microsoft.AspNetCore.Authorization;
 
 namespace Principal.API;
 
+[Authorize(AuthenticationSchemes = JwtBearerDefaults.AuthenticationScheme)]
 [ApiController]
 [Route("Api/Pagos")]
 public class PagosController : ControllerBase {
@@ -30,6 +33,13 @@ public class PagosController : ControllerBase {
         List <Pago> Pagos = Contexto.Pagos.ToList ();
         return Ok (Pagos);
     }
+
+    [HttpGet("PorContrato/{id}")]
+    public IActionResult PagosPorContrato ([FromRoute] int id) {
+        List <Pago> Pagos = Contexto.Pagos.Where (pago => pago.IdContrato == id).ToList ();
+        return Ok (Pagos);
+    }
+    
     [HttpPost("Nuevo")]
     public async Task<IActionResult> NuevoPago ([FromForm] Pago pago) {
         try {
@@ -83,6 +93,4 @@ public class PagosController : ControllerBase {
             }
         }
     }
-
-    //Después implementar un método para cambiar la clave.
 }

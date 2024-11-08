@@ -60,48 +60,6 @@ public class UsuarioController : Controller
         return View ();
     }
 
-    [HttpPost]
-    [AllowAnonymous]
-    public async Task <IActionResult> Ingresar (LoginView data) {
-        string ContraseñaConHash = Convert.ToBase64String(KeyDerivation.Pbkdf2(
-			password: data.Clave,
-			salt: System.Text.Encoding.ASCII.GetBytes(Config["Salt"]),
-			prf: KeyDerivationPrf.HMACSHA256,
-			iterationCount: 1000,
-			numBytesRequested: 256 / 8
-        ));
-        string? ReturnURL = String.IsNullOrEmpty(TempData ["ReturnUrl"] as string) ? "/Home" : TempData ["ReturnUrl"].ToString();
-
-        Usuario UsuarioSeleccionado = repo.BuscarPorNombre (data.Nombre);
-
-        if (UsuarioSeleccionado == null || ContraseñaConHash != UsuarioSeleccionado.Clave) {
-            TempData ["Mensaje"] = "Usuario o clave incorrectas";
-            TempData ["ColorMensaje"] = "#FF0000";
-            return RedirectToAction ("Login");
-        } else {
-            string URLFoto;
-            if (UsuarioSeleccionado.URLFoto == null) {
-                    URLFoto = "/medios/Nulo.png";
-                } else {
-                    URLFoto = UsuarioSeleccionado.URLFoto;
-                }
-            var ClaimList = new List<Claim> {
-                new Claim (ClaimTypes.Name, UsuarioSeleccionado.NombreUsuario),
-                new Claim (ClaimTypes.Role, UsuarioSeleccionado.Rol),
-                new Claim ("IdUsuario", UsuarioSeleccionado.ID.ToString ()),
-                new Claim ("FotoUsuario", URLFoto)
-            };
-            var IdentityClaim = new ClaimsIdentity (ClaimList, CookieAuthenticationDefaults.AuthenticationScheme);
-            await HttpContext.SignInAsync(CookieAuthenticationDefaults.AuthenticationScheme, new ClaimsPrincipal(IdentityClaim));
-            if (String.IsNullOrEmpty (ReturnURL) || !Url.IsLocalUrl (ReturnURL)) {
-                return RedirectToAction("Index", "Home");
-            } else {
-                TempData.Remove("ReturnUrl");
-                return Redirect (ReturnURL);
-            }
-        }
-    }
-
     [HttpGet]
     public IActionResult Nuevo () {
         return View ();

@@ -16,7 +16,7 @@
             <thead>
                 <tr>
                 <th>#</th>
-                <th>Dirección</th>
+                <th>Direccion</th>
                 <th>Tipo</th>
                 <th>Superficie en m&#178;</th>
                 <th>Uso</th>
@@ -27,7 +27,7 @@
                 @foreach (var item in Model) {
                     <tr>
                     <td>@item.ID</td>
-                    <td><a asp-action="Detalles" asp-route-id= "@item.ID">@item.Dirección</a></td>
+                    <td><a asp-action="Detalles" asp-route-id= "@item.ID">@item.Direccion</a></td>
                     <td>@item.Tipo</td>
                     <td>@item.Superficie</td>
                     <td>@item.Uso</td>

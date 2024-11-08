@@ -6,8 +6,9 @@ using System.Threading.Tasks;
 namespace Principal.Models;
 
 public class LoginView {
+	[DataType(DataType.EmailAddress)]
 	[Required (ErrorMessage = "Es necesario el nombre de usuario")]
-	public string Nombre {get; set;}
+	public string Correo {get; set;}
 
 	[DataType(DataType.Password)]
 	[Required (ErrorMessage = "Es necesaria la contraseña")]

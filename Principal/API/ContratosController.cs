@@ -4,9 +4,12 @@ using Principal.Models;
 using Principal.Controllers;
 using System.Diagnostics.CodeAnalysis;
 using MySql.Data.MySqlClient;
+using Microsoft.AspNetCore.Authorization;
+using Microsoft.AspNetCore.Authentication.JwtBearer;
 
 namespace Principal.API;
 
+[Authorize(AuthenticationSchemes = JwtBearerDefaults.AuthenticationScheme)]
 [ApiController]
 [Route("Api/Contratos")]
 public class ContratosController : ControllerBase {
@@ -26,16 +29,46 @@ public class ContratosController : ControllerBase {
         }
     }
     [HttpGet("Todos")]
-    public IActionResult TodosLosContratos () {
+    public async Task <IActionResult> TodosLosContratos () {
+        string usuario = User.Claims.FirstOrDefault (claim => claim.Type == "IdUsuario").Value;
+        int IdUsuario = int.Parse (usuario);
+
+        List <Inmueble> Inmuebles = Contexto.Inmuebles.Where (item => item.Propietario == IdUsuario).ToList ();
+        Console.WriteLine ("Inmuebles del propietario " + "#" + IdUsuario + ":");
+        Inmuebles.ForEach (item => Console.WriteLine (item.ID));
+        List<ResultadoContrato> ContratosSeleccionados = new List<ResultadoContrato> ();
+
         List <Contrato> Contratos = Contexto.Contratos.ToList ();
-        return Ok (Contratos);
+        foreach (Contrato contrato in Contratos) {
+            if (Inmuebles.Any (inmueble => inmueble.ID == contrato.Propiedad)) {
+                Inquilino InquilinoSeleccionado = await Contexto.Inquilinos.FindAsync(contrato.Locatario);
+                Inmueble InmuebleSeleccionado = await Contexto.Inmuebles.FindAsync (contrato.Propiedad);
+                //List <Pago> PagosDelContrato = Contexto.Pagos.Where (pago => pago.IdContrato == contrato.ID).ToList ();
+                ResultadoContrato NuevoItem = new ResultadoContrato ();
+                NuevoItem.DireccionInmueble = InmuebleSeleccionado.Direccion;
+                NuevoItem.IdContrato = contrato.ID;
+                NuevoItem.IdInquilino = InquilinoSeleccionado.ID;
+                //NuevoItem.ListaPagos = PagosDelContrato;
+                NuevoItem.FechaContrato = contrato.FechaContrato;
+                NuevoItem.FechaLímite = contrato.FechaLímite;
+                NuevoItem.Vigente = contrato.Vigente;
+                NuevoItem.Monto = contrato.Monto;
+                NuevoItem.IdInmueble = InmuebleSeleccionado.ID;
+                NuevoItem.NombreInquilino = InquilinoSeleccionado.Nombre;
+
+                ContratosSeleccionados.Add (NuevoItem);
+            }
+        }
+        return Ok (ContratosSeleccionados);
     }
     [HttpPost("Nuevo")]
     public async Task<IActionResult> NuevoContrato ([FromForm] Contrato contrato) {
         try {
             if (ModelState.IsValid) {
+                contrato.Vigente = 1;
                 await Contexto.Contratos.AddAsync (contrato);
                 await Contexto.SaveChangesAsync ();
+                GenerarPagos (contrato);
                 return Created ();
             } else {
                 return BadRequest ("Un campo es inválido.");
@@ -85,4 +118,17 @@ public class ContratosController : ControllerBase {
     }
 
     //Después implementar un método para cambiar la clave.
+    private void GenerarPagos (Contrato co) {
+        int Meses = ((co.FechaLímite.Year - co.FechaContrato.Year) *12) + co.FechaLímite.Month - co.FechaContrato.Month;
+        for (int i = 1; i <= Meses; i++) {
+            Contexto.Pagos.Add (new Pago {
+                NumeroPago = i,
+                IdContrato = co.ID,
+                Monto = co.Monto,
+                FechaPago = co.FechaContrato.AddMonths (i),
+                Pagado = 0
+            });
+        }
+        Contexto.SaveChangesAsync ();
+    }
 }

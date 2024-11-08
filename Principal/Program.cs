@@ -5,6 +5,7 @@ using Microsoft.EntityFrameworkCore;
 using Pomelo.EntityFrameworkCore.MySql;
 using System.Text.Json.Serialization;
 using System.Security.Claims;
+using Microsoft.AspNetCore.Authentication.JwtBearer;
 
 var builder = WebApplication.CreateBuilder(args);
 builder.Services.AddMvc ();
@@ -48,16 +49,28 @@ builder.Services.AddAuthentication (CookieAuthenticationDefaults.AuthenticationS
         ValidAudience = builder.Configuration ["TokenAuthentication:Audience"],
         IssuerSigningKey = new SymmetricSecurityKey (System.Text.Encoding.ASCII.GetBytes (builder.Configuration ["TokenAuthentication:SecretKey"]))
     };
+    options.Events = new JwtBearerEvents {
+        OnMessageReceived = context => {
+            var TokenAcceso = context.Request.Query["TokenRecuperación"];
+            var Camino = context.HttpContext.Request.Path;
+            if (!string.IsNullOrEmpty (TokenAcceso) && Camino.StartsWithSegments ("/Api/Propietarios/ReiniciarClave")) {
+                context.Token = TokenAcceso;
+            }
+            return Task.CompletedTask;
+        }
+    };
 });
 
 builder.Services.AddAuthorization (options => {
     options.AddPolicy ("Admin", policy => {
         //policy.RequireRole ("Admin");
         policy.RequireClaim (ClaimTypes.Role, "Admin");
+        policy.AddAuthenticationSchemes (JwtBearerDefaults.AuthenticationScheme);
     });
     options.AddPolicy ("Usuario", policy => {
         policy.RequireRole ("Usuario");
         policy.RequireClaim (ClaimTypes.Role, "Empleado");
+        policy.AddAuthenticationSchemes (JwtBearerDefaults.AuthenticationScheme);
     });
 });
 

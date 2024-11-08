@@ -6,7 +6,7 @@ namespace Principal.Models;
 public class Inmueble {
     [Key]
     public int ID {get; set;}
-    public string? Dirección {get; set;}
+    public string? Direccion {get; set;}
     public short Superficie {get; set;}
     [DisplayFormat(ConvertEmptyStringToNull = true, NullDisplayText = "No está en alquiler", ApplyFormatInEditMode=true)]
     public int? Precio {get; set;}
@@ -19,9 +19,12 @@ public class Inmueble {
     public byte Disponible {get; set;}
     public float CoordenadasX {get; set;}
     public float CoordenadasY {get; set;}
-    public Inmueble (int id, string? direccion, short area, int? precio, int? numDueño, string? tipo, string? uso, byte ambientes, byte disponible, float x, float y) {
+    [NotMapped]
+    public IFormFile? Foto {get; set;}
+    public string? UrlFoto {get; set;}
+    public Inmueble (int id, string? direccion, short area, int? precio, int? numDueño, string? tipo, string? uso, byte ambientes, byte disponible, float x, float y, IFormFile? foto) {
         this.ID = id;
-        this.Dirección = direccion;
+        this.Direccion = direccion;
         this.Superficie = area;
         this.Precio = precio;
         this.Propietario = numDueño;
@@ -31,6 +34,7 @@ public class Inmueble {
         this.Disponible = disponible;
         this.CoordenadasX = x;
         this.CoordenadasY = y;
+        this.Foto = foto;
     }
 
     //Sin parámetros

@@ -15,7 +15,7 @@
     <ul>
         @foreach (var item in ContratosSeleccionados) {
             Inmueble InmuebleSeleccionado = Model.Inmuebles.Where (casa => casa.ID == item.Propiedad).First ();
-            <li><a asp-action="Detalles" asp-controller="Contrato" asp-route-id="@item.ID"> #@item.ID</a>, en <a asp-action="Detalles" asp-controller="Inmueble" asp-route-id="@item.Propiedad">@InmuebleSeleccionado.Dirección</a></li>
+            <li><a asp-action="Detalles" asp-controller="Contrato" asp-route-id="@item.ID"> #@item.ID</a>, en <a asp-action="Detalles" asp-controller="Inmueble" asp-route-id="@item.Propiedad">@InmuebleSeleccionado.Direccion</a></li>
         }
     </ul>
     <a asp-action="Editar" asp-route-id="@Model.Inquilino.ID"><button class="btn btn-warning">Editar éste inquilino</button></a>

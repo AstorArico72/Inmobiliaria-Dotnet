@@ -4,9 +4,12 @@ using Principal.Models;
 using Principal.Controllers;
 using System.Diagnostics.CodeAnalysis;
 using MySql.Data.MySqlClient;
+using Microsoft.AspNetCore.Authentication.JwtBearer;
+using Microsoft.AspNetCore.Authorization;
 
 namespace Principal.API;
 
+[Authorize(JwtBearerDefaults.AuthenticationScheme)]
 [ApiController]
 [Route("Api/Inquilinos")]
 public class InquilinosController : ControllerBase {
