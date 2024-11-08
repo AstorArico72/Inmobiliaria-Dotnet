@@ -1,7 +1,6 @@
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
 using Principal.Models;
-using Principal.Controllers;
 using System.Diagnostics.CodeAnalysis;
 using MySql.Data.MySqlClient;
 using Microsoft.AspNetCore.Cryptography.KeyDerivation;
