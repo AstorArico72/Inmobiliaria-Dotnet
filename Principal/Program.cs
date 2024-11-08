@@ -9,13 +9,6 @@ using Microsoft.AspNetCore.Authentication.JwtBearer;
 
 var builder = WebApplication.CreateBuilder(args);
 builder.Services.AddMvc ();
-builder.Services.AddTransient <RepositorioInmueble, RepositorioInmueble> ();
-builder.Services.AddTransient <RepositorioContrato, RepositorioContrato> ();
-builder.Services.AddTransient <IRepo <Propietario>, RepositorioPropietario> ();
-builder.Services.AddTransient <IRepo <Inquilino>, RepositorioInquilino> ();
-builder.Services.AddTransient <IRepo <Contrato>, RepositorioContrato> ();
-builder.Services.AddTransient <IRepo <Pago>, RepositorioPago> ();
-builder.Services.AddTransient <RepositorioUsuario, RepositorioUsuario> ();
 
 builder.WebHost.UseUrls("http://127.0.0.1:8011", "http://192.168.1.150:8011");
 
